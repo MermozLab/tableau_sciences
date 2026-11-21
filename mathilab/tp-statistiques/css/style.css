@@ -1,0 +1,19 @@
+/* ════════════════════════════════════════════════════════════════
+   MathiLab — domaine « Statistique et probabilités »
+   Identité du domaine = 3 variables d'accent (claude_v7.md §10).
+   Tout composant commun (onglets, sous-onglets du puzzle, problématique,
+   médaillons de questions, puces d'étapes, utilitaires d'espacement,
+   blocs de questions masqués...) est défini UNE SEULE FOIS dans css/tp.css.
+   ════════════════════════════════════════════════════════════════ */
+@import url("../../../css/global.css");
+@import url("../../../css/reset.css");
+@import url("../../../css/tp.css");
+@import url("../../../css/animations.css");
+@import url("../../../css/print.css");
+@import url("../../../css/domaine.css");
+
+:root {
+  --domaine-accent:       #B45309;   /* fond des boutons / médaillons (contraste AA avec du blanc) */
+  --domaine-accent-fonce: #92400E;
+  --domaine-accent-rgb:   180, 83, 9;
+}

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths - 1ère Pro</title>
+
+    <link rel="stylesheet" href="arcade.css">
+</head>
+
+<body>
+
+<header class="top-bar">
+    <h1>🎮 MATHS - 1ÈRE PRO 🎮</h1>
+
+    <button class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </button>
+</header>
+
+
+<!-- PAGE ACCUEIL -->
+<div class="home-dashboard" id="homeDashboard">
+
+<!-- ===================== AUTOMATISMES ===================== -->
+<section class="arcade-column">
+
+    <h2>⚙️ Automatismes</h2>
+
+    <div class="game-card" onclick="loadPage('./automatisme-1ere/01/index.html')">
+        <h3>B 01</h3>
+        <p>⚙️ Probabilité d’un événement</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./automatisme-1ere/02/index.html')">
+        <h3>B 02</h3>
+        <p>⚙️ Dénombrement (tableaux et arbres)</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./automatisme-1ere/03/index.html')">
+        <h3>B 03</h3>
+        <p>⚙️ Lecture de graphiques et diagrammes</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./automatisme-1ere/04/index.html')">
+        <h3>B 04</h3>
+        <p>⚙️ Associer un graphique à des données</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./automatisme-1ere/05/index.html')">
+        <h3>B 05</h3>
+        <p>⚙️ Indicateurs de position et de dispersion</p>
+        <span class="tag cap3">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./automatisme-1ere/06/index.html')">
+        <h3>B 06</h3>
+        <p>⚙️ Résolution d’équations du 1er degré</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./automatisme-1ere/07/index.html')">
+        <h3>B 07</h3>
+        <p>⚙️ Résolution d’inéquations du 1er degré</p>
+        <span class="tag cap3">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./automatisme-1ere/08/index.html')">
+        <h3>B 08</h3>
+        <p>⚙️ Proportionnalité et fonction linéaire</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./automatisme-1ere/09/index.html')">
+        <h3>B 09</h3>
+        <p>⚙️ Allure d’une courbe à partir d’un tableau de variations</p>
+        <span class="tag cap3">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./automatisme-1ere/10/index.html')">
+        <h3>B 10</h3>
+        <p>⚙️ Tableau de variations à partir d’une courbe</p>
+        <span class="tag cap3">Niveau 02</span>
+    </div>
+
+    <div class="automatismes-explication">
+        <p>
+            Les automatismes t’aident à gagner en rapidité, en confiance et en efficacité.
+            Ils se travaillent régulièrement grâce à des exercices courts, des questions flash
+            et des activités variées tout au long de l’année.
+        </p>
+    </div>
+
+</section>
+
+
+<!-- ===================== PLAYMATHS ===================== -->
+<section class="arcade-column">
+
+    <h2>🕹 PlayMaths</h2>
+
+    <div class="game-card" onclick="loadPage('./playmaths/06/index.html')">
+        <h3>🏆 P 01</h3>
+        <p>Évaluation des acquis — 1ère</p>
+        <span class="tag cap3">Niveau 03</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/08/index.html')">
+        <h3>👾 A 01</h3>
+        <p>Algèbre — Résoudre un problème du premier degré</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/09/index.html')">
+        <h3>👻 A 02</h3>
+        <p>Algèbre — Étudier et comparer des suites numériques</p>
+        <span class="tag cap1">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/10/index.html')">
+        <h3>👾 A 03</h3>
+        <p>Algèbre — Étudier des fonctions</p>
+        <span class="tag cap1">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/11/index.html')">
+        <h3>🏆 A 04</h3>
+        <p>Algèbre — Fonctions exponentielles et logarithme décimal</p>
+        <span class="tag cap3">Niveau 03</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/12/index.html')">
+        <h3>👻 A 05</h3>
+        <p>Algèbre — Calculs commerciaux et financiers</p>
+        <span class="tag cap2">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/13/index.html')">
+        <h3>👾 AL 01</h3>
+        <p>Algorithme — Simuler une expérience aléatoire</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/14/index.html')">
+        <h3>👻 AL 02</h3>
+        <p>Algorithme — Statistiques à deux variables et probabilités en Python</p>
+        <span class="tag cap1">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/15/index.html')">
+        <h3>👾 AL 03</h3>
+        <p>Algorithme — Suites numériques en Python</p>
+        <span class="tag cap1">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/16/index.html')">
+        <h3>🏆 AL 04</h3>
+        <p>Algorithme — Fonctions et calculs commerciaux en Python</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/17/index.html')">
+        <h3>👻 AL 05</h3>
+        <p>Algorithme — Géométrie : calculs et constructions</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/18/index.html')">
+        <h3>👾 G 01</h3>
+        <p>Géométrie — Solides, aires, volumes, Pythagore et Thalès</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/19/index.html')">
+        <h3>👻 G 02</h3>
+        <p>Géométrie — Représenter et sectionner un solide</p>
+        <span class="tag cap1">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/20/index.html')">
+        <h3>👾 G 03</h3>
+        <p>Géométrie — Vecteurs du plan et de l'espace</p>
+        <span class="tag cap1">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/21/index.html')">
+        <h3>🏆 G 04</h3>
+        <p>Géométrie — Trigonométrie</p>
+        <span class="tag cap1">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/22/index.html')">
+        <h3>👾 S 01</h3>
+        <p>Statistiques — Organiser et représenter une série statistique</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/23/index.html')">
+        <h3>👻 S 02</h3>
+        <p>Statistiques — Comparer des séries à l'aide d'indicateurs statistiques</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/24/index.html')">
+        <h3>👾 S 03</h3>
+        <p>Statistiques — Fluctuation d'une fréquence, probabilités</p>
+        <span class="tag cap2">Niveau 01</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/25/index.html')">
+        <h3>🏆 S 04</h3>
+        <p>Statistiques — Nuage de points et ajustement</p>
+        <span class="tag cap1">Niveau 02</span>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playmaths/26/index.html')">
+        <h3>👻 S 05</h3>
+        <p>Statistiques — Tableau croisé, conditionnement et arbre pondéré</p>
+        <span class="tag cap3">Niveau 03</span>
+    </div>
+
+</section>
+
+</div>
+
+
+<!-- ===================== FRAME ===================== -->
+<div class="frame-container" id="frameContainer">
+    <iframe id="contentFrame" src=""></iframe>
+</div>
+
+
+<!-- ===================== MENU ===================== -->
+<div class="side-menu" id="sideMenu">
+
+    <button class="home-btn" onclick="returnHome()">
+        🏠 Retour accueil
+    </button>
+
+</div>
+
+<script src="arcade.js"></script>
+
+</body>
+</html>

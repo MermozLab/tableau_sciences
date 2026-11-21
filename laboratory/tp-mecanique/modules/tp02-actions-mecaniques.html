@@ -1,0 +1,791 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Actions mécaniques et équilibre</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">2nde</span>
+        <span class="tag">Mécanique</span>
+        <span class="tag">Force - </span><span class="tag">Poids - </span><span class="tag">Équilibre</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP M02</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<div class="contenu-tp">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+    <ul>
+      <li><strong>2nde</strong> — Faire l'inventaire des actions mécaniques qui s'exercent sur un solide.</li>
+      <li><strong>2nde</strong> — Savoir qu'une action mécanique peut se modéliser par une force.</li>
+      <li><strong>2nde</strong> — Représenter et caractériser une action mécanique par une force (droite d'action, sens, valeur en newton).</li>
+      <li><strong>2nde</strong> — Mesurer la valeur du poids d'un corps.</li>
+      <li><strong>2nde</strong> — Connaître et utiliser la relation entre le poids et la masse.</li>
+      <li><strong>2nde</strong> — Vérifier expérimentalement les conditions d'équilibre d'un solide soumis à deux ou trois forces de droites d'action concourantes.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="securite">
+
+  <div class="section-titre">
+    <div class="picto-section">⚠️</div>
+    <h2>Sécurité</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Ce TP utilise des masses marquées suspendues et un dynamomètre.
+    </div>
+
+    <ul class="liste-aeree">
+      <li><strong>Masses suspendues :</strong> ne jamais se placer sous une charge en cours de manipulation.</li>
+      <li><strong>Dynamomètre :</strong> ne pas dépasser sa charge maximale indiquée, au risque de le détériorer ou de le faire céder brutalement.</li>
+      <li><strong>Système en équilibre :</strong> maintenir le montage jusqu'à stabilisation avant de relever les valeurs.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+    <div class="picto-section">🧪</div>
+    <h2>Matériel nécessaire</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">⚗️</div>
+    <h2>Manipulations</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="tp02m-message-filiere" class="info" hidden></div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="modeliser-force">Modéliser une force</button>
+        <button class="tab-btn" data-tab="poids">Poids d'un corps</button>
+        <button class="tab-btn" data-tab="equilibre">Équilibre de forces concourantes</button>
+      </div>
+
+      <!-- ============================ -->
+      <!-- MODÉLISER UNE FORCE           -->
+      <!-- ============================ -->
+
+      <div class="tab-panel actif" id="modeliser-force">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="modeliser-force"></p>
+        </div>
+
+
+        <h3>Représenter une action mécanique par une force</h3>
+
+        <div class="info">
+          Une force est caractérisée par une droite d'action, un sens
+          et une valeur exprimée en newton (N). Elle modélise l'effet
+          d'une action mécanique exercée sur un solide.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Observer le solide étudié et faire l'inventaire de toutes les actions mécaniques qui s'exercent sur lui.</li>
+          <li>Pour chaque action, préciser sa direction, son sens et estimer ou mesurer sa valeur.</li>
+          <li>Saisir chaque force identifiée dans le tableau.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/m2-modeliser-force.svg" alt="Mode opératoire — modéliser une action mécanique par une force" width="760" height="395" loading="lazy">
+        </div>
+
+        <div id="inventaire-forces">
+
+          <div class="form-group">
+            <label for="force-nom">Action mécanique observée</label>
+            <input id="force-nom" type="text" placeholder="ex. le sol pousse la caisse vers le haut">
+          </div>
+
+          <div class="form-row">
+
+            <div class="form-group">
+              <label for="force-direction">Direction</label>
+              <input id="force-direction" type="text" placeholder="ex. verticale">
+            </div>
+
+            <div class="form-group">
+              <label for="force-sens">Sens</label>
+              <input id="force-sens" type="text" placeholder="ex. vers le haut">
+            </div>
+
+            <div class="form-group">
+              <label for="force-valeur">Valeur (N)</label>
+              <input id="force-valeur" type="number" step="0.1">
+            </div>
+
+            <div class="form-group">
+              <label>&nbsp;</label>
+              <button id="force-ajouter" type="button" class="btn btn-primaire">
+                + Ajouter la force
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>Action mécanique</th>
+                <th>Direction</th>
+                <th>Sens</th>
+                <th>Valeur (N)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-forces">
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- POIDS                        -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="poids">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="poids"></p>
+        </div>
+
+
+        <h3>Mesurer et calculer le poids d'un corps</h3>
+
+        <div class="info">
+          Le poids d'un corps est une force verticale, dirigée vers le
+          bas, proportionnelle à sa masse : P = m × g, avec
+          g ≈ 9,81 N/kg sur Terre.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Peser le corps étudié pour obtenir sa masse.</li>
+          <li>Suspendre le corps au dynamomètre et relever la valeur du poids affichée.</li>
+          <li>Saisir la masse et le poids mesuré pour comparer avec le poids théorique calculé.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/m2-poids.svg" alt="Mode opératoire — mesure du poids d'un corps" width="760" height="385" loading="lazy">
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="poids-masse">Masse du corps m (kg)</label>
+            <input id="poids-masse" type="number" step="0.001">
+          </div>
+
+          <div class="form-group">
+            <label for="poids-mesure">Poids mesuré au dynamomètre (N)</label>
+            <input id="poids-mesure" type="number" step="0.01">
+          </div>
+
+        </div>
+
+        <div id="poids-resultat" class="resultat-calcul">
+          Saisir la masse pour calculer le poids théorique, et
+          éventuellement le poids mesuré pour comparer les deux
+          valeurs.
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- ÉQUILIBRE DE FORCES           -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="equilibre">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="equilibre"></p>
+        </div>
+
+
+        <h3>Conditions d'équilibre de forces concourantes</h3>
+
+        <div class="info">
+          Un solide soumis à deux forces est en équilibre si ces deux
+          forces ont la même droite d'action, des sens opposés et la
+          même valeur. Avec trois forces concourantes, leur somme
+          vectorielle doit être nulle.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Réaliser un montage avec un solide soumis à deux ou trois forces (fils, dynamomètres, masses marquées) et l'amener à l'équilibre.</li>
+          <li>Mesurer la valeur de chaque force en présence.</li>
+          <li>Saisir ces valeurs et comparer à la condition d'équilibre attendue.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/m2-equilibre.svg" alt="Mode opératoire — équilibre de forces concourantes" width="760" height="320" loading="lazy">
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="eq-f1">Valeur de la force F₁ (N)</label>
+            <input id="eq-f1" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="eq-f2">Valeur de la force F₂ (N)</label>
+            <input id="eq-f2" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="eq-f3">Valeur de la force F₃ (N) — facultatif</label>
+            <input id="eq-f3" type="number" step="0.1">
+          </div>
+
+        </div>
+
+        <div id="eq-resultat" class="resultat-calcul">
+          Saisir les valeurs des forces en présence (deux forces
+          opposées, ou trois forces dont on connaît les valeurs) pour
+          vérifier si l'équilibre est cohérent.
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Mécanique et prévention</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Décharger les dynamomètres après usage pour ne pas fausser leur étalonnage.</li>
+      <li>Ranger les masses marquées après chaque manipulation.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">Équilibre et sécurité des charges</h3>
+
+    <p>
+      Vérifier les conditions d'équilibre d'un solide soumis à
+      plusieurs forces est essentiel pour sécuriser le levage ou le
+      maintien d'une charge, que ce soit sur un chantier, un atelier ou
+      une machine de production.
+    </p>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation
+      sélectionné. Répondre aux questions de l'onglet que vous avez réalisé :
+      les quatre premières portent sur l'objet du TP de l'onglet, la cinquième
+      répond à sa problématique.
+    </p>
+
+    <div class="questions-bloc" data-tp="actions-mecaniques" data-onglet="modeliser-force" data-onglet-nom="Modéliser une force">
+    <h4>Questions de l'onglet « Modéliser une force »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Expliquer ce qu'est une action mécanique et citer les caractéristiques qui permettent de modéliser une force (point d'application, direction, sens, valeur).
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-modeliser-force-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir du tableau, faire l'inventaire des actions mécaniques qui s'exercent sur le solide étudié en précisant, pour chacune, sa direction, son sens et sa valeur.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-modeliser-force-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Classer les actions mécaniques relevées en actions de contact et actions à distance, en justifiant.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-modeliser-force-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier que la longueur de chaque vecteur force est proportionnelle à sa valeur selon l'échelle choisie, et que sa direction et son sens correspondent à l'action mécanique décrite.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-modeliser-force-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Modéliser une force » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="modeliser-force"></p>
+        <div class="zone-eleve">
+          <textarea id="question-modeliser-force-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="actions-mecaniques" data-onglet="poids" data-onglet-nom="Poids d'un corps" hidden>
+    <h4>Questions de l'onglet « Poids d'un corps »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire la relation P = m × g en précisant le nom et l'unité de chaque grandeur ainsi que la valeur de g utilisée.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-poids-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Calculer le poids théorique du corps étudié à partir de sa masse, puis relever la valeur du poids mesurée au dynamomètre.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-poids-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer le poids théorique calculé et le poids mesuré au dynamomètre, et expliquer un éventuel écart.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-poids-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Valider la relation P = m × g en calculant le rapport P / m à partir du poids mesuré et en le comparant à la valeur de g utilisée.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-poids-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Poids d'un corps » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="poids"></p>
+        <div class="zone-eleve">
+          <textarea id="question-poids-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="actions-mecaniques" data-onglet="equilibre" data-onglet-nom="Équilibre de forces concourantes" hidden>
+    <h4>Questions de l'onglet « Équilibre de forces concourantes »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Énoncer les conditions d'équilibre d'un solide soumis à deux forces, puis à trois forces concourantes.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-equilibre-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir des valeurs de forces mesurées, indiquer si le système étudié est à l'équilibre et justifier.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-equilibre-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer vos mesures à la condition d'équilibre attendue et proposer des causes possibles d'écart (lecture des dynamomètres, frottements, orientation des fils).
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-equilibre-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier que les valeurs de forces mesurées sont compatibles avec la condition d'équilibre et indiquer si l'écart observé est acceptable.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-equilibre-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Équilibre de forces concourantes » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="equilibre"></p>
+        <div class="zone-eleve">
+          <textarea id="question-equilibre-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Identifier les actions mécaniques exercées sur un solide.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Mesurer un poids au dynamomètre.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Vérifier les conditions d'équilibre d'un solide soumis à plusieurs forces.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Comparer poids théorique et poids mesuré.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Représenter une force avec sa direction, son sens et sa valeur.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div class="espace-haut-md" id="radar-resultat"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, Imprimer votre TP en PDF.
+      Envoyer à l'enseignant votre Compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les valeurs saisies, les résultats calculés, les tableaux de mesures et les graphiques ;</li>
+        <li>les réponses aux questions ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-tp="tp01-decrire-mouvement">
+    ← TP01
+  </button>
+
+  <button class="btn btn-primaire" data-aller-tp="tp03-cinematique-pression">
+    TP03 →
+  </button>
+
+</div>
+
+</div>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

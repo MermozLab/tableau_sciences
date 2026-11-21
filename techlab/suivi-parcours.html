@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <link rel="stylesheet" href="css/techlab.css">
+  <title>Suivi des Parcours — TechLab</title>
+</head>
+<body class="suivi">
+  <header class="entete">
+    <a class="logo" href="index.html" aria-label="TechLab, accueil">
+      <span class="logo-icone"><i class="fas fa-screwdriver-wrench" aria-hidden="true"></i></span>
+      <span class="logo-texte"><span class="tech">Tech</span><span class="lab">Lab</span></span>
+    </a>
+    <a class="retour" href="index.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> Accueil TechLab</a>
+  </header>
+  <main>
+    <h1><i class="fas fa-chart-line" aria-hidden="true"></i> Suivi des Parcours</h1>
+    <p class="sous-titre">Les deux tableaux PlayLab sont affichés ici. Si l’un reste vide, ouvrez-le dans un nouvel onglet.</p>
+    <div class="onglets" role="tablist" aria-label="Tableaux de suivi">
+      <button role="tab" id="t-results" aria-selected="true" aria-controls="cadre"><i class="fas fa-trophy" aria-hidden="true"></i> Résultats</button>
+      <button role="tab" id="t-suivi" aria-selected="false" aria-controls="cadre"><i class="fas fa-user-check" aria-hidden="true"></i> Suivi des élèves</button>
+    </div>
+    <iframe id="cadre" class="cadre" title="Tableau de suivi PlayLab" src="https://mermoz.codeberg.page/sciences/playlab/results/"></iframe>
+    <p><a id="ouvrir" class="btn secondaire" href="https://mermoz.codeberg.page/sciences/playlab/results/" target="_blank" rel="noopener"><i class="fas fa-up-right-from-square" aria-hidden="true"></i> Ouvrir dans un nouvel onglet</a></p>
+  </main>
+  <script>
+    const URLS = {
+      "t-results": "https://mermoz.codeberg.page/sciences/playlab/results/",
+      "t-suivi": "https://mermozlab.codeberg.page/sciences/playlab/suivi/index.html"
+    };
+    document.querySelectorAll("[role=tab]").forEach(b => b.addEventListener("click", () => {
+      document.querySelectorAll("[role=tab]").forEach(x => x.setAttribute("aria-selected", x === b));
+      document.getElementById("cadre").src = URLS[b.id];
+      document.getElementById("ouvrir").href = URLS[b.id];
+    }));
+  </script>
+</body>
+</html>

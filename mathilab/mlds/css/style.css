@@ -1,0 +1,172 @@
+/* =========================================================
+   MLDS MATHS — style.css (hub + ateliers QCM)
+   Même socle que les autres pages MathiLab (global → reset →
+   tp → print → domaine). Seules les variables d'identité MLDS
+   sont définies ici. Les chemins sont relatifs à mathilab/mlds/css/.
+   ========================================================= */
+
+@import url("../../../css/global.css");
+@import url("../../../css/reset.css");
+@import url("../../../css/tp.css");
+@import url("../../../css/print.css");
+@import url("../../../css/domaine.css");
+
+:root {
+  --domaine-accent:       #E85D4B;
+  --domaine-accent-fonce: #B8432F;
+  --domaine-accent-rgb:   232, 93, 75;
+
+  --prop-1: #1B6CA8; --prop-2: #0D4F8A;
+  --conv-1: #8B5CF6; --conv-2: #5B21B6;
+  --pct-1:  #E87A0E; --pct-2:  #A8500A;
+  --frac-1: #10B981; --frac-2: #059669;
+  --eq-1: #0891B2; --eq-2: #0E6B83;
+  --geo-1: #DB2777; --geo-2: #9D174D;
+  --nombres-1: #4F46E5; --nombres-2: #3730A3;
+  --stat-1: #65A30D; --stat-2: #3F6212;
+  --probl-1: #475569; --probl-2: #1E293B;
+}
+
+header.entete-mlds h1 {
+  color: var(--blanc, #fff);
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+header.entete-mlds p { margin-top: 6px; opacity: .95; }
+.lien-retour {
+  display: inline-block; margin-top: 10px; color: #fff;
+  text-decoration: underline; font-weight: 600;
+}
+
+.contenu-mlds {
+  max-width: var(--largeur-contenu, 1000px);
+  margin: 0 auto;
+  padding: var(--gap-md, 20px) 18px;
+  display: flex; flex-direction: column; gap: var(--gap-md, 20px);
+}
+.titre-section {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 1.3rem; color: var(--gris-ardoise, #2f3b4a);
+  margin: 10px 0;
+}
+
+/* ---- Cartes d'ateliers ---- */
+.ateliers-grille {
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+.carte-atelier {
+  --accent: var(--domaine-accent);
+  --accent-fonce: var(--domaine-accent-fonce);
+  text-align: left; cursor: pointer; font: inherit;
+  background: #fff; border: 1px solid var(--gris-clair, #ddd);
+  border-top: 8px solid var(--accent);
+  border-radius: var(--r-lg, 16px);
+  box-shadow: var(--ombre-carte, 0 2px 8px rgba(0,0,0,.1));
+  padding: 18px; min-height: 150px;
+  display: flex; flex-direction: column; gap: 6px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.carte-atelier:hover, .carte-atelier:focus-visible { transform: translateY(-3px); outline: 3px solid rgba(var(--domaine-accent-rgb), .35); }
+.carte-atelier i { font-size: 1.8rem; color: var(--accent-fonce); }
+.carte-atelier strong { font-size: 1.1rem; color: var(--accent-fonce); }
+.carte-atelier span { color: var(--gris-texte-clair, #555); }
+.carte-atelier.prop { --accent: var(--prop-1); --accent-fonce: var(--prop-2); }
+.carte-atelier.conv { --accent: var(--conv-1); --accent-fonce: var(--conv-2); }
+.carte-atelier.pct  { --accent: var(--pct-1);  --accent-fonce: var(--pct-2); }
+.carte-atelier.frac { --accent: var(--frac-1); --accent-fonce: var(--frac-2); }
+.carte-atelier.eq { --accent: var(--eq-1); --accent-fonce: var(--eq-2); }
+.carte-atelier.geo { --accent: var(--geo-1); --accent-fonce: var(--geo-2); }
+.carte-atelier.nombres { --accent: var(--nombres-1); --accent-fonce: var(--nombres-2); }
+.carte-atelier.stat { --accent: var(--stat-1); --accent-fonce: var(--stat-2); }
+.carte-atelier.probl { --accent: var(--probl-1); --accent-fonce: var(--probl-2); }
+
+/* ---- Liens vers les outils ---- */
+.liens-outils {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.carte-lien {
+  display: flex; align-items: center; gap: 14px; text-decoration: none;
+  background: #fff; border: 1px solid var(--gris-clair, #ddd);
+  border-radius: var(--r-md, 12px); padding: 14px 16px;
+  color: var(--gris-ardoise, #2f3b4a);
+}
+.carte-lien i { font-size: 1.6rem; color: var(--domaine-accent-fonce); }
+.carte-lien:hover { border-color: var(--domaine-accent); }
+
+/* ---- Atelier actif ---- */
+#vue-atelier[hidden] { display: none; }
+.carte {
+  background: #fff; border: 1px solid var(--gris-clair, #ddd);
+  border-radius: var(--r-lg, 16px);
+  box-shadow: var(--ombre-carte, 0 2px 8px rgba(0,0,0,.1));
+  padding: var(--gap-md, 20px);
+}
+.btn-simple {
+  border: 2px solid var(--gris-ardoise, #2f3b4a); background: #fff;
+  color: var(--gris-ardoise, #2f3b4a); border-radius: 999px;
+  padding: 8px 16px; font-weight: 700; cursor: pointer; min-height: 44px;
+  display: inline-flex; align-items: center; gap: 8px; font-family: inherit;
+}
+.btn-simple:hover { background: var(--gris-ardoise, #2f3b4a); color: #fff; }
+.btn-principal { background: var(--domaine-accent); border-color: var(--domaine-accent); color: #fff; }
+.btn-principal:hover { background: var(--domaine-accent-fonce); border-color: var(--domaine-accent-fonce); }
+
+.atelier-entete { margin: 16px 0 10px; }
+.atelier-entete h2 { display: flex; align-items: center; gap: 10px; color: var(--accent-fonce, var(--domaine-accent-fonce)); }
+.atelier-entete p { margin-top: 6px; line-height: 1.6; }
+.progression { font-weight: 700; color: var(--gris-texte-clair, #555); margin: 12px 0 6px; }
+.enonce { font-size: 1.15rem; line-height: 1.6; margin-bottom: 14px; }
+
+.choix { display: grid; gap: 10px; margin-bottom: 14px; }
+.choix button {
+  text-align: left; font: inherit; cursor: pointer; min-height: 48px;
+  background: #fff; border: 2px solid var(--gris-clair, #ccc);
+  border-radius: var(--r-md, 12px); padding: 10px 14px;
+}
+.choix button:hover:not(:disabled) { border-color: var(--accent, var(--domaine-accent)); }
+.choix button:disabled { cursor: default; }
+.choix button.choisi { border-color: #a32d22; background: #fdf0ee; }
+.choix button.bonne  { border-color: var(--frac-2); background: #ecfdf5; }
+
+.retour-reponse {
+  border-left: 8px solid var(--accent, var(--domaine-accent));
+  background: var(--blanc-paillasse, #f4f6f8);
+  border-radius: var(--r-md, 12px); padding: 12px 16px; margin-bottom: 14px; line-height: 1.6;
+}
+.bilan { text-align: center; padding: 18px 0; }
+.bilan p { font-size: 1.15rem; margin-bottom: 14px; }
+.actions-atelier { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+/* ---- Marques de réponse (icône + texte, pas la couleur seule) ---- */
+.choix button .marque { display: block; margin-top: 4px; font-weight: 700; font-size: .92rem; }
+.choix button.bonne .marque { color: #0b5e3c; }
+.choix button.choisi .marque { color: #a32d22; }
+
+/* ---- Sources, groupes, historique ---- */
+.source-atelier { margin-top: 8px; font-size: .92rem; color: var(--gris-texte-clair, #445070); }
+.source-atelier a { color: inherit; }
+.note-groupe { margin: -4px 0 12px; color: var(--gris-texte-clair, #445070); }
+.etat-historique { min-height: 1.4em; font-size: 1rem !important; color: var(--gris-texte-clair, #445070); }
+.pied-mlds { max-width: var(--largeur-contenu, 1000px); margin: 0 auto; padding: 8px 18px 28px; font-size: .92rem; color: var(--gris-texte-clair, #445070); }
+.pied-mlds a { color: inherit; font-weight: 600; }
+#vue-historique[hidden] { display: none; }
+.histo-defile { overflow-x: auto; }
+.histo-table { width: 100%; border-collapse: collapse; margin: 8px 0 18px; }
+.histo-table th, .histo-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--gris-clair, #ddd); vertical-align: middle; }
+.histo-table thead th { font-size: .92rem; color: var(--gris-texte-clair, #445070); }
+.histo-liste { list-style: none; padding: 0; display: grid; gap: 8px; }
+.histo-liste i { color: var(--domaine-accent-fonce); margin-right: 6px; }
+.vide { color: var(--gris-texte-clair, #445070); }
+.sr-seulement { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media print { .btn-simple, .liens-outils { display: none !important; } }
+
+/* ---- Page sources ---- */
+.source-ref { padding: 12px 0; border-bottom: 1px solid var(--gris-clair, #ddd); }
+.source-ref:last-child { border-bottom: 0; }
+.source-ref:target { background: rgba(var(--domaine-accent-rgb), .08); outline: 3px solid rgba(var(--domaine-accent-rgb), .35); border-radius: 8px; padding-left: 10px; }
+.source-ref p { margin: 4px 0; line-height: 1.55; }
+.source-titre { font-weight: 700; }
+.source-fichier { font-size: .9rem; color: var(--gris-texte-clair, #445070); }

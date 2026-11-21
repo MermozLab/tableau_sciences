@@ -1,0 +1,504 @@
+/* ── Tokens globaux, composants TP, impression ────────────────── */
+/* Chaîne CSS complète, dans l'ordre documenté (css/global.css) :
+   global → reset → tp → animations → print. compte-rendu.css est chargé
+   à la demande par js/compte-rendu.js ; les <link> de index.html ont été retirés. */
+@import url("../../../css/global.css");
+@import url("../../../css/reset.css");
+@import url("../../../css/tp.css");
+@import url("../../../css/animations.css");
+@import url("../../../css/print.css");
+
+/* ── Overrides communs à tous les domaines (header, nav, cartes,
+   tableaux, EPI, radar, graphique...) — paramétrés par les variables
+   de couleur ci-dessous ── */
+@import url("../../../css/domaine.css");
+
+/* ════════════════════════════════════════════════════════════════
+   IDENTITÉ DU DOMAINE ÉLECTRICITÉ
+   L'ordre d'écriture n'a pas d'importance pour la résolution des
+   var() : ces valeurs s'appliquent à css/domaine.css même si celui-ci
+   est importé plus haut dans ce fichier.
+   ════════════════════════════════════════════════════════════════ */
+:root {
+  --domaine-accent:       #E87A0E;
+  --domaine-accent-fonce: #A8500A;
+  --domaine-accent-rgb:   232, 122, 14;
+}
+
+/* Tout le reste (header, nav, cartes, formulaires, tableaux, EPI,
+   matériel, radar, graphique, histogramme, cartouches, quiz,
+   problématique, champ-erreur...) vient désormais de tp.css et
+   css/domaine.css — plus aucune duplication propre à ce domaine. */
+
+/* ── Résultats de calcul guidé (.resultat-calcul) ──────────────────
+   tp.css colore ce bloc en vert-acide fixe (section 14, calcul-guide),
+   sans override par domaine dans domaine.css : recoloré ici dans la
+   teinte du domaine Électricité pour rester cohérent avec le reste
+   de la charte (bandeau, onglets, boutons, cartouches...). */
+.resultat-calcul {
+  color: var(--domaine-accent-fonce);
+}
+
+/* ── Numéros de question (.questions-tp .question-entete::before) ──
+   tp.css colore ce médaillon en bleu-cuivre fixe (section 17),
+   sans override par domaine dans domaine.css : recoloré ici dans la
+   teinte du domaine Électricité. Même chose pour les étapes de
+   protocole numérotées (.etapes li::before), soumises au même
+   codage en dur. */
+.questions-tp .question-entete::before,
+.etapes li::before {
+  background: var(--domaine-accent);
+}
+
+/* ── Schéma interactif réseau de distribution (TP02) ───────────────
+   Le contenu est une page HTML autonome chargée en iframe : aucun
+   script n'est ajouté au fragment SPA, conformément à la règle
+   « aucun <script> dans les fragments ». */
+.schema-interactif-conteneur {
+  border: 1px solid var(--gris-clair, #E7E9EC);
+  border-radius: var(--radius-md, 12px);
+  overflow: hidden;
+  margin-top: var(--gap-md);
+}
+
+.schema-interactif-frame {
+  width: 100%;
+  min-height: 760px;
+  border: 0;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .schema-interactif-frame {
+    min-height: 980px;
+  }
+}
+/* ══════════════════════════════════════════════════════════════
+   Simulateur interactif — Effet Joule (TP E02, tp-electricite)
+   Utilise les variables globales définies dans css/global.css
+   (--gap-*, --r-*, --font-code, --vert-acide, --ambre-fer,
+   --rouge-ph, --gris-ardoise, --gris-moyen, --blanc).
+   ══════════════════════════════════════════════════════════════ */
+
+.joule-simu {
+  background: var(--blanc);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+  padding: var(--gap-md);
+  margin: var(--gap-md) 0;
+}
+
+/* ── Réglages (sliders) ─────────────────────────────────────── */
+
+.joule-simu-reglages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--gap-md);
+  margin-bottom: var(--gap-md);
+}
+
+.joule-reglage {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.joule-reglage label {
+  font-size: var(--fs-sm, .85rem);
+  font-weight: 600;
+  color: var(--gris-ardoise);
+}
+
+.joule-reglage input[type="range"] {
+  width: 100%;
+  accent-color: var(--domaine-accent, var(--bleu-cuivre));
+}
+
+.joule-reglage-valeur {
+  align-self: flex-start;
+  font-family: var(--font-code);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--domaine-accent-fonce, var(--bleu-fonce));
+  background: var(--domaine-accent-clair, var(--bleu-tres-clair));
+  padding: .1rem .55rem;
+  border-radius: 999px;
+}
+
+/* ── Les deux lignes comparées ──────────────────────────────── */
+
+.joule-simu-lignes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--gap-md);
+}
+
+.joule-ligne {
+  background: var(--blanc-paillasse, #F8F9FA);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+  padding: var(--gap-sm) var(--gap-md);
+}
+
+.joule-ligne-entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-bottom: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+.joule-ligne-titre {
+  font-weight: 700;
+  color: var(--gris-ardoise);
+  font-size: .95rem;
+}
+
+.joule-ligne-tension {
+  font-family: var(--font-code);
+  font-size: .8rem;
+  color: var(--gris-moyen);
+}
+
+/* ── Le câble et son échauffement visuel ────────────────────── */
+
+.joule-cable {
+  position: relative;
+  padding: 26px 4px 10px;
+}
+
+.joule-cable-fil {
+  position: relative;
+  height: 16px;
+  border-radius: 999px;
+  background-color: var(--vert-acide);
+  box-shadow: 0 0 4px 1px var(--vert-acide);
+  transition: background-color .35s ease, box-shadow .35s ease;
+}
+
+/* Ondes de chaleur au-dessus du câble : trois petits traits animés,
+   dont l'opacité et la vitesse sont pilotées par --chauffe (0 à 1),
+   fixé en JS sur chaque .joule-cable-fil. */
+.joule-vague {
+  position: absolute;
+  bottom: 100%;
+  width: 2px;
+  height: 16px;
+  border-radius: 2px;
+  background: currentColor;
+  color: inherit;
+  opacity: calc(var(--chauffe, 0) * 0.8);
+  animation: joule-onde calc(1.4s - 0.9s * var(--chauffe, 0)) ease-in-out infinite;
+}
+
+.joule-vague:nth-child(1) { left: 18%; animation-delay: 0s; }
+.joule-vague:nth-child(2) { left: 48%; animation-delay: .25s; }
+.joule-vague:nth-child(3) { left: 76%; animation-delay: .5s; }
+
+@keyframes joule-onde {
+  0%   { transform: translateY(0) scaleY(.6); opacity: 0; }
+  40%  { opacity: calc(var(--chauffe, 0) * 0.8); }
+  100% { transform: translateY(-14px) scaleY(1.3); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .joule-vague { animation: none; opacity: 0; }
+}
+
+/* ── Mesures ─────────────────────────────────────────────────── */
+
+.joule-mesures {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .5rem;
+  margin-top: var(--gap-sm);
+}
+
+.joule-mesure {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+  background: var(--blanc);
+  border-radius: var(--r-sm);
+  padding: .4rem .5rem;
+  text-align: center;
+}
+
+.joule-mesure-label {
+  font-size: .68rem;
+  color: var(--gris-moyen);
+}
+
+.joule-mesure-valeur {
+  font-family: var(--font-code);
+  font-weight: 700;
+  font-size: .9rem;
+  color: var(--gris-ardoise);
+}
+
+@media (max-width: 560px) {
+  .joule-mesures { grid-template-columns: 1fr; }
+}
+/* ══════════════════════════════════════════════════════════════
+   Simulateur interactif — Transformateur (TP E02, tp-electricite)
+   Utilise les variables globales définies dans css/global.css.
+   ══════════════════════════════════════════════════════════════ */
+
+.transfo-simu {
+  background: var(--blanc);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+  padding: var(--gap-md);
+  margin: var(--gap-md) 0;
+}
+
+/* ── Réglages (sliders) ─────────────────────────────────────── */
+
+.transfo-simu-reglages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--gap-md);
+  margin-bottom: var(--gap-lg);
+}
+
+.transfo-reglage {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.transfo-reglage label {
+  font-size: var(--fs-sm, .85rem);
+  font-weight: 600;
+  color: var(--gris-ardoise);
+}
+
+.transfo-reglage input[type="range"] {
+  width: 100%;
+  accent-color: var(--domaine-accent, var(--bleu-cuivre));
+}
+
+.transfo-reglage-valeur {
+  align-self: flex-start;
+  font-family: var(--font-code);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--domaine-accent-fonce, var(--bleu-fonce));
+  background: var(--domaine-accent-clair, var(--bleu-tres-clair));
+  padding: .1rem .55rem;
+  border-radius: 999px;
+}
+
+/* ── Représentation visuelle du transformateur ─────────────────── */
+
+.transfo-simu-visuel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-lg);
+  align-items: center;
+  justify-content: center;
+  background: var(--blanc-paillasse, #F8F9FA);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+  padding: var(--gap-md);
+}
+
+.transfo-schema {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.transfo-bobine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .4rem;
+  width: 90px;
+}
+
+.transfo-bobine-titre {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--gris-ardoise);
+}
+
+/* Enroulement représenté par des spires horizontales dont la densité
+   (espacement --espacement, fixé en JS selon N) traduit visuellement
+   le nombre de spires : plus N est grand, plus les spires sont
+   serrées. */
+.transfo-bobine-image {
+  width: 46px;
+  height: 130px;
+  border-radius: 8px;
+  border: 2px solid var(--domaine-accent-fonce, var(--bleu-fonce));
+  background-color: var(--domaine-accent-clair, var(--bleu-tres-clair));
+  background-image: repeating-linear-gradient(
+    0deg,
+    var(--domaine-accent-fonce, var(--bleu-fonce)) 0,
+    var(--domaine-accent-fonce, var(--bleu-fonce)) 2px,
+    transparent 2px,
+    transparent calc(2px + var(--espacement, 10px))
+  );
+  transition: background-image .25s ease;
+}
+
+.transfo-bobine-n {
+  font-family: var(--font-code);
+  font-size: .72rem;
+  color: var(--gris-moyen);
+  text-align: center;
+}
+
+.transfo-noyau {
+  width: 34px;
+  height: 150px;
+  margin: 0 -6px;
+  background: repeating-linear-gradient(
+    90deg,
+    #B8BFC7 0,
+    #B8BFC7 4px,
+    #A7AFB8 4px,
+    #A7AFB8 8px
+  );
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
+}
+
+/* ── Barres de tension (échelle logarithmique) ─────────────────── */
+
+.transfo-tensions {
+  display: flex;
+  gap: var(--gap-lg);
+  align-items: flex-end;
+}
+
+.transfo-tension {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .4rem;
+}
+
+.transfo-tension-nom {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--gris-ardoise);
+}
+
+.transfo-barre-fond {
+  width: 34px;
+  height: 160px;
+  background: var(--gris-clair);
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.transfo-barre-remplissage {
+  width: 100%;
+  height: 5%;
+  background: linear-gradient(180deg, var(--domaine-accent, #E87A0E), var(--domaine-accent-fonce, #A8500A));
+  border-radius: 0 0 6px 6px;
+  transition: height .3s ease;
+}
+
+.transfo-tension-valeur {
+  font-family: var(--font-code);
+  font-weight: 700;
+  font-size: .85rem;
+  color: var(--gris-ardoise);
+}
+
+@media (max-width: 640px) {
+  .transfo-simu-visuel { flex-direction: column; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Ajustements d'interface (tp-electricite)
+   ══════════════════════════════════════════════════════════════ */
+
+/* Titre du bandeau (« TP Électricité : … ») en blanc */
+body > header h1,
+body > header h1 span {
+  color: #ffffff;
+}
+
+/* Matériel nécessaire : menu accordéon Équipements / Verrerie */
+.accordeon-materiel {
+  border: 1px solid var(--gris-clair, #E7E9EC);
+  border-radius: var(--r-md, 12px);
+  background: var(--blanc, #ffffff);
+  margin: 0 0 var(--gap-md, 1rem);
+  overflow: hidden;
+}
+
+.accordeon-materiel > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .75rem 1rem;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--domaine-accent-fonce, #A8500A);
+  background: rgba(var(--domaine-accent-rgb, 232, 122, 14), .10);
+}
+
+.accordeon-materiel > summary::-webkit-details-marker { display: none; }
+
+.accordeon-materiel > summary::after {
+  content: "▼";
+  font-size: .8rem;
+  transition: transform .2s ease;
+}
+
+.accordeon-materiel[open] > summary::after { transform: rotate(180deg); }
+
+.accordeon-materiel > summary:focus-visible {
+  outline: 3px solid var(--domaine-accent, #E87A0E);
+  outline-offset: -3px;
+}
+
+.accordeon-materiel > .grille-materiel { padding: var(--gap-md, 1rem); }
+
+/* Manipulations : problématique de l'onglet, en tête du bloc */
+.problematique-onglet { margin: 0 0 var(--gap-md, 1rem); }
+
+.problematique-onglet-etiquette {
+  display: block;
+  margin-bottom: .2rem;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--domaine-accent-fonce, #A8500A);
+}
+
+.problematique-onglet .problematique-rappel { margin: 0; font-weight: 600; }
+
+/* ════════════════════════════════════════════════════════════════
+   COMPLÉMENTS DES FRAGMENTS PROPRES À ÉLECTRICITÉ
+   (les utilitaires génériques — espace-haut-*, liste-aeree,
+   graphique-canvas, règles [hidden] — sont dans css/domaine.css)
+   ════════════════════════════════════════════════════════════════ */
+
+/* Schémas de montage (SVG importés par <img>) */
+.mode-op .mode-image { display: block; width: 100%; height: auto; }
+
+/* Mentions de source */
+.tp-source { font-size: var(--fs-xs); color: var(--gris-moyen); }
+.tp-source-espace { margin-top: .4rem; }
+
+/* TP05 : chaîne pile / accumulateur et champs du temps de charge */
+.chaine-stockage        { display: flex; flex-direction: column; gap: .6rem; font-family: inherit; }
+.chaine-stockage-ligne  { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.chaine-stockage-fleche { color: var(--gris-moyen); }
+.pile-nom               { min-width: 110px; }
+.champ-etroit           { max-width: 260px; }
+.champ-bas              { justify-content: flex-end; }
+.tag-formule            { align-self: flex-start; }

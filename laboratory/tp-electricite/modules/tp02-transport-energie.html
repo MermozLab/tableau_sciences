@@ -1,0 +1,1142 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Transport de l'énergie électrique</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">1ère</span>
+        <span class="tag">Électricité</span>
+        <span class="tag">Effet Joule - </span><span class="tag">Transformateur</span>
+      </div>
+
+      <div class="tp-row">
+        <span class="tag">Tle</span>
+        <span class="tag">Électricité</span>
+        <span class="tag">Effet Joule - </span><span class="tag">Transformateur</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP E02</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+    <ul>
+      <li>Représenter le schéma simplifié d'un réseau de distribution d'énergie électrique à l'échelle d'un pays et d'une installation domestique.</li>
+      <li>Justifier l'intérêt du transport d'énergie électrique à grande distance sous haute tension.</li>
+      <li>Mettre en évidence expérimentalement le rôle d'abaisseur ou d'élévateur de tension d'un transformateur.</li>
+      <li>Connaître la relation reliant puissance électrique dissipée par effet Joule, résistance et valeur efficace de l'intensité.</li>
+      <li>Savoir que l'effet Joule est responsable des pertes en ligne dans le transport et la distribution de l'électricité.</li>
+      <li>Connaître le rôle des transformateurs dans les réseaux de distribution d'énergie électrique.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="securite">
+
+  <div class="section-titre">
+    <div class="picto-section">⚠️</div>
+    <h2>Sécurité</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Ce TP utilise un transformateur d'atelier basse tension. Les
+      tensions manipulées restent faibles, mais les règles générales
+      de sécurité électrique s'appliquent.
+    </div>
+
+    <ul class="liste-aeree">
+      <li><strong>Transformateur :</strong> ne jamais toucher les enroulements sous tension ; couper l'alimentation avant toute modification du montage.</li>
+      <li><strong>Échauffement :</strong> un enroulement parcouru par un courant important peut chauffer ; le laisser refroidir avant manipulation prolongée.</li>
+      <li><strong>Protection :</strong> vérifier la présence d'un fusible ou d'un disjoncteur en amont du montage.</li>
+      <li><strong>Résistances :</strong> ne jamais dépasser la puissance admissible marquée sur le composant (voir le rappel P = U²/R dans la manipulation réelle).</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+    <div class="picto-section">🧪</div>
+    <h2>Matériel nécessaire</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">⚗️</div>
+    <h2>Manipulations</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="tp02-message-filiere" class="info" hidden></div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="reseau-distribution">Réseau de distribution</button>
+        <button class="tab-btn" data-tab="effet-joule">Effet Joule et pertes en ligne</button>
+        <button class="tab-btn" data-tab="transformateur">Transformateur</button>
+        <button class="tab-btn" data-tab="manipulation-reelle">Manipulation réelle</button>
+      </div>
+
+      <!-- ============================ -->
+      <!-- RÉSEAU DE DISTRIBUTION       -->
+      <!-- ============================ -->
+
+      <div class="tab-panel actif" id="reseau-distribution">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="reseau-distribution"></p>
+        </div>
+
+
+        <h3>Du site de production à l'installation domestique</h3>
+
+        <div class="info">
+          L'énergie électrique produite dans une centrale est élevée en
+          très haute tension pour être transportée sur de longues
+          distances, puis progressivement abaissée par des
+          transformateurs successifs jusqu'à la tension d'utilisation
+          domestique ou industrielle (230 V / 400 V).
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Cliquer sur chaque étape du schéma interactif (ou sur les boutons numérotés) pour afficher sa fiche technique.</li>
+          <li>Pour chaque étape, relever le rôle du transformateur, le type de ligne et la tension associée.</li>
+          <li>Représenter le schéma simplifié du réseau en indiquant l'évolution de la tension.</li>
+        </ol>
+
+        <div class="schema-interactif-conteneur">
+          <iframe
+            src="./assets/schema-reseau-distribution.html"
+            title="Schéma interactif du réseau de distribution — de la centrale au client"
+            class="schema-interactif-frame"
+            loading="lazy">
+          </iframe>
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- EFFET JOULE                  -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="effet-joule">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="effet-joule"></p>
+        </div>
+
+
+        <h3>Pertes en ligne par effet Joule</h3>
+
+        <div class="info">
+          Une ligne électrique possède une résistance R non nulle. La
+          puissance dissipée par effet Joule dans cette résistance vaut
+          P&#8321; = R × I², où I est la valeur efficace de l'intensité
+          qui parcourt la ligne. Le simulateur ci-dessous transporte la
+          même puissance électrique par deux lignes identiques (même
+          résistance R), l'une en basse tension, l'autre en haute
+          tension : observez l'échauffement du câble dans chaque cas.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Régler la puissance transportée P et la résistance R de la ligne modélisée.</li>
+          <li>Pour cette même puissance, comparer l'intensité et l'échauffement du câble en basse tension puis en haute tension.</li>
+          <li>Faire varier U₂ pour observer l'effet d'une tension de transport plus élevée sur les pertes par effet Joule.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img src="./assets/images/5_transport_pylone_trianon_400kv.jpg" alt="Ligne de transport à très haute tension — c'est dans ce type de ligne que se produisent les pertes par effet Joule" class="mode-image">
+          <p class="mode-legende">Une ligne de transport à très haute tension : plus l'intensité qui la parcourt est faible, moins elle dissipe d'énergie par effet Joule.</p>
+        </div>
+
+        <div class="joule-simu" id="joule-simu">
+
+          <div class="joule-simu-reglages">
+
+            <div class="joule-reglage">
+              <label for="joule-puissance">Puissance transportée P</label>
+              <input type="range" id="joule-puissance" min="1" max="200" step="1" value="20">
+              <span class="joule-reglage-valeur" id="joule-puissance-valeur">20 kW</span>
+            </div>
+
+            <div class="joule-reglage">
+              <label for="joule-resistance-simu">Résistance de la ligne R</label>
+              <input type="range" id="joule-resistance-simu" min="0.1" max="10" step="0.1" value="2">
+              <span class="joule-reglage-valeur" id="joule-resistance-simu-valeur">2.0 Ω</span>
+            </div>
+
+            <div class="joule-reglage">
+              <label for="joule-tension-bt">Tension basse tension U₁</label>
+              <input type="range" id="joule-tension-bt" min="230" max="1000" step="10" value="230">
+              <span class="joule-reglage-valeur" id="joule-tension-bt-valeur">230 V</span>
+            </div>
+
+            <div class="joule-reglage">
+              <label for="joule-tension-ht">Tension haute tension U₂</label>
+              <input type="range" id="joule-tension-ht" min="1" max="400" step="1" value="20">
+              <span class="joule-reglage-valeur" id="joule-tension-ht-valeur">20 kV</span>
+            </div>
+
+          </div>
+
+          <div class="joule-simu-lignes">
+
+            <div class="joule-ligne" id="joule-ligne-bt">
+              <div class="joule-ligne-entete">
+                <span class="joule-ligne-titre">Transport en basse tension</span>
+                <span class="joule-ligne-tension" id="joule-bt-tension-affiche">230 V</span>
+              </div>
+              <div class="joule-cable">
+                <div class="joule-cable-fil" id="joule-bt-fil">
+                  <span class="joule-vague"></span>
+                  <span class="joule-vague"></span>
+                  <span class="joule-vague"></span>
+                </div>
+              </div>
+              <div class="joule-mesures">
+                <div class="joule-mesure">
+                  <span class="joule-mesure-label">Intensité I₁</span>
+                  <span class="joule-mesure-valeur" id="joule-bt-intensite">—</span>
+                </div>
+                <div class="joule-mesure">
+                  <span class="joule-mesure-label">Pertes Joule</span>
+                  <span class="joule-mesure-valeur" id="joule-bt-pertes">—</span>
+                </div>
+                <div class="joule-mesure">
+                  <span class="joule-mesure-label">Part perdue</span>
+                  <span class="joule-mesure-valeur" id="joule-bt-part">—</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="joule-ligne" id="joule-ligne-ht">
+              <div class="joule-ligne-entete">
+                <span class="joule-ligne-titre">Transport en haute tension</span>
+                <span class="joule-ligne-tension" id="joule-ht-tension-affiche">20 kV</span>
+              </div>
+              <div class="joule-cable">
+                <div class="joule-cable-fil" id="joule-ht-fil">
+                  <span class="joule-vague"></span>
+                  <span class="joule-vague"></span>
+                  <span class="joule-vague"></span>
+                </div>
+              </div>
+              <div class="joule-mesures">
+                <div class="joule-mesure">
+                  <span class="joule-mesure-label">Intensité I₂</span>
+                  <span class="joule-mesure-valeur" id="joule-ht-intensite">—</span>
+                </div>
+                <div class="joule-mesure">
+                  <span class="joule-mesure-label">Pertes Joule</span>
+                  <span class="joule-mesure-valeur" id="joule-ht-pertes">—</span>
+                </div>
+                <div class="joule-mesure">
+                  <span class="joule-mesure-label">Part perdue</span>
+                  <span class="joule-mesure-valeur" id="joule-ht-part">—</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div id="joule-resultat" class="resultat-calcul">
+            Régler la puissance, la résistance et les deux tensions pour
+            comparer les pertes par effet Joule en basse et en haute
+            tension, à puissance transportée égale.
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- TRANSFORMATEUR               -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="transformateur">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="transformateur"></p>
+        </div>
+
+
+        <h3>Rôle élévateur ou abaisseur du transformateur</h3>
+
+        <div class="info">
+          Un transformateur permet d'élever ou d'abaisser une tension
+          alternative. Le rapport entre la tension au secondaire et la
+          tension au primaire est égal au rapport du nombre de spires
+          des deux enroulements : U₂ / U₁ = N₂ / N₁. Le simulateur
+          ci-dessous permet d'explorer cette relation avant de la
+          vérifier expérimentalement.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Dans le simulateur, régler N₁ et N₂ puis observer l'effet sur U₂ pour une tension U₁ donnée.</li>
+          <li>Alimenter l'enroulement primaire du transformateur réel avec une tension alternative basse tension.</li>
+          <li>Mesurer la tension efficace au primaire, puis au secondaire, à l'aide d'un voltmètre en position alternatif, et saisir les deux valeurs mesurées ci-dessus.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img src="./assets/images/9_distribution_transformateur_20kv.jpg" alt="Transformateur HTA/BT dans un poste de distribution réel" class="mode-image">
+          <p class="mode-legende">Un transformateur de réseau (poste de distribution HTA/BT). En TP, vous utiliserez un transformateur d'atelier basse tension, mais le principe élévateur/abaisseur est identique.</p>
+        </div>
+
+        <div class="transfo-simu" id="transfo-simu">
+
+          <div class="transfo-simu-reglages">
+
+            <div class="transfo-reglage">
+              <label for="transfo-u1-simu">Tension au primaire U₁</label>
+              <input type="range" id="transfo-u1-simu" min="1" max="230" step="1" value="12">
+              <span class="transfo-reglage-valeur" id="transfo-u1-simu-valeur">12 V</span>
+            </div>
+
+            <div class="transfo-reglage">
+              <label for="transfo-n1">Nombre de spires au primaire N₁</label>
+              <input type="range" id="transfo-n1" min="10" max="500" step="10" value="200">
+              <span class="transfo-reglage-valeur" id="transfo-n1-valeur">200 spires</span>
+            </div>
+
+            <div class="transfo-reglage">
+              <label for="transfo-n2">Nombre de spires au secondaire N₂</label>
+              <input type="range" id="transfo-n2" min="10" max="500" step="10" value="100">
+              <span class="transfo-reglage-valeur" id="transfo-n2-valeur">100 spires</span>
+            </div>
+
+          </div>
+
+          <div class="transfo-simu-visuel">
+
+            <div class="transfo-schema">
+
+              <div class="transfo-bobine">
+                <span class="transfo-bobine-titre">Primaire</span>
+                <div class="transfo-bobine-image" id="transfo-image-primaire"></div>
+                <span class="transfo-bobine-n" id="transfo-n1-affiche">N₁ = 200 spires</span>
+              </div>
+
+              <div class="transfo-noyau" aria-hidden="true"></div>
+
+              <div class="transfo-bobine">
+                <span class="transfo-bobine-titre">Secondaire</span>
+                <div class="transfo-bobine-image" id="transfo-image-secondaire"></div>
+                <span class="transfo-bobine-n" id="transfo-n2-affiche">N₂ = 100 spires</span>
+              </div>
+
+            </div>
+
+            <div class="transfo-tensions">
+
+              <div class="transfo-tension">
+                <span class="transfo-tension-nom">U₁</span>
+                <div class="transfo-barre-fond">
+                  <div class="transfo-barre-remplissage" id="transfo-barre-u1"></div>
+                </div>
+                <span class="transfo-tension-valeur" id="transfo-u1-affiche">12 V</span>
+              </div>
+
+              <div class="transfo-tension">
+                <span class="transfo-tension-nom">U₂</span>
+                <div class="transfo-barre-fond">
+                  <div class="transfo-barre-remplissage" id="transfo-barre-u2"></div>
+                </div>
+                <span class="transfo-tension-valeur" id="transfo-u2-affiche">6 V</span>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div id="transfo-resultat-simu" class="resultat-calcul">
+            Régler la tension au primaire et le nombre de spires de
+            chaque enroulement pour déterminer si le transformateur
+            est élévateur ou abaisseur.
+          </div>
+
+        </div>
+
+        <h4 class="espace-haut-lg">Vérification expérimentale</h4>
+
+        <div class="info">
+          Sur le transformateur réel du poste de travail, mesurez les
+          tensions efficaces au primaire et au secondaire pour
+          vérifier la relation observée dans le simulateur.
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="transfo-u1">Tension au primaire U₁ (V)</label>
+            <input id="transfo-u1" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="transfo-u2">Tension au secondaire U₂ (V)</label>
+            <input id="transfo-u2" type="number" step="0.1">
+          </div>
+
+        </div>
+
+        <div id="transfo-resultat" class="resultat-calcul">
+          Saisir les deux tensions mesurées pour déterminer si le
+          transformateur est élévateur ou abaisseur.
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- MANIPULATION RÉELLE          -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="manipulation-reelle">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="manipulation-reelle"></p>
+        </div>
+
+
+        <h3>Manipulation avec le matériel du laboratoire</h3>
+
+        <div class="info">
+          Cette manipulation utilise uniquement du matériel basse
+          tension (12 V maximum, très basse tension de sécurité) pour
+          vérifier avec de vrais appareils ce que vous avez observé dans
+          les simulateurs : le rôle du transformateur, et l'échauffement
+          d'une résistance parcourue par un courant.
+        </div>
+
+        <h4>Partie A — Le transformateur, en vrai</h4>
+
+        <ol class="etapes">
+          <li>Relier le générateur de tension alternative (réglé sur 12 V, sa valeur maximale) aux deux bornes de l'enroulement primaire du transformateur. Choisir un transformateur dont le secondaire reste inférieur ou égal à 12 V (N₂ ≤ N₁).</li>
+          <li>Mettre le multimètre en position voltmètre alternatif (V~) et mesurer la tension U₁ directement aux bornes du primaire, générateur allumé.</li>
+          <li>Mesurer de la même façon la tension U₂ aux bornes de l'enroulement secondaire, à vide (sans rien brancher dessus).</li>
+          <li>Noter les deux valeurs mesurées ci-dessous.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp02-transformateur-a-vide.svg" alt="Schéma normalisé du montage : générateur alternatif 12 V aux bornes du primaire du transformateur, voltmètre alternatif V avec borne COM en dérivation au primaire et au secondaire laissé à vide" width="596" height="250" loading="lazy">
+          <p class="mode-legende">Partie A : voltmètre alternatif (V~) aux bornes du primaire (U₁) puis du secondaire laissé à vide (U₂).</p>
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="manip-transfo-u1">Tension mesurée au primaire U₁ (V)</label>
+            <input id="manip-transfo-u1" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="manip-transfo-u2">Tension mesurée au secondaire U₂ (V)</label>
+            <input id="manip-transfo-u2" type="number" step="0.1">
+          </div>
+
+        </div>
+
+        <div id="manip-transfo-resultat" class="resultat-calcul">
+          Saisir les deux tensions mesurées pour vérifier si ce
+          transformateur est élévateur ou abaisseur.
+        </div>
+
+        <h4 class="espace-haut-lg">Partie B — Sentir l'effet Joule</h4>
+
+        <div class="info">
+          Ne jamais toucher directement une résistance qui chauffe :
+          approcher la main à quelques centimètres suffit pour sentir
+          la différence de température.
+        </div>
+
+        <div class="info">
+          <strong>Rappel :</strong> la puissance dissipée par une résistance
+          soumise à la tension U vaut P = U² / R, donc R = U² / P.
+          Avec le générateur réglé sur 12 V, U² = 144 V² : une résistance
+          dont la puissance admissible est de 5 W doit avoir
+          R ≥ 144 / 5 ≈ 29 Ω. Choisir pour R₁ et R₂ des valeurs respectant
+          cette condition, par exemple R₁ = 100 Ω (P ≈ 1,4 W) et
+          R₂ = 33 Ω (P ≈ 4,4 W), avec des résistances de puissance
+          admissible d'au moins 5 W. Régler le multimètre sur un
+          calibre d'intensité supérieur à 0,4 A.
+        </div>
+
+        <ol class="etapes">
+          <li>Réaliser un circuit série : générateur (12 V~) → interrupteur → résistance R₁ → multimètre en position ampèremètre alternatif (A~) → retour au générateur.</li>
+          <li>Fermer l'interrupteur, relever l'intensité I₁ affichée par le multimètre, puis approcher la main de la résistance sans la toucher et noter la sensation.</li>
+          <li>Ouvrir le circuit, couper l'alimentation, remplacer R₁ par une résistance R₂ de valeur plus faible.</li>
+          <li>Refermer le circuit, relever l'intensité I₂, approcher à nouveau la main et comparer la sensation avec l'essai précédent.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp02-effet-joule.svg" alt="Schéma normalisé du montage : générateur alternatif 12 V, interrupteur K, résistance R1 puis R2 et ampèremètre alternatif A avec borne COM en série" width="596" height="250" loading="lazy">
+          <p class="mode-legende">Partie B : circuit série alimenté en 12 V~ ; ne pas toucher la résistance, approcher seulement la main.</p>
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="tableau-resultats">
+
+            <thead>
+              <tr>
+                <th>Essai</th>
+                <th>Résistance R (Ω)</th>
+                <th>Intensité I (A)</th>
+                <th>Échauffement ressenti</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>1 (R₁, plus grande)</td>
+                <td><input id="manip-r1" type="number" step="0.1"></td>
+                <td><input id="manip-i1" type="number" step="0.01"></td>
+                <td>
+                  <select id="manip-ressenti-1">
+                    <option value="">--</option>
+                    <option value="froid">Froid / à peine tiède</option>
+                    <option value="tiede">Tiède</option>
+                    <option value="chaud">Chaud</option>
+                  </select>
+                </td>
+              </tr>
+
+              <tr>
+                <td>2 (R₂, plus faible)</td>
+                <td><input id="manip-r2" type="number" step="0.1"></td>
+                <td><input id="manip-i2" type="number" step="0.01"></td>
+                <td>
+                  <select id="manip-ressenti-2">
+                    <option value="">--</option>
+                    <option value="froid">Froid / à peine tiède</option>
+                    <option value="tiede">Tiède</option>
+                    <option value="chaud">Chaud</option>
+                  </select>
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+        <div id="manip-joule-resultat" class="resultat-calcul">
+          Compléter le tableau ci-dessus (résistance, intensité mesurée et échauffement ressenti pour les deux essais) pour comparer les puissances dissipées par effet Joule.
+        </div>
+
+        <h4 class="espace-haut-lg">Ce qu'il faut en retenir</h4>
+
+        <ul class="liste-aeree">
+          <li>La tension au secondaire d'un transformateur peut être mesurée directement au voltmètre : elle confirme si l'appareil élève ou abaisse la tension.</li>
+          <li>Plus l'intensité dans une résistance est grande, plus elle chauffe : c'est l'effet Joule, que l'on peut sentir avec la main, pas seulement calculer.</li>
+          <li>À tension U constante, P = R × I² = U² / R : une résistance plus faible est parcourue par un courant plus grand et chauffe davantage.</li>
+          <li>C'est exactement ce même échauffement qui se produit, à bien plus grande échelle, dans les lignes du réseau électrique.</li>
+        </ul>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Électricité et sobriété énergétique</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Couper l'alimentation du transformateur dès la fin des mesures.</li>
+      <li>Limiter la durée de fonctionnement en court-circuit lors des mesures d'intensité.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">Limiter les pertes énergétiques</h3>
+
+    <p>
+      Le transport de l'énergie électrique sous haute tension permet de
+      limiter très fortement les pertes par effet Joule dans les lignes,
+      donc de réduire les émissions de gaz à effet de serre associées à
+      la production d'électricité nécessaire pour compenser ces pertes.
+    </p>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation
+      sélectionné. Répondre aux questions de l'onglet que vous avez réalisé :
+      les quatre premières portent sur l'objet du TP de l'onglet, la cinquième
+      répond à sa problématique.
+    </p>
+
+    <div class="questions-bloc" data-tp="transport-energie" data-onglet="reseau-distribution" data-onglet-nom="Réseau de distribution">
+
+    <h4>Questions de l'onglet « Réseau de distribution »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Représenter le schéma simplifié du réseau de distribution d'énergie électrique, de la centrale à l'installation domestique, en indiquant les transformateurs et le niveau de tension de chaque étape (THT/HTB, HT, HTA, BT).
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-reseau-distribution-1" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À l'aide des fiches du schéma interactif, compléter pour chaque étape (production, transport, répartition, poste source, distribution) le type de ligne, la tension et le rôle du transformateur (élévateur ou abaisseur).
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-reseau-distribution-2" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Décrire comment évolue la tension de la centrale jusqu'à l'installation domestique et justifier la place des transformateurs élévateur et abaisseurs le long du réseau.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-reseau-distribution-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Exprimer en volts puis en kilovolts la tension de chacune des étapes du réseau (par exemple 400 kV = 400 000 V) et associer chaque niveau de tension à la couleur de la légende du schéma.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-reseau-distribution-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Réseau de distribution » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="reseau-distribution"></p>
+        <div class="zone-eleve">
+          <textarea id="question-reseau-distribution-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="transport-energie" data-onglet="effet-joule" data-onglet-nom="Effet Joule et pertes en ligne" hidden>
+
+    <h4>Questions de l'onglet « Effet Joule et pertes en ligne »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire la relation donnant la puissance dissipée par effet Joule dans une ligne électrique en fonction de sa résistance et de l'intensité, en précisant le nom et l'unité de chaque grandeur. Expliquer pourquoi une ligne s'échauffe.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-effet-joule-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Dans le simulateur, relever pour P = 20 kW et R = 2 Ω les intensités I₁ (basse tension) et I₂ (haute tension), puis les pertes Joule dans chaque cas. Vérifier l'une des valeurs en calculant R × I².
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-effet-joule-2" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Pour une puissance transportée donnée, comparer les intensités puis les pertes par effet Joule en basse et en haute tension : de quel facteur diminuent I et les pertes lorsque la tension est multipliée par 10 ?
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-effet-joule-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Exprimer, en pourcentage de la puissance transportée, la part perdue en basse tension puis en haute tension, avec les unités et un nombre adapté de chiffres significatifs, et rédiger une phrase de conclusion.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-effet-joule-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Effet Joule et pertes en ligne » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="effet-joule"></p>
+        <div class="zone-eleve">
+          <textarea id="question-effet-joule-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="transport-energie" data-onglet="transformateur" data-onglet-nom="Transformateur" hidden>
+
+    <h4>Questions de l'onglet « Transformateur »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire la relation entre les tensions et les nombres de spires d'un transformateur. Définir primaire et secondaire, puis indiquer à quelle condition un transformateur est élévateur ou abaisseur de tension.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-transformateur-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Dans le simulateur, régler U₁ = 12 V, N₁ = 200 spires, N₂ = 100 spires puis relever U₂ ; recommencer avec N₂ = 400 spires. Noter les deux résultats.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-transformateur-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir des tensions U₁ et U₂ mesurées sur le transformateur réel, calculer le rapport U₂ / U₁, préciser si le transformateur est élévateur ou abaisseur de tension et en déduire le rapport N₂ / N₁.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-transformateur-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Rédiger une phrase de conclusion indiquant, avec les valeurs mesurées et leurs unités, si le transformateur étudié élève ou abaisse la tension, puis citer un transformateur du réseau électrique de chaque type.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-transformateur-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Transformateur » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="transformateur"></p>
+        <div class="zone-eleve">
+          <textarea id="question-transformateur-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="transport-energie" data-onglet="manipulation-reelle" data-onglet-nom="Manipulation réelle" hidden>
+
+    <h4>Questions de l'onglet « Manipulation réelle »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Préciser, pour chaque mesure de la manipulation, la position du multimètre (V~ ou A~) et son branchement (en dérivation ou en série), en justifiant.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-manipulation-reelle-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Partie A : donner les tensions U₁ et U₂ mesurées, calculer U₂ / U₁ et indiquer si le transformateur utilisé est élévateur ou abaisseur de tension.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-manipulation-reelle-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Partie B : comparer les intensités I₁ et I₂ et calculer les puissances dissipées R₁ × I₁² et R₂ × I₂², puis les vérifier avec P = U² / R (U = 12 V). Relier ces résultats à l'échauffement ressenti.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-manipulation-reelle-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Rédiger en quelques phrases la conclusion de la manipulation (transformateur et effet Joule), avec les valeurs mesurées et leurs unités.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-manipulation-reelle-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Manipulation réelle » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="manipulation-reelle"></p>
+        <div class="zone-eleve">
+          <textarea id="question-manipulation-reelle-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Décrire les grandes étapes du réseau de distribution électrique.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Mesurer les tensions au primaire et au secondaire d'un transformateur.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Justifier l'intérêt du transport sous haute tension à partir des pertes par effet Joule.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier la cohérence du rapport de transformation mesuré.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Représenter et légender le schéma d'un réseau de distribution électrique.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div class="espace-haut-md" id="radar-resultat"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, Imprimer votre TP en PDF.
+      Envoyer à l'enseignant votre Compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les réponses aux questions ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-tp="tp01-puissance-energie">
+    ← TP01
+  </button>
+
+  <button class="btn btn-primaire" data-aller-tp="tp03-puissance-active">
+    TP03 →
+  </button>
+
+</div>
+
+</main>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

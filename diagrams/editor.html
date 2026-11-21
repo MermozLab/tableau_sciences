@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>MermozLab -- Editeur diagrams.net</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/editor.css">
+</head>
+<body>
+<div id="topbar">
+  <span class="title"><i class="fas fa-diagram-project" aria-hidden="true"></i> MermozLab -- Editeur diagrams.net</span>
+  <span id="status">Chargement de l'editeur...</span>
+  <button id="btn-enregistrer-drawio" type="button" title="Telecharger le diagramme au format .drawio"><i class="fas fa-floppy-disk" aria-hidden="true"></i> Enregistrer sous .drawio</button>
+  <a href="index.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> Retour au catalogue</a>
+  <a id="fulltab-link" href="https://app.diagrams.net/" target="_blank" rel="noopener"><i class="fas fa-up-right-from-square" aria-hidden="true"></i> Ouvrir en plein ecran</a>
+</div>
+<div id="frame-wrap">
+  <iframe id="drawio-frame"
+    title="Editeur diagrams.net -- MermozLab"
+    allow="clipboard-read; clipboard-write"
+    referrerpolicy="strict-origin-when-cross-origin">
+  </iframe>
+</div>
+<script src="assets/editor.js"></script>
+</body>
+</html>

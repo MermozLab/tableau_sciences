@@ -1,0 +1,753 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucune balise script dans ce fragment (le contrôleur js/td04-nuage-points-ajustement.js
+  est importé par navigation.js, qui appelle son export init()).
+  Structure conforme à claude_v7.md : objectif, contexte-pro, preparation,
+  bilan, auto-evaluation, impression_tp.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Mathi</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Nuage de points et ajustement</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">1ère</span>
+        <span class="tag">Tle</span>
+        <span class="tag">Statistique et probabilités</span>
+        <span class="tag">Nuage de points - </span><span class="tag">Ajustement affine - </span><span class="tag">Coefficient de détermination</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TD S04</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      Ce TD est commun aux classes de 1ère et de Terminale : sélectionner
+      votre filière et votre niveau ci-dessous fait apparaître les
+      onglets correspondant à votre programme.
+    </p>
+
+    <ul>
+      <li><strong>1ère —</strong> Représenter un nuage de points associé à une série statistique à deux variables quantitatives, à l'aide d'outils numériques.</li>
+      <li><strong>1ère —</strong> Réaliser un ajustement affine (méthode des moindres carrés), interpoler ou extrapoler des valeurs inconnues.</li>
+      <li><strong>1ère —</strong> Déterminer le coefficient de détermination R² et évaluer la pertinence d'un ajustement affine.</li>
+      <li><strong>Tle —</strong> Choisir un modèle adapté (pas nécessairement affine) pour ajuster un nuage de points, à l'aide d'un changement de variable (par exemple z = log(y)).</li>
+      <li><em>Domaine transversal — Co-intervention :</em> ce module est mis en œuvre dans les domaines Mécanique et Électricité de SciLab, chaque fois qu'une grandeur physique dépend d'une autre (distance/temps, résistance/intensité...).</li>
+      <li><em>Domaine transversal — Capacités mathématiques : chercher, modéliser, représenter, calculer, raisonner et communiquer.</em></li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Deux grandeurs liées par le processus de fabrication (épaisseur
+      et temps de découpe, vitesse et usure d'outil, longueur et temps
+      de traitement...) varient souvent l'une avec l'autre. Un
+      ajustement permet de modéliser cette liaison et de prévoir une
+      valeur non mesurée.
+    </div>
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre niveau et votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre niveau et votre filière professionnelle pour afficher le contexte et la problématique associée.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">📐</div>
+    <h2>Activités</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="toolbar">
+      <a class="btn btn-secondaire" href="../../numworks/emulator.html" data-outil-index="Calculatrice NumWorks" target="_blank" rel="noopener">
+        🧮 Ouvrir la calculatrice NumWorks
+      </a>
+    </div>
+
+    <div id="td04-message-filiere" class="info">
+      Sélectionner votre filière ci-dessus : l'onglet « Ajustement non affine » n'apparaît qu'au niveau Terminale.
+    </div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="nuage-ajustement-affine">Nuage de points et ajustement affine</button>
+        <button class="tab-btn" data-tab="interpoler-extrapoler">Interpoler / extrapoler</button>
+        <button class="tab-btn" data-tab="ajustement-non-affine" data-niveau="tle">Ajustement non affine (Tle)</button>
+        <button class="tab-btn" data-tab="activites-puzzle">🧩 Activités Puzzle</button>
+      </div>
+
+      <!-- ============================================= -->
+      <!-- NUAGE DE POINTS ET AJUSTEMENT AFFINE          -->
+      <!-- ============================================= -->
+
+      <div class="tab-panel actif" id="nuage-ajustement-affine">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="nuage-ajustement-affine"></p>
+        </div>
+
+        <h3>Construire le nuage de points et la droite d'ajustement</h3>
+
+        <div class="info">
+          Saisir une série de couples (x ; y) mesurés (par exemple :
+          épaisseur de tôle et temps de découpe). La droite
+          d'ajustement et son équation s'affichent automatiquement dès
+          que 3 points au moins sont saisis.
+        </div>
+
+        <h4 class="espace-haut-lg">Méthodologie</h4>
+
+        <ol class="etapes espace-bas-lg">
+          <li>Choisir deux grandeurs quantitatives liées de votre filière (voir contexte professionnel).</li>
+          <li>Saisir au moins 5 couples de valeurs mesurées.</li>
+          <li>Lire l'équation de la droite d'ajustement et le coefficient de détermination R².</li>
+          <li>Un R² proche de 1 indique-t-il nécessairement un lien de cause à effet entre les deux grandeurs ?</li>
+        </ol>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="na-x">x</label>
+            <input id="na-x" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="na-y">y</label>
+            <input id="na-y" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="na-ajouter" type="button" class="btn btn-primaire">
+              + Ajouter le point
+            </button>
+          </div>
+
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr><th>N°</th><th>x</th><th>y</th></tr>
+            </thead>
+            <tbody id="na-tbody"></tbody>
+          </table>
+        </div>
+
+        <div id="na-nuage" class="graphique-conteneur"></div>
+
+        <div id="na-resultat" class="resultat-calcul"></div>
+
+      </div>
+
+      <!-- ============================================= -->
+      <!-- INTERPOLER / EXTRAPOLER                       -->
+      <!-- ============================================= -->
+
+      <div class="tab-panel" id="interpoler-extrapoler">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="interpoler-extrapoler"></p>
+        </div>
+
+        <h3>Utiliser l'ajustement pour interpoler ou extrapoler</h3>
+
+        <div class="info">
+          À partir de la droite d'ajustement construite dans l'onglet
+          précédent, estimer une valeur de y pour un x donné —
+          interpolation si x est compris dans l'intervalle des valeurs
+          mesurées, extrapolation sinon.
+        </div>
+
+        <h4 class="espace-haut-lg">Méthodologie</h4>
+
+        <ol class="etapes espace-bas-lg">
+          <li>Choisir une valeur de x à l'intérieur de l'intervalle mesuré (interpolation) puis une valeur en dehors (extrapolation).</li>
+          <li>Comparer la fiabilité attendue des deux estimations.</li>
+        </ol>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="ie-x">Valeur de x à estimer</label>
+            <input id="ie-x" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="ie-estimer" type="button" class="btn btn-primaire">
+              Estimer y
+            </button>
+          </div>
+
+        </div>
+
+        <div id="ie-resultat" class="resultat-calcul">
+          Construire d'abord l'ajustement dans l'onglet précédent (au moins 3 points).
+        </div>
+
+      </div>
+
+      <!-- ============================================= -->
+      <!-- AJUSTEMENT NON AFFINE (TLE)                   -->
+      <!-- ============================================= -->
+
+      <div class="tab-panel" id="ajustement-non-affine" data-niveau="tle">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="ajustement-non-affine"></p>
+        </div>
+
+        <h3>Ajustement non affine par changement de variable</h3>
+
+        <div class="info">
+          Certaines évolutions ne sont pas linéaires (croissance ou
+          décroissance de plus en plus rapide). Poser z = log(y)
+          permet de se ramener à un ajustement affine entre x et z :
+          si z ≈ A x + K, alors y ≈ 10<sup>K</sup> × 10<sup>A x</sup>
+          (modèle exponentiel).
+        </div>
+
+        <h4 class="espace-haut-lg">Méthodologie</h4>
+
+        <ol class="etapes espace-bas-lg">
+          <li>Saisir au moins 5 couples (x ; y) avec y strictement positif.</li>
+          <li>Observer le coefficient de détermination calculé sur les données transformées (x ; z) : un R² proche de 1 valide le modèle exponentiel choisi.</li>
+          <li>Écrire le modèle obtenu sous la forme y = 10<sup>K</sup> × 10<sup>A x</sup>.</li>
+        </ol>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="na2-x">x</label>
+            <input id="na2-x" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="na2-y">y (strictement positif)</label>
+            <input id="na2-y" type="number" step="0.1" min="0.0001">
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="na2-ajouter" type="button" class="btn btn-primaire">
+              + Ajouter le point
+            </button>
+          </div>
+
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr><th>N°</th><th>x</th><th>y</th><th>z = log₁₀(y)</th></tr>
+            </thead>
+            <tbody id="na2-tbody"></tbody>
+          </table>
+        </div>
+
+        <div id="na2-nuage" class="graphique-conteneur"></div>
+
+        <div id="na2-resultat" class="resultat-calcul"></div>
+
+      </div>
+
+      <!-- ---------- ACTIVITÉS PUZZLE (onglet indépendant, sans zone de saisie) ---------- -->
+      <div class="tab-panel" id="activites-puzzle">
+
+        <h3>🧩 Activités Puzzle</h3>
+
+        <div id="puzzle-info" class="info">
+          Sélectionner votre filière professionnelle dans la section « Contexte professionnel »
+          ci-dessus pour afficher les sujets.
+        </div>
+
+        <div class="info">
+          Organisation en <strong>classe puzzle</strong> : chaque groupe expert traite un sujet (nuage de points, droite d’ajustement, interpolation / extrapolation). En groupe mélangé, les experts comparent les trois étapes : allure du nuage, qualité de l’ajustement, fiabilité des prévisions. Dans quel cas peut-on faire confiance à une extrapolation ?
+        </div>
+
+        <div class="toolbar">
+          <a class="btn btn-secondaire" href="../../roue/index.html" target="_blank" rel="noopener">
+            🎡 Ouvrir la roue (tirage des groupes)
+          </a>
+        </div>
+
+        <div class="sous-onglets" role="tablist">
+        <button class="sous-btn actif" data-sous="puzzle-sujet-a">Sujet A</button>
+        <button class="sous-btn" data-sous="puzzle-sujet-b">Sujet B</button>
+        <button class="sous-btn" data-sous="puzzle-sujet-c">Sujet C</button>
+        </div>
+
+      <div class="sous-panel actif" id="puzzle-sujet-a">
+        <div class="fiche-puzzle" data-titre="Nuage de points">
+          <div class="questions-bloc" data-tp="puzzle-a">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet A — Nuage de points</strong>
+                <span class="cartouche" data-comp="REA">REA</span></div>
+              <p class="info puzzle-contexte" id="puzzle-a-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-a-problematique"></p>
+              <ol id="puzzle-a-enonce" class="puzzle-questions"></ol>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+      <div class="sous-panel" id="puzzle-sujet-b">
+        <div class="fiche-puzzle" data-titre="Droite d’ajustement">
+          <div class="questions-bloc" data-tp="puzzle-b">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet B — Droite d’ajustement</strong>
+                <span class="cartouche" data-comp="ANA">ANA</span></div>
+              <p class="info puzzle-contexte" id="puzzle-b-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-b-problematique"></p>
+              <ol id="puzzle-b-enonce" class="puzzle-questions"></ol>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+      <div class="sous-panel" id="puzzle-sujet-c">
+        <div class="fiche-puzzle" data-titre="Interpoler / extrapoler">
+          <div class="questions-bloc" data-tp="puzzle-c">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet C — Interpoler / extrapoler</strong>
+                <span class="cartouche" data-comp="VAL">VAL</span></div>
+              <p class="info puzzle-contexte" id="puzzle-c-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-c-problematique"></p>
+              <ol id="puzzle-c-enonce" class="puzzle-questions"></ol>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées suivent l'onglet d'activité actif : ouvrir
+      l'onglet travaillé dans la section « Activités » pour répondre aux
+      questions correspondantes.
+    </p>
+
+    <div class="questions-bloc" data-tp="statistiques-nuage-ajustement-affine" data-onglet="nuage-ajustement-affine" data-onglet-nom="Nuage de points et ajustement affine" hidden>
+      <h4>Questions de l'onglet « Nuage de points et ajustement affine »</h4>
+      <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Rappeler ce qu'est un nuage de points et ce que représente la droite d'ajustement obtenue par la méthode des moindres carrés.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-nuage-ajustement-affine-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Donner l'équation de la droite d'ajustement obtenue et le coefficient de détermination associé.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-nuage-ajustement-affine-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Décrire la forme du nuage et interpréter le coefficient directeur a dans la situation professionnelle.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-nuage-ajustement-affine-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Le coefficient de détermination obtenu permet-il d'affirmer qu'il existe un lien de cause à effet entre les deux grandeurs étudiées ? Justifier.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-nuage-ajustement-affine-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="nuage-ajustement-affine"></p>
+        <div class="zone-eleve"><textarea id="question-nuage-ajustement-affine-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+      </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="statistiques-interpoler-extrapoler" data-onglet="interpoler-extrapoler" data-onglet-nom="Interpoler / extrapoler" hidden>
+      <h4>Questions de l'onglet « Interpoler / extrapoler »</h4>
+      <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer la différence entre interpoler et extrapoler.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-interpoler-extrapoler-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Utiliser l'équation pour estimer une valeur par interpolation, puis une valeur par extrapolation.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-interpoler-extrapoler-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer pourquoi une extrapolation est moins fiable qu'une interpolation.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-interpoler-extrapoler-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Comparer la valeur estimée à l'allure du nuage (ou à une mesure réelle) et conclure sur la fiabilité de chaque estimation.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-interpoler-extrapoler-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="interpoler-extrapoler"></p>
+        <div class="zone-eleve"><textarea id="question-interpoler-extrapoler-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+      </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="statistiques-ajustement-non-affine" data-onglet="ajustement-non-affine" data-onglet-nom="Ajustement non affine (Tle)" hidden>
+      <h4>Questions de l'onglet « Ajustement non affine (Tle) »</h4>
+      <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Rappeler le changement de variable z = log(y) et le modèle y = 10^K × 10^(A x) qu'il permet d'obtenir.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-ajustement-non-affine-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Indiquer le type d'ajustement non affine utilisé et donner l'équation obtenue.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-ajustement-non-affine-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Comparer les coefficients de détermination des ajustements affine et non affine et conclure sur le modèle le plus adapté.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-ajustement-non-affine-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier que toutes les valeurs de y sont strictement positives et que le modèle obtenu reproduit l'allure du nuage.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-ajustement-non-affine-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="ajustement-non-affine"></p>
+        <div class="zone-eleve"><textarea id="question-ajustement-non-affine-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+      </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="statistiques-activites-puzzle" data-onglet="activites-puzzle" data-onglet-nom="🧩 Activités Puzzle" hidden>
+      <h4>Questions de l'onglet « 🧩 Activités Puzzle »</h4>
+      <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Indiquer le sujet traité par votre groupe (A nuage, B droite d'ajustement, C interpolation / extrapolation) et rappeler la notion mobilisée.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Donner les résultats obtenus pour votre sujet : coordonnées du point moyen G, équation y = ax + b ou valeurs estimées.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Interpréter ces résultats dans la situation professionnelle (sens de a, fiabilité de la prévision).</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier graphiquement que la droite passe près du point moyen G et que les estimations sont cohérentes avec le nuage.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de votre sujet en vous appuyant sur vos résultats :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+      </ol>
+    <p class="info">Les fiches Sujet A, B et C de l'onglet « Activités Puzzle » sont des fiches de consigne : seules vos réponses à ces questions sont reprises dans le compte-rendu.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TD, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Représenter un nuage de points associé à deux variables quantitatives.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Déterminer une droite d'ajustement et l'utiliser pour interpoler ou extrapoler.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Évaluer la pertinence d'un ajustement à l'aide du coefficient de détermination.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Distinguer corrélation et causalité entre deux grandeurs.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Présenter et justifier un modèle d'ajustement à l'oral ou à l'écrit.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" type="button" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div id="radar-resultat" class="espace-haut-md"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TD, imprimer votre travail en PDF.
+      Envoyer à l'enseignant votre compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" type="button" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les réponses aux questions de l'onglet affiché ;</li>
+        <li>l'auto-évaluation des compétences et le radar.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button type="button" class="btn btn-secondaire" data-aller-accueil>
+    🏠 Accueil
+  </button>
+
+  <button type="button" class="btn btn-primaire" data-aller-tp="td05-tableau-croise-arbre-pondere">
+    TD S05 →
+  </button>
+
+</div>
+
+</main>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

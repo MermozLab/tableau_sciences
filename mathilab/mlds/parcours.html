@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Générateur de parcours MLDS — Mathématiques — MathiLab</title>
+<link rel="icon" href="data:,">
+<!-- Police Atkinson Hyperlegible auto-hébergée (source unique : /fonts à la racine du projet) -->
+<link rel="stylesheet" href="../../fonts/fonts.css">
+<link rel="stylesheet" href="css/parcours.css">
+<link rel="stylesheet" href="css/historique.css">
+<link rel="stylesheet" href="css/complementaire.css">
+</head>
+<body>
+<div id="app" class="app"></div>
+<button type="button" id="btn-imprimer-pdf" class="btn-imprimer-pdf no-print"
+        aria-label="Imprimer cette page en PDF">
+  <span aria-hidden="true">🖨️</span> Imprimer en PDF
+</button>
+<script src="js/supabase-config.js"></script>
+<script src="js/historique.js"></script>
+<script src="js/sources.js"></script>
+<script src="js/data.js"></script>
+<script src="js/data-fiches.js"></script>
+<script src="js/parcours-complementaire.js"></script>
+<script src="js/game.js"></script>
+<script src="js/game-complementaire.js"></script>
+<script src="js/app.js"></script>
+<script type="module">
+  // « Imprimer en PDF » : identification (nom, prénom, classe, date) puis PDF
+  // nommé MermozLab_NOM_Prenom_id=xxxxxxxx (module commun js/impression-identifiee.js)
+  import { imprimerAvecIdentite } from '../../js/impression-identifiee.js';
+  document.getElementById('btn-imprimer-pdf').addEventListener('click', () => imprimerAvecIdentite());
+</script>
+</body>
+</html>

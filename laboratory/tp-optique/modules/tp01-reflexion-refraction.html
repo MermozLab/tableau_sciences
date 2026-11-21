@@ -1,0 +1,887 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<!-- ====================================================== -->
+<!-- EN-TÊTE                                                 -->
+<!-- ====================================================== -->
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Réflexion et réfraction</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">2nde</span>
+        <span class="tag">Optique</span>
+        <span class="tag">Lois de Descartes, angle limite</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP O01</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<!-- ====================================================== -->
+<!-- CAPACITES                                               -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <ul>
+
+      <li><strong>2nde</strong> — Vérifier expérimentalement les lois de la réflexion et de la réfraction.</li>
+
+      <li><strong>2nde</strong> — Déterminer expérimentalement l'angle limite de réfraction et vérifier expérimentalement la réflexion totale.</li>
+
+      <li><strong>2nde</strong> — Connaître les lois de la réflexion et de la réfraction.</li>
+
+      <li><strong>2nde</strong> — Savoir que la réfringence d'un milieu est liée à la valeur de son indice de réfraction.</li>
+
+      <li><strong>2nde</strong> — Connaître la condition d'existence de l'angle limite de réfraction et du phénomène de réflexion totale.</li>
+
+    </ul>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- CONTEXTE PROFESSIONNEL                                  -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- SECURITE                                                -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="securite">
+
+  <div class="section-titre">
+    <div class="picto-section">⚠️</div>
+    <h2>Sécurité</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Ce TP ne met pas en œuvre de produit chimique. Le risque
+      principal est le risque oculaire lié à l'utilisation d'un
+      pointeur laser.
+    </div>
+
+    <ul class="liste-aeree">
+      <li><strong>Source laser :</strong> ne jamais viser les yeux, ni directement ni par réflexion sur une surface brillante (métal poli, miroir).</li>
+      <li><strong>Classe du laser :</strong> le pointeur utilisé en classe est de classe II, à faible puissance, mais l'exposition directe reste à éviter.</li>
+      <li><strong>Monochromaticité et divergence :</strong> un faisceau laser reste fin et concentré sur de grandes distances, ce qui augmente le risque en cas de visée accidentelle.</li>
+    </ul>
+
+    <div class="epi-bloc">
+      <p><strong>Équipements de protection recommandés :</strong> lunettes de protection laser adaptées à la longueur d'onde utilisée si la puissance de la source le nécessite.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- MATERIEL                                                -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+    <div class="picto-section">🧪</div>
+    <h2>Matériel nécessaire</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- MANIPULATIONS                                           -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">⚗️</div>
+    <h2>Manipulations</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="tp01-message-filiere" class="info" hidden></div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="loi-reflexion">Loi de la réflexion</button>
+        <button class="tab-btn" data-tab="loi-refraction">Loi de la réfraction</button>
+        <button class="tab-btn" data-tab="angle-limite">Angle limite et réflexion totale</button>
+      </div>
+
+      <!-- ============================ -->
+      <!-- LOI DE LA REFLEXION          -->
+      <!-- ============================ -->
+
+      <div class="tab-panel actif" id="loi-reflexion">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="loi-reflexion"></p>
+        </div>
+
+
+        <h3>La loi de la réflexion</h3>
+
+        <div class="info">
+          Lorsqu'un rayon lumineux se réfléchit sur une surface plane,
+          l'angle de réflexion i₂ est égal à l'angle d'incidence i₁,
+          les deux angles étant mesurés par rapport à la normale à la
+          surface.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Placer le miroir plan au centre du disque optique gradué.</li>
+          <li>Envoyer le faisceau laser selon un angle d'incidence i₁ choisi, mesuré par rapport à la normale.</li>
+          <li>Mesurer l'angle du rayon réfléchi i₂ sur le disque gradué et le saisir ci-dessus.</li>
+          <li>Recommencer pour trois valeurs différentes de i₁.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp01-loi-reflexion.svg" alt="Schéma de la loi de la réflexion : un laser envoie un rayon incident sur un miroir plan horizontal au point d'incidence O ; la normale au miroir est tracée en tirets ; le rayon réfléchi repart symétriquement de l'autre côté de la normale ; l'angle d'incidence i1 et l'angle de réflexion i2 sont mesurés entre chaque rayon et la normale" width="600" height="300" loading="lazy">
+          <p class="mode-legende">Les angles i₁ et i₂ se mesurent par rapport à la normale au miroir, non par rapport à sa surface.</p>
+        </div>
+
+        <div class="formule">
+          i₁ = i₂
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="reflexion-i1">Angle d'incidence i₁ (°)</label>
+            <input id="reflexion-i1" type="number" step="1" min="0" max="89">
+          </div>
+
+          <div class="form-group">
+            <label for="reflexion-i2-mesure">Angle de réflexion mesuré i₂ (°)</label>
+            <input id="reflexion-i2-mesure" type="number" step="1" min="0" max="89">
+          </div>
+
+          <div class="form-group">
+            <label for="reflexion-ecart">Écart à la loi</label>
+            <div class="input-unite">
+              <output id="reflexion-ecart">—</output>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- LOI DE LA REFRACTION         -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="loi-refraction">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="loi-refraction"></p>
+        </div>
+
+
+        <h3>La loi de la réfraction (Snell-Descartes)</h3>
+
+        <div class="info">
+          Lorsqu'un rayon lumineux traverse la surface séparant deux
+          milieux transparents d'indices n₁ et n₂, les angles
+          d'incidence i₁ et de réfraction i₂ (mesurés par rapport à la
+          normale) vérifient la relation de Snell-Descartes.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Placer le bloc hémicylindrique sur le disque gradué, face plane vers le rayon incident, centre optique confondu avec le centre du disque.</li>
+          <li>Envoyer le faisceau laser depuis l'air (n₁ = 1,000) selon un angle d'incidence i₁ choisi.</li>
+          <li>Mesurer l'angle de réfraction dans le plexiglas et le saisir dans le champ « mesuré » : l'indice n₂ du matériau est déduit automatiquement.</li>
+          <li>Comparer l'indice obtenu à la valeur usuelle du plexiglas (environ 1,49) et recommencer pour au moins deux autres angles.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp01-loi-refraction.svg" alt="Schéma de la loi de la réfraction : un rayon laser venant de l'air (indice n1 = 1,00) frappe au centre O la face plane verticale d'un bloc hémicylindrique de plexiglas (indice n2 = 1,49) posé sur un disque gradué ; la normale horizontale est tracée en tirets ; le rayon réfracté dans le plexiglas se rapproche de la normale (i2 inférieur à i1) ; un faible rayon réfléchi repart vers l'air" width="600" height="320" loading="lazy">
+          <p class="mode-legende">Dans le plexiglas, plus réfringent que l'air, le rayon se rapproche de la normale : i₂ < i₁.</p>
+        </div>
+
+        <div class="formule">
+          n₁ × sin(i₁) = n₂ × sin(i₂)
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="refraction-n1">Indice du milieu 1 (n₁)</label>
+            <input id="refraction-n1" type="number" step="0.001" value="1.000">
+          </div>
+
+          <div class="form-group">
+            <label for="refraction-i1">Angle d'incidence i₁ (°)</label>
+            <input id="refraction-i1" type="number" step="0.1" min="0" max="89">
+          </div>
+
+          <div class="form-group">
+            <label for="refraction-n2">Indice du milieu 2 (n₂)</label>
+            <input id="refraction-n2" type="number" step="0.001" value="1.490">
+          </div>
+
+          <div class="form-group">
+            <label for="refraction-i2-out">Angle de réfraction i₂ calculé</label>
+            <div class="input-unite">
+              <output id="refraction-i2-out">—</output>
+            </div>
+          </div>
+
+        </div>
+
+        <h4>Vérification à partir d'une mesure</h4>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="refraction-i2-mesure">Angle de réfraction mesuré (°)</label>
+            <input id="refraction-i2-mesure" type="number" step="0.1" min="0" max="89">
+          </div>
+
+          <div class="form-group">
+            <label for="refraction-n2-calcule">Indice n₂ déduit de la mesure</label>
+            <div class="input-unite">
+              <output id="refraction-n2-calcule">—</output>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- ANGLE LIMITE                 -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="angle-limite">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="angle-limite"></p>
+        </div>
+
+
+        <h3>Angle limite et réflexion totale</h3>
+
+        <div class="info">
+          Lorsque la lumière passe d'un milieu plus réfringent (n₁) vers
+          un milieu moins réfringent (n₂ &lt; n₁), il existe un angle
+          limite θ_lim au-delà duquel toute la lumière est réfléchie :
+          c'est le phénomène de réflexion totale.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Reprendre le montage du bloc hémicylindrique, mais en envoyant cette fois le faisceau laser depuis l'intérieur du plexiglas vers l'air.</li>
+          <li>Calculer l'angle limite à l'aide de la relation ci-dessus.</li>
+          <li>Faire varier l'angle d'incidence et observer, pour chaque valeur, si un rayon réfracté sort dans l'air ou si toute la lumière est réfléchie.</li>
+          <li>Comparer chaque angle testé à l'angle limite calculé et vérifier la cohérence avec l'observation.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp01-angle-limite.svg" alt="Trois schémas d'un rayon qui traverse un bloc hémicylindrique de plexiglas depuis l'intérieur vers l'air : à gauche, pour un angle d'incidence inférieur à l'angle limite, une partie de la lumière sort dans l'air en s'éloignant de la normale ; au centre, pour un angle égal à l'angle limite, le rayon émergent est rasant (r = 90°) ; à droite, pour un angle supérieur à l'angle limite, toute la lumière est réfléchie dans le plexiglas (réflexion totale)" width="600" height="300" loading="lazy">
+          <p class="mode-legende">Au-delà de l'angle limite θ_lim, il n'y a plus de rayon réfracté : c'est la réflexion totale.</p>
+        </div>
+
+        <div class="formule">
+          sin(θ_lim) = n₂ / n₁, condition d'existence : n₂ &lt; n₁
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="limite-n1">Indice du milieu incident n₁ (plexiglas)</label>
+            <input id="limite-n1" type="number" step="0.001" value="1.490">
+          </div>
+
+          <div class="form-group">
+            <label for="limite-n2">Indice du milieu émergent n₂ (air)</label>
+            <input id="limite-n2" type="number" step="0.001" value="1.000">
+          </div>
+
+          <div class="form-group">
+            <label for="limite-angle-out">Angle limite θ_lim calculé</label>
+            <div class="input-unite">
+              <output id="limite-angle-out">—</output>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="limite-angle-teste">Angle d'incidence testé (°), depuis le plexiglas</label>
+            <input id="limite-angle-teste" type="number" step="0.1" min="0" max="89">
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="limite-verifier" type="button" class="btn btn-primaire">
+              ✓ Vérifier le comportement du rayon
+            </button>
+          </div>
+
+        </div>
+
+        <div id="limite-resultat" class="feedback-verification espace-haut-md">
+          Compléter les indices et l'angle testé, puis cliquer sur « Vérifier ».
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- OPTIQUE ET ENVIRONNEMENT                                -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Optique et environnement</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Éteindre la source laser dès la fin des mesures.</li>
+      <li>Ranger le bloc hémicylindrique et le disque gradué à l'abri des chocs.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">La réflexion totale, un principe industriel</h3>
+
+    <p>
+      Le phénomène de réflexion totale, mis en évidence dans ce TP,
+      est le principe de fonctionnement des fibres optiques utilisées
+      dans les réseaux de télécommunication : il permet de guider la
+      lumière sur de longues distances avec très peu de pertes
+      d'énergie.
+    </p>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- TRACE ECRITE - COMPTE RENDU                            -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation
+      sélectionné. Répondre aux questions de l'onglet que vous avez réalisé :
+      les quatre premières portent sur l'objet du TP de l'onglet, la cinquième
+      répond à sa problématique.
+    </p>
+
+    <div class="questions-bloc" data-tp="reflexion-refraction" data-onglet="loi-reflexion" data-onglet-nom="Loi de la réflexion">
+
+    <h4>Questions de l'onglet « Loi de la réflexion »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Énoncer la loi de la réflexion et préciser par rapport à quelle droite les angles d'incidence et de réflexion sont mesurés.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-loi-reflexion-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Décrire le protocole suivi pour mesurer l'angle de réflexion i₂ pour trois valeurs différentes de l'angle d'incidence i₁.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-loi-reflexion-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Analyser vos mesures : comparer i₂ et i₁ pour chaque essai et expliquer les écarts éventuels (précision de lecture du disque gradué, position du faisceau).
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-loi-reflexion-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Conclure : vos mesures permettent-elles de valider la relation i₁ = i₂ ? Justifier en citant les écarts relevés.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-loi-reflexion-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="loi-reflexion"></p>
+        <div class="zone-eleve">
+          <textarea id="question-loi-reflexion-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="reflexion-refraction" data-onglet="loi-refraction" data-onglet-nom="Loi de la réfraction" hidden>
+
+    <h4>Questions de l'onglet « Loi de la réfraction »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire la relation de Snell-Descartes et indiquer ce que représentent n₁, n₂, i₁ et i₂.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-loi-refraction-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Décrire comment l'indice de réfraction n₂ du plexiglas est déduit d'une mesure de l'angle de réfraction i₂ (grandeurs à mesurer, calcul à effectuer).
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-loi-refraction-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer les indices n₂ obtenus pour vos différents angles d'incidence : sont-ils cohérents entre eux ? Les comparer à la valeur usuelle du plexiglas (environ 1,49).
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-loi-refraction-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Quand la lumière passe de l'air vers le plexiglas, le rayon se rapproche-t-il ou s'éloigne-t-il de la normale ? Justifier à l'aide de vos mesures et de la notion de réfringence.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-loi-refraction-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="loi-refraction"></p>
+        <div class="zone-eleve">
+          <textarea id="question-loi-refraction-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="reflexion-refraction" data-onglet="angle-limite" data-onglet-nom="Angle limite et réflexion totale" hidden>
+
+    <h4>Questions de l'onglet « Angle limite et réflexion totale »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Donner la condition d'existence de l'angle limite de réfraction et la relation qui permet de le calculer.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-angle-limite-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Calculer l'angle limite θ_lim pour un passage du plexiglas vers l'air (n₁ = 1,49 et n₂ = 1,00) en détaillant le calcul.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-angle-limite-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Analyser vos essais : pour des angles inférieurs puis supérieurs à θ_lim, décrire ce que devient le rayon lumineux dans l'air.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-angle-limite-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vos observations sont-elles cohérentes avec l'angle limite calculé ? Justifier en comparant l'angle testé à θ_lim.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-angle-limite-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="angle-limite"></p>
+        <div class="zone-eleve">
+          <textarea id="question-angle-limite-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- AUTO-ÉVALUATION                                         -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Connaître les lois de la réflexion et de la réfraction.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Mesurer des angles et déterminer un indice de réfraction.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Interpréter l'apparition de la réflexion totale au-delà de l'angle limite.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier la cohérence des résultats obtenus.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Présenter les résultats avec un vocabulaire scientifique.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+
+      <div class="espace-haut-md" id="radar-resultat"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- IMPRESSION COMPTE RENDU                                 -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, imprimer votre compte-rendu en PDF.
+      L'envoyer à l'enseignant en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les réponses aux questions ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- NAVIGATION                                              -->
+<!-- ====================================================== -->
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-accueil>
+    🏠 Accueil
+  </button>
+
+  <button class="btn btn-primaire" data-aller-tp="tp02-spectre-lumiere-blanche">
+    TP02 →
+  </button>
+
+</div>
+
+</main>
+
+<!-- ====================================================== -->
+<!-- CONTENEUR IMPRESSION COMPTE RENDU                       -->
+<!-- ====================================================== -->
+
+<div id="cr-print-container" hidden></div>
+
+</section>

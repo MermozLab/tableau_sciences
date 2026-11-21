@@ -1,0 +1,674 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucune balise script dans ce fragment (le contrôleur js/td05-tableau-croise-arbre-pondere.js
+  est importé par navigation.js, qui appelle son export init()).
+  Structure conforme à claude_v7.md : objectif, contexte-pro, preparation,
+  bilan, auto-evaluation, impression_tp.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Mathi</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Tableau croisé, conditionnement et arbre pondéré</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">1ère</span>
+        <span class="tag">Tle</span>
+        <span class="tag">Statistique et probabilités</span>
+        <span class="tag">Tableau croisé - </span><span class="tag">Probabilité conditionnelle - </span><span class="tag">Arbre pondéré</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TD S05</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      Ce TD est commun aux classes de 1ère et de Terminale : sélectionner
+      votre filière et votre niveau ci-dessous fait apparaître les
+      onglets correspondant à votre programme.
+    </p>
+
+    <ul>
+      <li><strong>1ère —</strong> Compléter ou exploiter un tableau croisé d'effectifs ; calculer la probabilité d'un événement, d'un événement contraire, de la réunion ou de l'intersection de deux événements.</li>
+      <li><strong>1ère —</strong> Calculer une fréquence conditionnelle et une probabilité conditionnelle P<sub>A</sub>(B) à partir d'un tableau croisé d'effectifs.</li>
+      <li><strong>Tle —</strong> Représenter une situation aléatoire par un arbre pondéré ; calculer une probabilité à l'aide de la formule des probabilités totales.</li>
+      <li><strong>Tle —</strong> Montrer que deux événements sont indépendants (P(A∩B) = P(A) × P(B)).</li>
+      <li><em>Domaine transversal — Co-intervention :</em> le tableau croisé prolonge directement les diagrammes en secteurs et en bâtons construits en 2nde (TP S1) pour une série qualitative.</li>
+      <li><em>Domaine transversal — Capacités mathématiques : chercher, modéliser, représenter, calculer, raisonner et communiquer.</em></li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Un contrôle qualité croise souvent deux critères : l'origine
+      d'une pièce (poste, machine, atelier, agent, transporteur...) et
+      son résultat (conforme ou non). Le tableau croisé d'effectifs
+      permet de répondre à la question : le résultat dépend-il de
+      l'origine ?
+    </div>
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre niveau et votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre niveau et votre filière professionnelle pour afficher le contexte et la problématique associée.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">📐</div>
+    <h2>Activités</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="toolbar">
+      <a class="btn btn-secondaire" href="../../numworks/emulator.html" data-outil-index="Calculatrice NumWorks" target="_blank" rel="noopener">
+        🧮 Ouvrir la calculatrice NumWorks
+      </a>
+    </div>
+
+    <div id="td05-message-filiere" class="info">
+      Sélectionner votre filière ci-dessus : l'onglet « Arbre pondéré et indépendance » n'apparaît qu'au niveau Terminale.
+    </div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="tableau-croise">Tableau croisé et probabilité conditionnelle</button>
+        <button class="tab-btn" data-tab="arbre-pondere" data-niveau="tle">Arbre pondéré et indépendance (Tle)</button>
+        <button class="tab-btn" data-tab="activites-puzzle">🧩 Activités Puzzle</button>
+      </div>
+
+      <!-- ============================================= -->
+      <!-- TABLEAU CROISÉ ET PROBABILITÉ CONDITIONNELLE  -->
+      <!-- ============================================= -->
+
+      <div class="tab-panel actif" id="tableau-croise">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="tableau-croise"></p>
+        </div>
+
+        <h3>Compléter le tableau croisé d'effectifs</h3>
+
+        <div class="info">
+          Noter A l'événement « provient de l'origine 1 » et B
+          l'événement « résultat conforme ». Saisir les 4 effectifs du
+          tableau croisé pour calculer automatiquement les
+          probabilités associées.
+        </div>
+
+        <h4 class="espace-haut-lg">Méthodologie</h4>
+
+        <ol class="etapes espace-bas-lg">
+          <li>Choisir un critère d'origine (poste, machine, atelier, agent, transporteur) et un critère de résultat (conforme / non conforme) de votre filière.</li>
+          <li>Compter les effectifs sur un échantillon d'au moins 30 pièces ou dossiers, et compléter le tableau.</li>
+          <li>Comparer la probabilité P(B) et la probabilité conditionnelle P<sub>A</sub>(B) : le résultat semble-t-il dépendre de l'origine ?</li>
+        </ol>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th></th>
+                <th>B (conforme)</th>
+                <th>B̄ (non conforme)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>A (origine 1)</td>
+                <td><input id="tc-nab" type="number" step="1" min="0" placeholder="0"></td>
+                <td><input id="tc-nabbarre" type="number" step="1" min="0" placeholder="0"></td>
+              </tr>
+              <tr>
+                <td>Ā (origine 2)</td>
+                <td><input id="tc-nabarreb" type="number" step="1" min="0" placeholder="0"></td>
+                <td><input id="tc-nabarrebbarre" type="number" step="1" min="0" placeholder="0"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="toolbar">
+          <button id="tc-calculer" type="button" class="btn btn-primaire">
+            Calculer les probabilités
+          </button>
+        </div>
+
+        <div class="table-responsive espace-haut-md">
+          <table class="tableau-resultats">
+            <thead>
+              <tr><th>Grandeur</th><th>Valeur</th></tr>
+            </thead>
+            <tbody id="tc-tbody-resultats">
+              <tr><td colspan="2">Renseigner le tableau puis cliquer sur « Calculer ».</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ============================================= -->
+      <!-- ARBRE PONDÉRÉ ET INDÉPENDANCE (TLE)           -->
+      <!-- ============================================= -->
+
+      <div class="tab-panel" id="arbre-pondere" data-niveau="tle">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="arbre-pondere"></p>
+        </div>
+
+        <h3>Représenter la situation par un arbre pondéré</h3>
+
+        <div class="info">
+          Reprendre la même situation à l'aide de probabilités
+          conditionnelles connues : P(A), P<sub>A</sub>(B) (probabilité
+          que B se réalise sachant A) et P<sub>Ā</sub>(B) (probabilité
+          que B se réalise sachant Ā).
+        </div>
+
+        <h4 class="espace-haut-lg">Méthodologie</h4>
+
+        <ol class="etapes espace-bas-lg">
+          <li>Renseigner P(A) et les deux probabilités conditionnelles P<sub>A</sub>(B) et P<sub>Ā</sub>(B).</li>
+          <li>Lire les 4 probabilités de chemin obtenues par multiplication le long de l'arbre.</li>
+          <li>Calculer P(B) grâce à la formule des probabilités totales : P(B) = P(A∩B) + P(Ā∩B).</li>
+          <li>Comparer P<sub>A</sub>(B) et P<sub>Ā</sub>(B) : que peut-on en conclure sur l'indépendance de A et B ?</li>
+        </ol>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="ap-pa">P(A) (en %)</label>
+            <input id="ap-pa" type="number" step="1" min="1" max="99" value="50">
+          </div>
+
+          <div class="form-group">
+            <label for="ap-pab">P<sub>A</sub>(B) (en %)</label>
+            <input id="ap-pab" type="number" step="1" min="1" max="99" value="90">
+          </div>
+
+          <div class="form-group">
+            <label for="ap-pabarreb">P<sub>Ā</sub>(B) (en %)</label>
+            <input id="ap-pabarreb" type="number" step="1" min="1" max="99" value="90">
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="ap-construire" type="button" class="btn btn-primaire">
+              🌳 Construire l'arbre
+            </button>
+          </div>
+
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>1er niveau</th>
+                <th>2ᵉ niveau</th>
+                <th>Chemin</th>
+                <th>Probabilité</th>
+              </tr>
+            </thead>
+            <tbody id="ap-tbody">
+              <tr><td colspan="4">Renseigner les probabilités puis cliquer sur « Construire l'arbre ».</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="ap-pb-resultat" class="resultat-calcul"></div>
+        <div id="ap-independance-resultat" class="resultat-calcul"></div>
+
+      </div>
+
+      <!-- ---------- ACTIVITÉS PUZZLE (onglet indépendant, sans zone de saisie) ---------- -->
+      <div class="tab-panel" id="activites-puzzle">
+
+        <h3>🧩 Activités Puzzle</h3>
+
+        <div id="puzzle-info" class="info">
+          Sélectionner votre filière professionnelle dans la section « Contexte professionnel »
+          ci-dessus pour afficher les sujets.
+        </div>
+
+        <div class="info">
+          Organisation en <strong>classe puzzle</strong> : chaque groupe expert traite un sujet (tableau croisé, probabilité conditionnelle, arbre pondéré). En groupe mélangé, les experts vérifient qu'ils ont suivi la même méthode (tableau croisé, puis P_E(D) = P(E∩D) / P(E), puis arbre pondéré), malgré des contextes différents.
+        </div>
+
+        <div class="toolbar">
+          <a class="btn btn-secondaire" href="../../roue/index.html" target="_blank" rel="noopener">
+            🎡 Ouvrir la roue (tirage des groupes)
+          </a>
+        </div>
+
+        <div class="sous-onglets" role="tablist">
+        <button class="sous-btn actif" data-sous="puzzle-sujet-a">Sujet A</button>
+        <button class="sous-btn" data-sous="puzzle-sujet-b">Sujet B</button>
+        <button class="sous-btn" data-sous="puzzle-sujet-c">Sujet C</button>
+        </div>
+
+      <div class="sous-panel actif" id="puzzle-sujet-a">
+        <div class="fiche-puzzle" data-titre="Tableau croisé">
+          <div class="questions-bloc" data-tp="puzzle-a">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet A — Tableau croisé</strong>
+                <span class="cartouche" data-comp="REA">REA</span></div>
+              <p class="info puzzle-contexte" id="puzzle-a-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-a-problematique"></p>
+              <ol id="puzzle-a-enonce" class="puzzle-questions"></ol>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+      <div class="sous-panel" id="puzzle-sujet-b">
+        <div class="fiche-puzzle" data-titre="Probabilité conditionnelle">
+          <div class="questions-bloc" data-tp="puzzle-b">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet B — Probabilité conditionnelle</strong>
+                <span class="cartouche" data-comp="ANA">ANA</span></div>
+              <p class="info puzzle-contexte" id="puzzle-b-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-b-problematique"></p>
+              <ol id="puzzle-b-enonce" class="puzzle-questions"></ol>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+      <div class="sous-panel" id="puzzle-sujet-c">
+        <div class="fiche-puzzle" data-titre="Arbre pondéré">
+          <div class="questions-bloc" data-tp="puzzle-c">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet C — Arbre pondéré</strong>
+                <span class="cartouche" data-comp="VAL">VAL</span></div>
+              <p class="info puzzle-contexte" id="puzzle-c-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-c-problematique"></p>
+              <ol id="puzzle-c-enonce" class="puzzle-questions"></ol>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées suivent l'onglet d'activité actif : ouvrir
+      l'onglet travaillé dans la section « Activités » pour répondre aux
+      questions correspondantes.
+    </p>
+
+    <div class="questions-bloc" data-tp="statistiques-tableau-croise" data-onglet="tableau-croise" data-onglet-nom="Tableau croisé et probabilité conditionnelle" hidden>
+      <h4>Questions de l'onglet « Tableau croisé et probabilité conditionnelle »</h4>
+      <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Donner la définition de la probabilité conditionnelle P_A(B) et la calculer pour votre situation.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tableau-croise-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Calculer P(A∪B) à partir de P(A), P(B) et P(A∩B).</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tableau-croise-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>En comparant P(B) et la ou les probabilités conditionnelles obtenues, les événements étudiés semblent-ils indépendants ? Justifier.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tableau-croise-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier que les quatre effectifs du tableau s'additionnent bien au total et que P(A∩B) ≤ P(A) et P(A∩B) ≤ P(B).</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tableau-croise-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="tableau-croise"></p>
+        <div class="zone-eleve"><textarea id="question-tableau-croise-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+      </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="statistiques-arbre-pondere" data-onglet="arbre-pondere" data-onglet-nom="Arbre pondéré et indépendance (Tle)" hidden>
+      <h4>Questions de l'onglet « Arbre pondéré et indépendance (Tle) »</h4>
+      <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Rappeler la formule des probabilités totales et la condition d'indépendance de deux événements.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-arbre-pondere-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Compléter l'arbre pondéré étudié et calculer P(B) par la formule des probabilités totales.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-arbre-pondere-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Les événements A et B sont-ils indépendants ? Justifier par le calcul.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-arbre-pondere-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier que les probabilités des branches issues d'un même nœud ont pour somme 1 et que la somme des 4 probabilités de chemin vaut 1.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-arbre-pondere-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="arbre-pondere"></p>
+        <div class="zone-eleve"><textarea id="question-arbre-pondere-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+      </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="statistiques-activites-puzzle" data-onglet="activites-puzzle" data-onglet-nom="🧩 Activités Puzzle" hidden>
+      <h4>Questions de l'onglet « 🧩 Activités Puzzle »</h4>
+      <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Indiquer le sujet traité par votre groupe (A tableau croisé, B probabilité conditionnelle, C arbre pondéré) et rappeler la formule utilisée.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Donner les probabilités calculées pour votre sujet (P(D), P(E∩D), P_E(D)…).</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Interpréter ces probabilités dans la situation : le fait d'être E modifie-t-il le risque d'être D ?</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier la cohérence de vos résultats : effectifs du tableau égaux au total, probabilités des branches d'un même nœud de somme 1.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de votre sujet en vous appuyant sur vos résultats :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+      </ol>
+    <p class="info">Les fiches Sujet A, B et C de l'onglet « Activités Puzzle » sont des fiches de consigne : seules vos réponses à ces questions sont reprises dans le compte-rendu.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TD, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Compléter et lire un tableau croisé d'effectifs.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Calculer P(A∪B), P(A∩B) et une probabilité conditionnelle.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Exploiter un arbre pondéré et la formule des probabilités totales.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Montrer que deux événements sont ou non indépendants.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Argumenter une conclusion d'indépendance ou de dépendance à l'oral ou à l'écrit.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" type="button" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div id="radar-resultat" class="espace-haut-md"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TD, imprimer votre travail en PDF.
+      Envoyer à l'enseignant votre compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" type="button" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les réponses aux questions de l'onglet affiché ;</li>
+        <li>l'auto-évaluation des compétences et le radar.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button type="button" class="btn btn-secondaire" data-aller-accueil>
+    🏠 Accueil
+  </button>
+
+</div>
+
+</main>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

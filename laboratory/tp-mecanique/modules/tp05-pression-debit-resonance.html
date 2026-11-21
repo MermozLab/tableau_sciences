@@ -1,0 +1,955 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Pression, débit et résonance</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">Tle</span>
+        <span class="tag">Mécanique</span>
+        <span class="tag">Pascal - </span><span class="tag">Débit - </span><span class="tag">Résonance</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP M05</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<div class="contenu-tp">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+    <ul>
+      <li><strong>Tle</strong> — Déterminer expérimentalement les variations de pression au sein d'un fluide à l'équilibre et exploiter la relation de Pascal.</li>
+      <li><strong>Tle</strong> — Illustrer expérimentalement le principe de fonctionnement d'une presse ou d'un vérin hydraulique.</li>
+      <li><strong>Tle</strong> — Mesurer expérimentalement le débit en masse ou en volume d'un fluide en mouvement.</li>
+      <li><strong>Tle</strong> — Calculer une vitesse moyenne d'écoulement, le débit en volume étant donné.</li>
+      <li><strong>Tle</strong> — Mesurer expérimentalement la période et l'amplitude d'un phénomène vibratoire simple.</li>
+      <li><strong>Tle</strong> — Étudier expérimentalement un phénomène de résonance mécanique.</li>
+      <li><strong>Tle</strong> — Mettre en évidence expérimentalement la force de traînée, la force de portance et l'effet Venturi.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="securite">
+
+  <div class="section-titre">
+    <div class="picto-section">⚠️</div>
+    <h2>Sécurité</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Ce TP met en œuvre un vérin hydraulique, une circulation de
+      fluide et un système en oscillation forcée.
+    </div>
+
+    <ul class="liste-aeree">
+      <li><strong>Vérin hydraulique :</strong> ne jamais placer les doigts entre les parties mobiles sous pression.</li>
+      <li><strong>Circuit de fluide :</strong> vérifier l'absence de fuite avant chaque mise en circulation.</li>
+      <li><strong>Résonance mécanique :</strong> limiter l'amplitude des oscillations forcées pour éviter tout choc ou projection.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+    <div class="picto-section">🧪</div>
+    <h2>Matériel nécessaire</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">⚗️</div>
+    <h2>Manipulations</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="tp05m-message-filiere" class="info" hidden></div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="pression-fluide">Pression dans un fluide immobile</button>
+        <button class="tab-btn" data-tab="debit">Débit d'un fluide en mouvement</button>
+        <button class="tab-btn" data-tab="resonance">Résonance mécanique</button>
+        <button class="tab-btn" data-tab="trainee-portance">Traînée, portance et effet Venturi</button>
+      </div>
+
+      <!-- ============================ -->
+      <!-- PRESSION FLUIDE IMMOBILE      -->
+      <!-- ============================ -->
+
+      <div class="tab-panel actif" id="pression-fluide">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="pression-fluide"></p>
+        </div>
+
+
+        <h3>Relation de Pascal et presse hydraulique</h3>
+
+        <div class="info">
+          Dans un fluide incompressible à l'équilibre, la variation de
+          pression entre deux points est proportionnelle à la
+          différence d'altitude : Δp = ρ × g × Δh. Une presse
+          hydraulique exploite cette propriété pour démultiplier une
+          force.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Mesurer la pression en différents points d'un fluide au repos à l'aide d'un capteur de pression, à différentes profondeurs.</li>
+          <li>Vérifier que la variation de pression mesurée est cohérente avec la relation de Pascal.</li>
+          <li>Illustrer le principe de la presse hydraulique à l'aide de deux vérins reliés, de sections différentes.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/m5-pression-fluide.svg" alt="Mode opératoire — pression dans un fluide immobile et presse hydraulique" width="640" height="320" loading="lazy">
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="pas-rho">Masse volumique du fluide ρ (kg/m³)</label>
+            <input id="pas-rho" type="number" step="1" value="1000">
+          </div>
+
+          <div class="form-group">
+            <label for="pas-h">Différence d'altitude Δh (m)</label>
+            <input id="pas-h" type="number" step="0.01">
+          </div>
+
+        </div>
+
+        <div id="pas-resultat" class="resultat-calcul">
+          Saisir la masse volumique du fluide et la différence
+          d'altitude pour calculer la variation de pression.
+        </div>
+
+        <h4 class="espace-haut-lg">Presse hydraulique</h4>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="presse-s1">Surface du petit piston S₁ (cm²)</label>
+            <input id="presse-s1" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="presse-s2">Surface du grand piston S₂ (cm²)</label>
+            <input id="presse-s2" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="presse-f1">Force appliquée F₁ (N)</label>
+            <input id="presse-f1" type="number" step="0.1">
+          </div>
+
+        </div>
+
+        <div id="presse-resultat" class="resultat-calcul">
+          Saisir les surfaces des deux pistons et la force appliquée
+          sur le petit piston pour calculer la force transmise au
+          grand piston.
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- DÉBIT                        -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="debit">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="debit"></p>
+        </div>
+
+
+        <h3>Débit et vitesse d'écoulement</h3>
+
+        <div class="info">
+          Le débit en volume d'un fluide en mouvement est le quotient
+          du volume écoulé par la durée d'écoulement : Qᵥ = V / t. La
+          vitesse moyenne d'écoulement se déduit du débit et de la
+          section de la canalisation : v = Qᵥ / S.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Recueillir le volume de fluide écoulé par une canalisation pendant une durée chronométrée.</li>
+          <li>Mesurer ou relever la section intérieure de la canalisation.</li>
+          <li>Saisir ces valeurs pour obtenir le débit et la vitesse moyenne d'écoulement.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/m5-debit.svg" alt="Mode opératoire — débit et vitesse d'écoulement d'un fluide" width="640" height="320" loading="lazy">
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="deb-volume">Volume écoulé V (L)</label>
+            <input id="deb-volume" type="number" step="0.01">
+          </div>
+
+          <div class="form-group">
+            <label for="deb-duree">Durée d'écoulement t (s)</label>
+            <input id="deb-duree" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="deb-section">Section de la canalisation S (cm²)</label>
+            <input id="deb-section" type="number" step="0.01">
+          </div>
+
+        </div>
+
+        <div id="deb-resultat" class="resultat-calcul">
+          Saisir le volume écoulé, la durée d'écoulement et la section
+          de la canalisation pour calculer le débit et la vitesse
+          moyenne d'écoulement.
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- RÉSONANCE                    -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="resonance">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="resonance"></p>
+        </div>
+
+
+        <h3>Période propre et résonance mécanique</h3>
+
+        <div class="info">
+          La période propre d'un système oscillant est la durée d'une
+          oscillation complète en l'absence d'excitation extérieure.
+          Un système excité à une fréquence proche de sa fréquence
+          propre peut entrer en résonance, avec une amplitude
+          d'oscillation nettement amplifiée.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Écarter légèrement le système de sa position d'équilibre et le laisser osciller librement pour mesurer sa période propre.</li>
+          <li>Exciter le système à différentes fréquences à l'aide d'un moteur ou d'un vibreur, et relever l'amplitude d'oscillation obtenue pour chacune.</li>
+          <li>Identifier la fréquence d'excitation pour laquelle l'amplitude est maximale (résonance).</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/m5-resonance.svg" alt="Mode opératoire — période propre et résonance mécanique" width="640" height="320" loading="lazy">
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="res-oscillations">Nombre d'oscillations N</label>
+            <input id="res-oscillations" type="number" step="1">
+          </div>
+
+          <div class="form-group">
+            <label for="res-duree">Durée totale mesurée (s)</label>
+            <input id="res-duree" type="number" step="0.01">
+          </div>
+
+        </div>
+
+        <div id="res-resultat" class="resultat-calcul">
+          Saisir le nombre d'oscillations comptées et la durée totale
+          correspondante pour calculer la période propre et la
+          fréquence propre du système.
+        </div>
+
+        <h4 class="espace-haut-lg">Amplitude en fonction de la fréquence d'excitation</h4>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="res-freq-exc">Fréquence d'excitation (Hz)</label>
+            <input id="res-freq-exc" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="res-amplitude">Amplitude observée (mm)</label>
+            <input id="res-amplitude" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="res-ajouter" type="button" class="btn btn-primaire">
+              + Ajouter le point
+            </button>
+          </div>
+
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>Fréquence d'excitation (Hz)</th>
+                <th>Amplitude (mm)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-resonance">
+            </tbody>
+          </table>
+        </div>
+
+        <div id="graphique-resonance" class="graphique-conteneur">
+          <p class="info">Ajouter au moins 2 points pour afficher le graphique.</p>
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- TRAÎNÉE, PORTANCE, VENTURI    -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="trainee-portance">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="trainee-portance"></p>
+        </div>
+
+
+        <h3>Force de traînée, force de portance et effet Venturi</h3>
+
+        <div class="info">
+          Un fluide en mouvement exerce sur un objet placé dans
+          l'écoulement une force de traînée (qui dissipe de l'énergie
+          mécanique) et éventuellement une force de portance. L'effet
+          Venturi se traduit par une diminution de la pression du
+          fluide dans les régions où la vitesse d'écoulement augmente.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Placer un objet profilé dans un écoulement d'air ou d'eau et observer la force exercée sur un dynamomètre ou un capteur de force.</li>
+          <li>Faire varier l'orientation ou la forme de l'objet et observer l'effet sur la force de traînée et, si applicable, la force de portance.</li>
+          <li>Observer la variation de pression dans un tube de section variable pour mettre en évidence l'effet Venturi.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/m5-trainee-portance.svg" alt="Mode opératoire — force de traînée, portance et effet Venturi" width="640" height="320" loading="lazy">
+        </div>
+
+        <div class="form-group">
+          <label for="trainee-select">Phénomène observé lors de l'essai en soufflerie ou en veine d'eau</label>
+          <select id="trainee-select">
+            <option value="">-- Sélectionner un phénomène --</option>
+            <option value="trainee">Force de traînée</option>
+            <option value="portance">Force de portance</option>
+            <option value="venturi">Effet Venturi</option>
+          </select>
+        </div>
+
+        <div id="trainee-info" class="resultat-calcul">
+          Sélectionner un phénomène pour afficher sa définition et un
+          exemple d'application.
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Mécanique et prévention</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Couper l'alimentation du vérin hydraulique et du système vibrant dès la fin des essais.</li>
+      <li>Récupérer et ne pas rejeter le fluide utilisé pour l'étude du débit.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">Résonance et sécurité des structures</h3>
+
+    <p>
+      Un phénomène de résonance mal maîtrisé peut endommager une
+      structure ou une machine ; l'étude de la fréquence propre d'un
+      système permet d'anticiper et d'éviter ces situations à risque
+      dans une installation industrielle.
+    </p>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation
+      sélectionné. Répondre aux questions de l'onglet que vous avez réalisé :
+      les quatre premières portent sur l'objet du TP de l'onglet, la cinquième
+      répond à sa problématique.
+    </p>
+
+    <div class="questions-bloc" data-tp="pression-debit-resonance" data-onglet="pression-fluide" data-onglet-nom="Pression dans un fluide immobile">
+    <h4>Questions de l'onglet « Pression dans un fluide immobile »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire la relation de Pascal ΔP = ρ × g × Δh en précisant le nom et l'unité de chaque grandeur, puis énoncer le principe de la presse hydraulique.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-pression-fluide-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Calculer la variation de pression ΔP entre deux points du fluide, puis la force F₂ exercée sur le grand piston de la presse hydraulique à partir de F₁, S₁ et S₂.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-pression-fluide-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer la variation de pression mesurée avec la valeur calculée par la relation de Pascal et commenter l'écart éventuel.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-pression-fluide-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier la cohérence de ΔP (unité en Pa, ordre de grandeur) et contrôler que le rapport F₂ / F₁ obtenu est égal à S₂ / S₁.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-pression-fluide-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Pression dans un fluide immobile » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="pression-fluide"></p>
+        <div class="zone-eleve">
+          <textarea id="question-pression-fluide-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="pression-debit-resonance" data-onglet="debit" data-onglet-nom="Débit d'un fluide en mouvement" hidden>
+    <h4>Questions de l'onglet « Débit d'un fluide en mouvement »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire les relations Qv = V / t et v = Qv / S, en précisant le nom et l'unité de chaque grandeur.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-debit-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir des mesures (volume, durée, section), calculer le débit volumique et la vitesse moyenne d'écoulement, en convertissant les unités.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-debit-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Indiquer comment évolue la vitesse d'écoulement lorsque la section de la canalisation diminue à débit constant, en justifiant.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-debit-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier la cohérence du débit et de la vitesse d'écoulement obtenus : contrôler les conversions (L/s, L/min, m³/s) et l'ordre de grandeur.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-debit-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Débit d'un fluide en mouvement » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="debit"></p>
+        <div class="zone-eleve">
+          <textarea id="question-debit-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="pression-debit-resonance" data-onglet="resonance" data-onglet-nom="Résonance mécanique" hidden>
+    <h4>Questions de l'onglet « Résonance mécanique »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Définir la période propre et la fréquence propre d'un système oscillant (T = durée / N, f₀ = 1 / T) et expliquer ce qu'est la résonance.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-resonance-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir du nombre d'oscillations et de la durée mesurée, calculer la période propre T puis la fréquence propre f₀ du système.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-resonance-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir du tableau de mesures, identifier la fréquence d'excitation pour laquelle l'amplitude est maximale et la comparer à la fréquence propre.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-resonance-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier la cohérence des résultats : contrôler que f₀ = 1 / T et que la fréquence d'excitation donnant l'amplitude maximale est proche de f₀, puis indiquer l'écart observé.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-resonance-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Résonance mécanique » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="resonance"></p>
+        <div class="zone-eleve">
+          <textarea id="question-resonance-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="pression-debit-resonance" data-onglet="trainee-portance" data-onglet-nom="Traînée, portance et effet Venturi" hidden>
+    <h4>Questions de l'onglet « Traînée, portance et effet Venturi »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Définir la force de traînée et la force de portance exercées par un fluide en mouvement sur un objet (direction par rapport à l'écoulement).
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-trainee-portance-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Décrire l'essai réalisé : objet placé dans l'écoulement, orientation ou forme testée, force relevée ou phénomène observé.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-trainee-portance-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Analyser l'influence de la forme ou de l'orientation de l'objet sur la force de traînée observée.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-trainee-portance-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier que les observations de l'effet Venturi sont cohérentes avec la relation entre vitesse d'écoulement et pression, et signaler toute observation qui s'en écarte.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-trainee-portance-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Traînée, portance et effet Venturi » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="trainee-portance"></p>
+        <div class="zone-eleve">
+          <textarea id="question-trainee-portance-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Distinguer débit en volume et vitesse d'écoulement.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Mesurer une période propre et relever une amplitude d'oscillation.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Identifier une situation de résonance à partir d'un graphique amplitude/fréquence.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier la cohérence d'une force transmise par une presse hydraulique.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Expliquer l'effet Venturi et la relation de Bernoulli avec un vocabulaire scientifique adapté.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div class="espace-haut-md" id="radar-resultat"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, Imprimer votre TP en PDF.
+      Envoyer à l'enseignant votre Compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les valeurs saisies, les résultats calculés, les tableaux de mesures et les graphiques ;</li>
+        <li>les réponses aux questions ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-tp="tp04-equilibre-rotation-archimede">
+    ← TP04
+  </button>
+
+  <button class="btn btn-primaire" data-aller-accueil>
+    🏠 Fin du module — Accueil
+  </button>
+
+</div>
+
+</div>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

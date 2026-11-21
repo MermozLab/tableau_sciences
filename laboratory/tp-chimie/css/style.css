@@ -1,0 +1,316 @@
+/* ── Tokens globaux, composants TP, impression ────────────────── */
+/* Chaîne CSS complète, dans l'ordre documenté (css/global.css) :
+   global → reset → tp → animations → print. compte-rendu.css est chargé
+   à la demande par js/compte-rendu.js ; les <link> de index.html ont été retirés. */
+@import url("../../../css/global.css");
+@import url("../../../css/reset.css");
+@import url("../../../css/tp.css");
+@import url("../../../css/animations.css");
+@import url("../../../css/print.css");
+
+/* ── Overrides communs à tous les domaines (header, nav, cartes,
+   tableaux, EPI, radar, graphique...) — paramétrés par les variables
+   de couleur ci-dessous ── */
+@import url("../../../css/domaine.css");
+
+/* ════════════════════════════════════════════════════════════════
+   IDENTITÉ DU DOMAINE CHIMIE
+   L'ordre d'écriture n'a pas d'importance pour la résolution des
+   var() : ces valeurs s'appliquent à css/domaine.css même si celui-ci
+   est importé plus haut dans ce fichier.
+   ════════════════════════════════════════════════════════════════ */
+:root {
+  --domaine-accent:       #1B6CA8;
+  --domaine-accent-fonce: #0D4F8A;
+  --domaine-accent-rgb:   27, 108, 168;
+}
+
+/* Aucun ajustement propre à la chimie au-delà de son identité de
+   couleur pour l'instant : toute la structure (header, nav, cartes,
+   formulaires, tableaux, EPI, matériel, radar, graphique,
+   histogramme, cartouches, auto-évaluation...) vient de tp.css et
+   css/domaine.css. */
+
+/* ════════════════════════════════════════════════════════════════
+   TP01 — onglet « Solutions commerciales » (Tle)
+   Mise en forme des sous-titres et listes de l'onglet ; tout le
+   reste (formulaires, tableaux, messages) vient de tp.css.
+   ════════════════════════════════════════════════════════════════ */
+.sc-suite {
+  margin-top: var(--gap-lg);
+}
+
+.sc-liste {
+  padding-left: 1.5rem;
+  line-height: 1.8;
+}
+
+/* Champs de l'onglet : les libellés peuvent passer sur 2 lignes ; on aligne
+   les champs sur le bas de la rangée pour qu'ils restent sur la même ligne.
+   (Sous 500 px, tp.css passe déjà les champs en colonne.) */
+@media (min-width: 501px) {
+  .sc-champs {
+    align-items: flex-end;
+  }
+}
+/* ════════════════════════════════════════════════════════════════
+   Blocs de mise en page utilisés par les fragments de TP
+   (figure du TP01, illustration et grille de résultats du TP03,
+   conteneur du graphique du TP02)
+   ════════════════════════════════════════════════════════════════ */
+.figure-tp {
+  margin: var(--gap-sm) auto;
+  max-width: var(--largeur-contenu);
+  text-align: center;
+}
+.figure-tp figcaption {
+  margin-top: .4rem;
+  font-size: var(--fs-sm);
+  color: var(--gris-moyen);
+}
+
+.illustration-centre {
+  margin: var(--gap-sm) auto;
+  text-align: center;
+}
+
+.resultats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--gap-md);
+  align-items: start;
+}
+
+.graphique-conteneur {
+  margin-top: var(--gap-sm);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Alignement sur tp-electricite : composants communs aux domaines
+   SciLab (teinte reprise de --domaine-accent / --domaine-accent-fonce)
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Résultats de calcul guidé (.resultat-calcul) ──────────────────
+   tp.css colore ce bloc en vert-acide fixe (section 14, calcul-guide),
+   sans override par domaine : recoloré dans la teinte du domaine
+   Chimie pour rester cohérent avec le reste de la charte. */
+.resultat-calcul {
+  color: var(--domaine-accent-fonce);
+}
+
+/* ── Numéros de question (.questions-tp .question-entete::before) et
+   étapes de protocole numérotées (.etapes li::before) : tp.css les
+   colore en bleu-cuivre fixe ; on les relie à la teinte du domaine. */
+.questions-tp .question-entete::before,
+.etapes li::before {
+  background: var(--domaine-accent);
+}
+
+/* ── Titre du bandeau (« TP Chimie : … ») en blanc ─────────────── */
+body > header h1,
+body > header h1 span {
+  color: #ffffff;
+}
+
+/* ── Matériel nécessaire : menu accordéon Équipements / Verrerie ── */
+.accordeon-materiel {
+  border: 1px solid var(--gris-clair, #E7E9EC);
+  border-radius: var(--r-md, 12px);
+  background: var(--blanc, #ffffff);
+  margin: 0 0 var(--gap-md, 1rem);
+  overflow: hidden;
+}
+
+.accordeon-materiel > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .75rem 1rem;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--domaine-accent-fonce, #0D4F8A);
+  background: rgba(var(--domaine-accent-rgb, 27, 108, 168), .10);
+}
+
+.accordeon-materiel > summary::-webkit-details-marker { display: none; }
+
+.accordeon-materiel > summary::after {
+  content: "▼";
+  font-size: .8rem;
+  transition: transform .2s ease;
+}
+
+.accordeon-materiel[open] > summary::after { transform: rotate(180deg); }
+
+.accordeon-materiel > summary:focus-visible {
+  outline: 3px solid var(--domaine-accent, #1B6CA8);
+  outline-offset: -3px;
+}
+
+.accordeon-materiel > .grille-materiel { padding: var(--gap-md, 1rem); }
+
+/* ── Manipulations : problématique de l'onglet, en tête du bloc ── */
+.problematique-onglet { margin: 0 0 var(--gap-md, 1rem); }
+
+.problematique-onglet-etiquette {
+  display: block;
+  margin-bottom: .2rem;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--domaine-accent-fonce, #0D4F8A);
+}
+
+.problematique-onglet .problematique-rappel { margin: 0; font-weight: 600; }
+
+/* ==========================================================
+   BOUTON « VOIR EN 3D » (viewer /molecule) — js/molecule-3d.js
+   ========================================================== */
+.molecule-3d-zone {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm, 0.5rem);
+  margin-top: var(--gap-sm, 0.5rem);
+}
+
+.molecule-3d-zone:empty {
+  display: none;
+}
+
+.btn-molecule-3d[hidden] {
+  display: none;
+}
+
+.btn-molecule-3d {
+  width: auto;
+  max-width: 100%;
+  white-space: normal;
+  text-align: left;
+}
+
+td .btn-molecule-3d {
+  margin-left: var(--gap-sm, 0.5rem);
+}
+
+/* Bouton rond bleu (− fermer) — même style que le + / − du zoom des visuels ;
+   à supprimer ici si .btn-rond-bleu existe déjà dans css/tp.css */
+.btn-rond-bleu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--domaine-accent, #1B6CA8);
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.btn-rond-bleu:hover { filter: brightness(1.12); }
+.btn-rond-bleu:focus-visible { outline: 3px solid #fff; box-shadow: 0 0 0 5px var(--domaine-accent, #1B6CA8); }
+
+/* Fenêtre d'aperçu 3D */
+.mol3d-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, .45);
+}
+.mol3d-overlay[hidden] { display: none; }
+.mol3d-fenetre {
+  display: flex;
+  flex-direction: column;
+  width: min(760px, 100%);
+  height: min(88vh, 640px);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .35);
+  overflow: hidden;
+}
+.mol3d-entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .6rem .9rem;
+  border-bottom: 2px solid var(--domaine-accent, #1B6CA8);
+}
+.mol3d-titre { margin: 0; font-size: 1.1rem; color: var(--domaine-accent-fonce, #0D4F8A); }
+.mol3d-cadre { flex: 1; width: 100%; min-height: 0; border: 0; background: #fff; }
+body.mol3d-ouverte { overflow: hidden; }
+
+@media print {
+  .mol3d-overlay,
+  .molecule-3d-zone,
+  .btn-molecule-3d {
+    display: none !important;
+  }
+}
+
+/* ==========================================================
+   Puissances de 10 en exposant (simulateur pH, TP02)
+   .capsule (tp.css) est en inline-flex : le texte et le <sup>
+   deviennent des éléments flex séparés (exposant centré, espacé,
+   non relevé). On repasse la capsule en inline-block pour que
+   l'exposant se comporte comme un vrai exposant.
+   ========================================================== */
+.simulateur-ph .capsule {
+  display: inline-block;
+}
+.simulateur-ph .capsule sup {
+  font-size: .7em;
+  line-height: 0;
+  vertical-align: super;
+}
+/* ════════════════════════════════════════════════════════════════
+   Équivalents des anciens styles en ligne des fragments
+   (CLAUDE v4, §2.4 : aucun style="…" dans un fragment)
+   ════════════════════════════════════════════════════════════════ */
+
+/* Images de schéma des .mode-op (§10) */
+.mode-op .mode-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* TP02 — simulateur de pH : textes secondaires et bandeau des concentrations */
+.texte-petit { font-size: .85rem; }
+.texte-gras { font-weight: 600; }
+.texte-discret { color: var(--gris-moyen); }
+.decalage-gauche-sm { margin-left: var(--gap-sm); }
+.bandeau-concentrations {
+  margin-top: var(--gap-md);
+  padding: var(--gap-sm) var(--gap-md);
+  background: var(--blanc-paillasse);
+  border-radius: var(--r-sm);
+}
+
+/* TP03 — pastilles de la légende de la courbe (couleurs identiques au tracé) */
+.legende-courbe .pastille-theorique     { background: #8a8a8a; }
+.legende-courbe .pastille-experimentale { background: #c0392b; }
+.legende-courbe .pastille-tangentes     { background: #111; }
+.legende-courbe .pastille-equivalence   { background: #1B6CA8; }
+.legende-courbe .pastille-derivee       { background: #8e44ad; }
+
+/* TP03 — info-bulle du curseur de la courbe */
+.curseur-info {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* TP03 — blocs affichés / masqués par le JS (attribut hidden) */
+.resultat[hidden] { display: none; }

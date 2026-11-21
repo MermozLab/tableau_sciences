@@ -1,0 +1,648 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Puissance active en régime sinusoïdal</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">Tle</span>
+        <span class="tag">Électricité</span>
+        <span class="tag">Déphasage - </span><span class="tag">Facteur de puissance</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP E03</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+    <ul>
+      <li><strong>Tle</strong> — Réaliser, en régime sinusoïdal, à l'aide d'une expérimentation assistée par ordinateur, le produit d'une tension aux bornes d'un dipôle et de l'intensité qui le traverse.</li>
+      <li><strong>Tle</strong> — Mesurer un déphasage entre la tension aux bornes d'un dipôle et l'intensité qui le traverse.</li>
+      <li><strong>Tle</strong> — Mesurer une puissance active à l'aide d'un wattmètre ou d'un système d'acquisition.</li>
+      <li><strong>Tle</strong> — Savoir que, pour un dipôle donné, l'intensité et la tension sont déphasées.</li>
+      <li><strong>Tle</strong> — Savoir que le facteur de puissance est le cosinus de ce déphasage.</li>
+      <li><strong>Tle</strong> — Savoir que la puissance active est la puissance moyenne consommée.</li>
+      <li><strong>Tle</strong> — Connaître la relation entre la puissance active, les valeurs efficaces de l'intensité et de la tension et le facteur de puissance.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="securite">
+
+  <div class="section-titre">
+    <div class="picto-section">⚠️</div>
+    <h2>Sécurité</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Ce TP utilise une alimentation en régime sinusoïdal (secteur ou
+      générateur basse fréquence associé à un transformateur).
+    </div>
+
+    <ul class="liste-aeree">
+      <li><strong>Wattmètre :</strong> respecter le sens de branchement des bornes tension et intensité indiqué sur l'appareil.</li>
+      <li><strong>Moteur en charge :</strong> ne jamais toucher un arbre en rotation, même à faible vitesse.</li>
+      <li><strong>Protection :</strong> vérifier la présence d'un disjoncteur en amont du montage avant mise sous tension.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+    <div class="picto-section">🧪</div>
+    <h2>Matériel nécessaire</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">⚗️</div>
+    <h2>Manipulations</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="tp03-message-filiere" class="info" hidden></div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="dephasage">Déphasage tension-intensité</button>
+        <button class="tab-btn" data-tab="puissance-active">Puissance active et facteur de puissance</button>
+      </div>
+
+      <!-- ============================ -->
+      <!-- DÉPHASAGE                    -->
+      <!-- ============================ -->
+
+      <div class="tab-panel actif" id="dephasage">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="dephasage"></p>
+        </div>
+
+
+        <h3>Mesurer le déphasage entre u(t) et i(t)</h3>
+
+        <div class="info">
+          Pour un dipôle en régime sinusoïdal, l'intensité et la tension
+          ne sont généralement pas synchrones : elles sont déphasées
+          d'un angle φ. Ce déphasage se mesure à partir du décalage
+          temporel entre les deux courbes relevées par ExAO ou à
+          l'oscilloscope.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Relever simultanément la tension aux bornes du dipôle et l'intensité qui le traverse, à l'aide d'un système ExAO ou d'un oscilloscope.</li>
+          <li>Mesurer la période T du signal et le décalage temporel Δt entre les deux courbes.</li>
+          <li>Saisir ces deux valeurs pour obtenir le déphasage φ et le facteur de puissance cos φ.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp03-montage-dephasage.svg" alt="Schéma du montage : dipôle et petite résistance r en série sur un générateur alternatif ; voie 1 de l&#x27;oscilloscope aux bornes du dipôle, voie 2 aux bornes de r" width="580" height="240" loading="lazy">
+          <img class="mode-image" src="./assets/illustrations/tp03-oscillogramme.svg" alt="Oscillogramme : tension u(t) en trait plein et intensité i(t) en tirets, décalées de Δt ; période T repérée entre deux passages identiques" width="540" height="200" loading="lazy">
+          <p class="mode-legende">Montage et allure des signaux : Δt est le décalage entre deux passages identiques de u(t) et i(t), T leur période.</p>
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="dep-periode">Période T du signal (ms)</label>
+            <input id="dep-periode" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="dep-decalage">Décalage temporel Δt entre u(t) et i(t) (ms)</label>
+            <input id="dep-decalage" type="number" step="0.01">
+          </div>
+
+        </div>
+
+        <div id="dep-resultat" class="resultat-calcul">
+          Saisir la période du signal et le décalage temporel mesuré
+          pour calculer le déphasage φ.
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- PUISSANCE ACTIVE             -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="puissance-active">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="puissance-active"></p>
+        </div>
+
+
+        <h3>Mesurer et calculer la puissance active</h3>
+
+        <div class="info">
+          La puissance active P est la puissance moyenne réellement
+          consommée par un dipôle. Elle se déduit des valeurs efficaces
+          de la tension U, de l'intensité I, et du facteur de
+          puissance cos φ : P = U × I × cos φ.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Brancher le wattmètre en respectant le circuit tension / circuit intensité du dipôle étudié.</li>
+          <li>Relever la puissance active indiquée par le wattmètre.</li>
+          <li>Calculer la puissance active à partir de U, I et cos φ mesurés par ailleurs, puis comparer les deux résultats.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp03-montage-wattmetre.svg" alt="Schéma normalisé du montage : wattmètre W dont les bornes I sont en série avec le dipôle Z et les bornes U en dérivation aux bornes du dipôle, alimenté par un générateur alternatif" width="636" height="380" loading="lazy">
+          <p class="mode-legende">Wattmètre : bornes « intensité » en série avec le dipôle, bornes « tension » en dérivation.</p>
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="pa-tension">Tension efficace U (V)</label>
+            <input id="pa-tension" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="pa-intensite">Intensité efficace I (A)</label>
+            <input id="pa-intensite" type="number" step="0.01">
+          </div>
+
+          <div class="form-group">
+            <label for="pa-cosphi">Facteur de puissance cos φ</label>
+            <input id="pa-cosphi" type="number" step="0.01" min="0" max="1">
+          </div>
+
+        </div>
+
+        <div id="pa-resultat" class="resultat-calcul">
+          Saisir U, I et cos φ pour calculer la puissance active, ou
+          comparer avec la valeur lue directement au wattmètre.
+        </div>
+
+        <div class="form-group champ-etroit">
+          <label for="pa-wattmetre">Puissance lue au wattmètre (W)</label>
+          <input id="pa-wattmetre" type="number" step="0.1">
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Électricité et sobriété énergétique</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Couper l'alimentation dès la fin des relevés au wattmètre.</li>
+      <li>Ne pas faire fonctionner un moteur en charge plus longtemps que nécessaire.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">Facteur de puissance et efficacité énergétique</h3>
+
+    <p>
+      Un facteur de puissance faible entraîne une intensité efficace
+      plus élevée pour une même puissance active utile, donc des
+      pertes en ligne accrues. Les installations industrielles cherchent
+      à s'en rapprocher de 1 pour limiter leur consommation d'énergie.
+    </p>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation
+      sélectionné. Répondre aux questions de l'onglet que vous avez réalisé :
+      les quatre premières portent sur l'objet du TP de l'onglet, la cinquième
+      répond à sa problématique.
+    </p>
+
+    <div class="questions-bloc" data-tp="puissance-active" data-onglet="dephasage" data-onglet-nom="Déphasage tension-intensité">
+
+    <h4>Questions de l'onglet « Déphasage tension-intensité »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Expliquer ce que représente le déphasage φ entre la tension et l'intensité pour un dipôle en régime sinusoïdal et écrire la relation qui le relie à la période T et au décalage temporel Δt.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dephasage-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir de vos relevés, donner la période T et le décalage Δt, puis calculer le déphasage φ (en degrés) et le facteur de puissance cos φ.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dephasage-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Interpréter la valeur de φ obtenue : la tension et l'intensité sont-elles en phase ? Que peut-on en déduire sur le comportement du dipôle étudié ?
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dephasage-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Exprimer le déphasage en degrés puis en radians, avec un nombre adapté de chiffres significatifs et l'unité correcte, et indiquer comment Δt se repère sur l'oscillogramme.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dephasage-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Déphasage tension-intensité » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="dephasage"></p>
+        <div class="zone-eleve">
+          <textarea id="question-dephasage-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="puissance-active" data-onglet="puissance-active" data-onglet-nom="Puissance active et facteur de puissance" hidden>
+
+    <h4>Questions de l'onglet « Puissance active et facteur de puissance »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire la relation donnant la puissance active d'un dipôle en régime sinusoïdal en fonction des valeurs efficaces U et I et du facteur de puissance cos φ, en précisant le nom et l'unité de chaque grandeur.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-puissance-active-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir des valeurs saisies de U, I et cos φ, calculer la puissance active P = U × I × cos φ.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-puissance-active-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer la puissance active calculée à partir de U, I et cos φ avec la valeur lue directement au wattmètre (écart relatif) et proposer une cause possible d'écart.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-puissance-active-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Expliquer l'intérêt, pour une installation industrielle, d'avoir un facteur de puissance proche de 1.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-puissance-active-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Puissance active et facteur de puissance » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="puissance-active"></p>
+        <div class="zone-eleve">
+          <textarea id="question-puissance-active-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Identifier le déphasage entre tension et intensité sur un relevé.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Mesurer une puissance active à l'aide d'un wattmètre.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Comparer une puissance active calculée et une puissance mesurée.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier la cohérence d'un facteur de puissance obtenu (compris entre 0 et 1).</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Expliquer l'intérêt d'un facteur de puissance proche de 1.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div class="espace-haut-md" id="radar-resultat"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, Imprimer votre TP en PDF.
+      Envoyer à l'enseignant votre Compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les réponses aux questions ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-tp="tp02-transport-energie">
+    ← TP02
+  </button>
+
+  <button class="btn btn-primaire" data-aller-tp="tp04-conversion-moteurs">
+    TP04 →
+  </button>
+
+</div>
+
+</main>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

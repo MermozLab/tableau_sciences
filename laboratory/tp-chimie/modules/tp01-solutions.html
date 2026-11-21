@@ -1,0 +1,1739 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<!-- ====================================================== -->
+<!-- EN-TÊTE                                                 -->
+<!-- ====================================================== -->
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Préparation de solutions par dissolution et dilution</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">2nde</span>
+        <span class="tag">Chimie</span>
+        <span class="tag">Dissolution - </span><span class="tag">Dilution - </span><span class="tag">Identification d'ions</span>        
+      </div>
+
+      <div class="tp-row">
+        <span class="tag">1ère</span>
+        <span class="tag">Chimie</span>
+        <span class="tag">Dissolution - </span><span class="tag">Dilution</span>
+       </div>
+
+      <div class="tp-row">
+        <span class="tag">Tle</span>
+        <span class="tag">Chimie</span>
+        <span class="tag">Dilution d'une solution commerciale</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP C01</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div class="bar-tp"></div>
+</div>
+
+<div class="tp-contenu">
+
+<!-- ====================================================== -->
+<!-- CAPACITES                                               -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+<ul>
+
+      <li>
+        <strong>2nde</strong> — Préparer une solution de concentration massique donnée, par dissolution.
+      </li>      
+
+      <li>
+        <strong>2nde</strong> — Réaliser expérimentalement une dilution.
+      </li>
+
+       <li>
+         <strong>1ère</strong> — Réaliser une solution de concentration en quantité de matière donnée par dilution ou dissolution.
+      </li>
+
+      <li>
+         Reconnaître et nommer le matériel et la verrerie de laboratoire employés lors des manipulations.
+      </li>
+
+      <li>
+        Identifier un pictogramme sur l’étiquette d’un produit chimique de laboratoire ou d’usage domestique.
+      </li>
+
+      <li>
+         Utiliser de façon raisonnée les équipements de protection individuelle adaptés à la situation expérimentale en chimie.
+      </li>
+
+      <li>
+        Adopter une démarche respectueuse de l'environnement : préparer strictement la quantité de solution nécessaire et traiter correctement les solutions non utilisées.
+      </li>
+
+      <li>
+        Identifier des situations où la maîtrise des dissolutions et des dilutions répond à un enjeu environnemental actuel (traitement des effluents, dosage raisonné des produits phytosanitaires).
+      </li>
+
+      <li>
+        Identifier un ion en solution par une réaction de précipitation caractéristique, et exploiter le résultat pour interpréter une situation concrète.
+      </li>
+
+      <li>
+        <strong>Tle</strong> — Déterminer la concentration molaire d'une solution commerciale à partir de son titre massique et de sa masse volumique, puis préparer par dilution une solution de concentration donnée (0,1 mol·L⁻¹) en choisissant la verrerie de prélèvement adaptée.
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- CONTEXTE PROFESSIONNEL                                  -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- SECURITE - PRODUITS UTILISES                           -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="securite">
+
+
+  <div class="section-titre">
+
+    <div class="picto-section">⚠️</div>
+
+    <h2>Sécurité - Produits utilisés</h2>
+
+    <span class="chevron">▼</span>
+
+  </div>
+
+  <div class="section-corps">
+
+    <!-- Filtres gérés par securite.js -->
+
+    <div class="filtre-reactifs">
+
+      <span class="filtre-titre">
+        <strong>Afficher :</strong>
+      </span>
+
+      <label>
+        <input type="checkbox"
+               class="filtre-cat"
+               value="Liquide"
+               checked>
+        Liquides
+      </label>
+
+      <label>
+        <input type="checkbox"
+               class="filtre-cat"
+               value="Sel"
+               checked>
+        Sels
+      </label>
+
+      <label>
+        <input type="checkbox"
+               class="filtre-cat"
+               value="Solide"
+               checked>
+        Solides
+      </label>
+
+      <label>
+        <input type="checkbox"
+               class="filtre-cat"
+               value="Indicateur"
+               checked>
+        Indicateurs
+      </label>
+
+      <label>
+        <input type="checkbox"
+               class="filtre-cat"
+               value="Colorant"
+               checked>
+        Colorants
+      </label>
+
+      <label>
+        <input type="checkbox"
+               class="filtre-cat"
+               value="Métal"
+               checked>
+        Métaux
+      </label>
+
+      <label>
+        <input type="checkbox"
+               class="filtre-cat"
+               value="Solvant"
+               checked>
+        Solvants
+      </label>
+
+      <label>
+        <input type="checkbox"
+               class="filtre-cat"
+               value="Halogène"
+               checked>
+        Halogènes
+      </label>
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="reactif">
+        Choisir un réactif :
+      </label>
+
+      <select id="reactif">
+
+        <option value="">
+          -- Sélectionner --
+        </option>
+
+      </select>
+
+    </div>
+
+    <div id="securite-bloc">      
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- MATERIEL                                                -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+
+    <div class="picto-section">🧪</div>
+
+    <h2>Matériel nécessaire</h2>
+
+    <span class="chevron">▼</span>
+
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Verrerie</summary>
+      <div id="materiel-verrerie" class="grille-materiel">
+      </div>
+    </details>
+
+      
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- PREPARATION DES SOLUTIONS                              -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+
+    <div class="picto-section">⚗️</div>
+
+    <h2>Manipulations</h2>
+
+    <span class="chevron">▼</span>
+
+  </div>
+
+
+  <div class="section-corps">
+
+
+    <div class="tabs-container">
+
+
+      <div class="tabs-header">
+
+        <button class="tab-btn actif" data-tab="dissolution">
+          Dissolution
+        </button>
+
+        <button class="tab-btn" data-tab="dilution">
+          Dilution
+        </button>
+
+        <button class="tab-btn" data-tab="identification-ions">
+          Identification d'ions
+        </button>
+
+        <button class="tab-btn" data-tab="solutions-commerciales">
+          Solutions commerciales
+        </button>
+
+      </div>
+
+
+      <!-- ============================ -->
+      <!-- DISSOLUTION                  -->
+      <!-- ============================ -->
+
+      <div class="tab-panel actif" id="dissolution">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="dissolution"></p>
+        </div>
+
+
+        <h3>Préparation par dissolution</h3>
+
+        <div id="modeDissolution" class="mode-op">
+
+            <img class="mode-image" src="./assets/illustrations/tp01-dissolution.svg" alt="Mode opératoire de la dissolution en 7 étapes : tare, prélèvement, versement, mise en solution, agitation, ajustage au trait de jauge, bouchage et étiquetage" width="1000" height="350" loading="lazy">
+
+          </div>
+
+          <h4 class="espace-haut-lg">Protocole — Dissolution</h4>
+
+          <ol class="etapes">
+
+      <li>Peser la masse de sel déterminée à l'aide d'une balance de précision.</li>
+      <li>Introduire le sel dans la fiole jaugée à l'aide d'une spatule.</li>
+      <li>Ajouter de l'eau déminéralisée jusqu'à mi-hauteur de la fiole.</li>
+      <li>Dissoudre le sel par basculements successifs de la fiole.</li>
+      <li>Compléter avec de l'eau déminéralisée jusqu'au trait de jauge à l'aide d'une pissette.</li>
+      <li>Boucher la fiole et homogénéiser par retournements successifs.</li>
+      <li>Étiqueter la fiole en notant : la formule de la solution, sa concentration (g/L), la date de réalisation et le groupe (par une lettre).</li>      
+
+        </ol>
+
+       <p class="success">
+        🌱 Conserver la solution étiquetée pour un usage ultérieur plutôt que de la préparer à nouveau ; 
+        en fin de séquence, verser les solutions non réutilisables dans le bidon de déchets adapté plutôt qu'à l'évier.
+      </p>
+
+        <div class="calcul-guide">
+
+
+          <!-- Affichage des informations du produit sélectionné (lié à #reactif de la section Sécurité) -->
+<div class="info-reactif">
+  <p><strong>Produit sélectionné :</strong> <span id="nom-reactif-selectionne">-</span></p>
+  <p><strong>Formule :</strong> <span id="formule-reactif-selectionne">-</span></p>
+  <p><strong>Masse molaire M (g/mol) :</strong> <span id="masse-molaire-reactif-selectionne">-</span></p>
+</div>
+
+          <hr>
+
+
+          <h4>Calcul de la masse à peser</h4>
+
+          <div class="formule">
+            m = C × V × M
+          </div>
+
+
+          <div class="form-row">
+
+            <div class="form-group">
+
+              <label for="c-dissolution">
+                Concentration C (mol/L)
+              </label>
+
+              <input id="c-dissolution"
+                     type="number"
+                     value="0.10"
+                     step="0.01"
+                     min="0">
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="v-dissolution">
+                Volume V (mL)
+              </label>
+
+              <input id="v-dissolution"
+                     type="number"
+                     value="100"
+                     min="1">
+
+              </div>
+
+             <div class="form-group">
+
+            <label for="res-dissolution">
+              Masse à peser
+            </label>
+
+            <div class="input-unite">
+              <input
+                id="res-dissolution"
+                type="text"
+                readonly>
+              <span>g</span>
+            </div>
+
+          </div>
+
+
+            <!-- La masse molaire est affichée dans le bloc info-reactif, donc on peut supprimer ce champ ou le garder en lecture seule -->
+<div class="form-group">
+  <label for="m-dissolution">Masse molaire M (g/mol)</label>
+  <input id="m-dissolution" type="number" readonly>
+</div>
+
+          </div>     
+
+          <p class="success">
+            🌱 Ajuster le volume V au strict besoin de la manipulation (une
+            fiole de 100 mL suffit pour un binôme) : une solution préparée en
+            excès est un déchet chimique évitable.
+          </p>
+
+<!-- ====================================================== -->
+        <!-- ANALYSE DES ERREURS DE PESÉE                           -->
+        <!-- ====================================================== -->
+
+        <h4 class="espace-haut-lg">Analyse des erreurs de pesée</h4>
+
+        <div class="info">
+
+          Toute mesure expérimentale possède une incertitude.
+          Comparer la masse mesurée à la masse théorique permet
+          d'évaluer la qualité de la préparation.
+
+        </div>   
+
+       
+
+        <div class="form-group">
+
+          <label for="pe-masse-theo">
+            Masse théorique attendue (g)
+          </label>
+
+          <input id="pe-masse-theo"
+             type="number"
+             step="0.001"
+             min="0"
+             placeholder="Ex : 2.940">
+
+        </div>
+
+                <div class="balances-grid">
+
+        <!-- Balance 0,1 g -->
+
+          <div class="balance-card">
+
+            <div class="balance-card-header">
+
+              <div class="balance-icon">⚖️</div>
+
+              <div>
+                <div class="balance-card-title">Balance précision</div>
+                <div class="balance-resolution">Résolution : 0,1 g</div>
+              </div>
+
+              <span class="balance-incert-badge">± 0,05 g</span>
+
+            </div>
+
+            <div class="balance-card-body">
+
+              <label for="pe-lue-01">Masse mesurée (g)</label>
+
+              <input id="pe-lue-01" type="number" step="0.1" min="0">
+
+              <div id="res-01" class="balance-results">
+              Saisir les valeurs.
+              </div>
+            </div>
+          </div>
+
+          <!-- Balance 1 g -->
+
+          <div class="balance-card">
+
+            <div class="balance-card-header">
+
+              <div class="balance-icon">⚖️</div>
+
+              <div>
+                <div class="balance-card-title">Balance courante</div>
+                <div class="balance-resolution">Résolution : 1 g</div>
+              </div>
+
+              <span class="balance-incert-badge">± 0,5 g</span>
+
+            </div>
+
+            <div class="balance-card-body">
+
+              <label for="pe-lue-1g">Masse mesurée (g)</label>
+
+              <input id="pe-lue-1g" type="number" step="1" min="0">
+
+              <div id="res-1g" class="balance-results">
+              Saisir les valeurs.
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+                  <div id="synthese-balances" class="balance-synthese hidden">
+
+            <h3>Comparaison des instruments</h3>
+
+              <table class="tableau-resultats">
+
+                <thead>
+                  <tr>
+                    <th>Critère</th>
+                    <th>Balance 0,1 g</th>
+                    <th>Balance 1 g</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+
+                  <tr>
+                    <td>Masse lue</td>
+                    <td id="syn-lue-01"></td>
+                    <td id="syn-lue-1g"></td>
+                  </tr>
+
+                  <tr>
+                    <td>Erreur absolue</td>
+                    <td id="syn-abs-01"></td>
+                    <td id="syn-abs-1g"></td>
+                  </tr>
+
+                  <tr>
+                    <td>Erreur relative</td>
+                    <td id="syn-rel-01"></td>
+                    <td id="syn-rel-1g"></td>
+                  </tr>
+
+                  <tr>
+                    <td>Qualité</td>
+                    <td id="syn-qual-01"></td>
+                    <td id="syn-qual-1g"></td>
+                  </tr>
+
+                  <tr class="synthese-conclusion-row">
+                    <td colspan="3" id="synthese-conclusion"></td>
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      <!-- ============================ -->
+      <!-- DILUTION                     -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="dilution">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="dilution"></p>
+        </div>
+
+
+        <h3>Préparation par dilution</h3>
+
+        <div id="modeDilution" class="mode-op">
+
+         <img class="mode-image" src="./assets/illustrations/tp01-dilution.svg" alt="Mode opératoire de la dilution en 7 étapes avec l&#x27;exemple d&#x27;une dilution au dixième" width="1000" height="490" loading="lazy">
+
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole — Dilution</h4>
+
+          <ol class="etapes">
+
+            <li>Verser un peu de solution mère dans un bécher propre afin d'éviter de contaminer le flacon d'origine.</li>
+
+            <li>Prélever le volume de solution mère déterminé à l'aide d'une pipette jaugée et d'une propipette.</li>
+
+            <li>Introduire ce volume dans une fiole jaugée de capacité adaptée.</li>
+
+            <li>Ajouter de l'eau déminéralisée jusqu'à mi-hauteur de la fiole.</li>
+
+            <li>Homogénéiser la solution par quelques basculements de la fiole.</li>
+
+            <li>Compléter avec de l'eau déminéralisée jusqu'au trait de jauge à l'aide d'une pissette.</li>
+
+            <li>Boucher la fiole et homogénéiser par retournements successifs.</li>
+
+            <li>Étiqueter la fiole en notant : la formule de la solution, sa concentration (g/L ou mol/L), la date de réalisation et le groupe (par une lettre).</li>
+
+          </ol>
+
+          <p class="success">
+            🌱 Prélever uniquement le volume de solution mère nécessaire afin de limiter les pertes ; 
+            conserver les solutions correctement étiquetées pour une réutilisation ultérieure et éliminer les solutions non réutilisables dans le bidon de déchets adapté.
+          </p>
+
+        <div class="calcul-guide">
+
+          <div class="formule">
+            C₁V₁ = C₂V₂
+          </div>
+
+
+          <div class="form-row">
+
+            <div class="form-group">
+
+              <label for="c1-hcl">
+                Concentration mère C₁ (mol/L)
+              </label>
+
+              <input id="c1-hcl"
+                     type="number"
+                     value="1"
+                     step="0.01">
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="c2-hcl">
+                Concentration fille C₂ (mol/L)
+              </label>
+
+              <input id="c2-hcl"
+                     type="number"
+                     value="0.10"
+                     step="0.01">
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="v2-hcl">
+                Volume final V₂ (mL)
+              </label>
+
+              <input id="v2-hcl"
+                     type="number"
+                     value="100">
+
+            </div>
+
+          </div>
+
+
+          <div id="resultat-hcl" class="resultat-calcul">
+          </div>          
+
+        </div>
+
+
+          <!-- ====================================================== -->
+          <!-- APPLICATION - SERIE DE DILUTIONS PAR 2 (complément)    -->
+          <!-- ====================================================== -->
+
+          <h4 class="espace-haut-lg">Application — Série de dilutions par 2</h4>
+
+          <p class="info">
+            À partir d'une solution mère colorée S0, préparer une série de 6 tubes
+            à essai D0 à D5 : D0 contient S0 non diluée ; pour chaque tube suivant,
+            mélanger 5 mL du tube précédent avec 5 mL d'eau déminéralisée (dilution
+            par 2 à chaque étape).
+          </p>
+
+          <figure class="figure-tp">
+            <img src="./assets/illustrations/tp01-serie-dilution.svg"
+                 alt="Série de 6 tubes à essai contenant une solution violette, dilution par 2 successive du plus concentré (D0, à droite) au plus dilué (D5, à gauche)"
+                 class="mode-image" width="1000" height="450" loading="lazy">
+            <figcaption>Série de dilutions par 2 de la solution mère S0 (D0 à droite → D5 à gauche)</figcaption>
+          </figure>
+
+          <ol class="etapes">
+            <li>Préparer 6 tubes à essai propres et les numéroter D0 à D5.</li>
+            <li>Verser 10 mL de solution mère S0 dans le tube D0.</li>
+            <li>Prélever 5 mL du tube D0, les verser dans le tube D1, puis ajouter 5 mL d'eau déminéralisée et homogénéiser.</li>
+            <li>Répéter l'opération de proche en proche (5 mL du tube précédent + 5 mL d'eau) jusqu'au tube D5.</li>
+            <li>Placer les tubes côte à côte dans un portoir devant un fond blanc et comparer les teintes obtenues.</li>
+          </ol>
+
+          <div class="table-responsive">
+            <table class="tableau-resultats">
+              <caption>Concentration de chaque tube de la série</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Tube</th>
+                  <th scope="col">D0</th>
+                  <th scope="col">D1</th>
+                  <th scope="col">D2</th>
+                  <th scope="col">D3</th>
+                  <th scope="col">D4</th>
+                  <th scope="col">D5</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Facteur de dilution</th>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>4</td>
+                  <td>8</td>
+                  <td>16</td>
+                  <td>32</td>
+                </tr>
+                <tr>
+                  <th scope="row">Concentration (mol/L)</th>
+                  <td><input id="dil-serie-d0" type="text" placeholder="C0"></td>
+                  <td><input id="dil-serie-d1" type="text" placeholder="C0/2"></td>
+                  <td><input id="dil-serie-d2" type="text" placeholder="C0/4"></td>
+                  <td><input id="dil-serie-d3" type="text" placeholder="C0/8"></td>
+                  <td><input id="dil-serie-d4" type="text" placeholder="C0/16"></td>
+                  <td><input id="dil-serie-d5" type="text" placeholder="C0/32"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+      </div>
+
+
+      <!-- ============================ -->
+      <!-- IDENTIFICATION D'IONS         -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="identification-ions">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="identification-ions"></p>
+        </div>
+
+
+        <h3>Identification d'ions par précipitation</h3>
+
+        <p class="info">
+          Après un traitement de surface (dégraissage, décapage, phosphatation,
+          teinture...), l'eau de rinçage ou le bain usé doivent être contrôlés
+          avant d'être évacués ou traités : ils peuvent encore contenir des ions
+          métalliques ou d'autres ions indésirables. Des réactions de précipitation,
+          spécifiques à chaque ion, permettent d'identifier simplement leur présence
+          dans un échantillon.
+        </p>
+
+        <div id="modeIdentificationIons" class="mode-op">
+
+            <img class="mode-image" src="./assets/illustrations/tp01-identification-ions.svg" alt="Tableau : ion recherché, réactif utilisé et couleur du précipité obtenu" width="900" height="420" loading="lazy">
+
+          </div>
+
+        <h4 class="espace-haut-lg">Protocole — tests préliminaires</h4>
+
+        <ol class="etapes">
+          <li>Répartir dans des tubes à essai quelques mL des solutions S₁ à S₆ (une solution par tube).</li>
+          <li>Ajouter dans chaque tube quelques gouttes du réactif à tester (nitrate d'argent, chlorure de baryum, soude ou oxalate d'ammonium), selon l'ion recherché.</li>
+          <li>Observer la formation éventuelle d'un précipité et noter sa couleur.</li>
+          <li>Compléter le tableau de reconnaissance des ions ci-dessus à partir des observations.</li>
+        </ol>
+
+        <h4 class="espace-haut-lg">Protocole — analyse d'un échantillon inconnu</h4>
+
+        <ol class="etapes">
+          <li>Répartir l'échantillon à analyser dans autant de tubes à essai que de réactifs disponibles.</li>
+          <li>Ajouter dans chaque tube l'un des quatre réactifs (nitrate d'argent, chlorure de baryum, soude, oxalate d'ammonium).</li>
+          <li>Observer la formation ou l'absence de précipité dans chaque tube, et en déduire les ions présents dans l'échantillon à l'aide du tableau de reconnaissance.</li>
+          <li>Comparer les échantillons testés pour conclure si l'eau peut être évacuée en l'état ou doit d'abord être traitée.</li>
+        </ol>
+
+        <div class="calcul-guide">
+
+          <h4>1. Tests préliminaires : tableau de reconnaissance des ions</h4>
+
+          <div class="table-responsive">
+            <table class="tableau-resultats" id="table-recap-ions">
+              <thead>
+                <tr>
+                  <th>Ion recherché</th>
+                  <th>Réactif utilisé</th>
+                  <th>Couleur du précipité</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-recap-ions">
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="espace-haut-lg">2. Analyse d'un échantillon</h4>
+
+          <div class="form-row">
+
+            <div class="form-group">
+              <label for="select-echantillon-ions">Échantillon testé</label>
+              <select id="select-echantillon-ions">
+                <option value="">-- Sélectionner --</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="select-reactif-ions">Réactif ajouté</label>
+              <select id="select-reactif-ions">
+                <option value="">-- Sélectionner --</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div id="resultat-test-ion" class="resultat-calcul">
+            Sélectionner un échantillon et un réactif pour prédire le résultat du test.
+          </div>
+
+          <p class="success">
+            🌱 Les précipités formés (notamment ceux contenant du baryum ou de
+            l'argent) ne se rejettent jamais à l'évier : ils se collectent dans le
+            bidon de déchets adapté.
+          </p>
+
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- SOLUTIONS COMMERCIALES (Tle)  -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="solutions-commerciales">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="solutions-commerciales"></p>
+        </div>
+
+
+        <h3>Dilution d'une solution commerciale</h3>
+
+        <p class="info">
+          Les solutions du commerce (acide chlorhydrique à 23 %, vinaigre blanc à 9,5°,
+          solution mère de soude à 50 g·L⁻¹...) ne sont pas étiquetées en mol·L⁻¹ : il faut
+          d'abord calculer leur concentration molaire, puis le volume à prélever. Cet onglet
+          prépare les solutions de NaOH, HCl et CH₃COOH à 0,1 mol·L⁻¹ utilisées dans le
+          TP C02-4 « Solution acido-basique ».
+        </p>
+
+        <p class="info">
+          Mêmes notations que dans l'onglet « Dilution » : solution mère C₁ (V₁) et solution fille C₂ (V₂).
+        </p>
+
+        <div class="calcul-guide">
+
+          <h4>1. Principe et formules</h4>
+
+          <p>
+            Une solution diluée (fille) est obtenue en prélevant un volume V₁ de solution mère
+            de concentration C₁, puis en complétant avec de l'eau distillée jusqu'au volume V₂
+            d'une fiole jaugée. La quantité de matière de soluté se conserve pendant la dilution :
+          </p>
+
+          <div class="formule">C₁ × V₁ = C₂ × V₂ donc V₁ = (C₂ × V₂) / C₁</div>
+          <div class="formule">Facteur de dilution : F = C₁ / C₂ = V₂ / V₁</div>
+
+          <p>
+            Quand la solution mère est commerciale, sa concentration molaire se déduit de son
+            titre massique et de sa masse volumique :
+          </p>
+
+          <div class="formule">Cm₁ = P × ρ puis C₁ = Cm₁ / M</div>
+
+          <ul>
+            <li>P : titre massique exprimé en fraction (23 % → 0,23) ; ρ : masse volumique en g·L⁻¹ (1,115 g·mL⁻¹ = 1 115 g·L⁻¹) ; M : masse molaire en g·mol⁻¹.</li>
+            <li>Vinaigre : le degré d'acidité (9,5°) indique le nombre de grammes d'acide éthanoïque pour 100 g de vinaigre, donc P = 9,5 %.</li>
+            <li>Solution mère donnée en concentration massique (NaOH à 50 g·L⁻¹) : C₁ = Cm₁ / M directement.</li>
+          </ul>
+
+        </div>
+
+        <div class="calcul-guide">
+
+          <h4>2. Calcul du volume à prélever</h4>
+
+          <div class="form-row sc-champs">
+
+            <div class="form-group">
+              <label for="sc-solution">Solution à préparer</label>
+              <select id="sc-solution">
+                <option value="">-- Sélectionner --</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="sc-mode">Solution mère donnée par</label>
+              <select id="sc-mode">
+                <option value="cm">Concentration massique Cm₁ (g·L⁻¹)</option>
+                <option value="titre">Titre massique P (%) et masse volumique ρ</option>
+              </select>
+            </div>
+
+          </div>
+
+          <p id="sc-description" class="info hidden"></p>
+
+          <div class="form-row sc-champs">
+
+            <div class="form-group" id="sc-groupe-cm">
+              <label for="sc-cm0">Concentration massique Cm₁ (g/L)</label>
+              <input id="sc-cm0" type="number" step="0.01" min="0">
+            </div>
+
+            <div class="form-group hidden" id="sc-groupe-titre">
+              <label for="sc-titre">Titre massique P (%)</label>
+              <input id="sc-titre" type="number" step="0.1" min="0" max="100">
+            </div>
+
+            <div class="form-group hidden" id="sc-groupe-rho">
+              <label for="sc-rho">Masse volumique ρ (g/L)</label>
+              <input id="sc-rho" type="number" step="1" min="0">
+            </div>
+
+            <div class="form-group">
+              <label for="sc-M">Masse molaire M (g/mol)</label>
+              <input id="sc-M" type="number" step="0.01" min="0">
+            </div>
+
+            <div class="form-group">
+              <label for="sc-c1">Concentration visée C₂ (mol/L)</label>
+              <input id="sc-c1" type="number" value="0.100" step="0.001" min="0">
+            </div>
+
+            <div class="form-group">
+              <label for="sc-v1">Volume final V₂ (mL)</label>
+              <input id="sc-v1" type="number" value="100.0" step="0.1" min="0">
+            </div>
+
+            <div class="form-group">
+              <label for="sc-u-lecture">Incertitude de lecture u(V) (mL, valeur indicative)</label>
+              <input id="sc-u-lecture" type="number" value="0.05" step="0.01" min="0">
+            </div>
+
+          </div>
+
+          <div class="form-row sc-champs">
+
+            <div class="form-group">
+              <label for="sc-out-cm0">Concentration massique Cm₁</label>
+              <div class="input-unite">
+                <input id="sc-out-cm0" type="text" readonly>
+                <span>g·L⁻¹</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="sc-out-c0">Concentration molaire C₁</label>
+              <div class="input-unite">
+                <input id="sc-out-c0" type="text" readonly>
+                <span>mol·L⁻¹</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="sc-out-v0">Volume à prélever V₁</label>
+              <div class="input-unite">
+                <input id="sc-out-v0" type="text" readonly>
+                <span>mL</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="sc-out-f">Facteur de dilution F</label>
+              <input id="sc-out-f" type="text" readonly>
+            </div>
+
+          </div>
+
+          <div id="sc-resultat-details" class="resultat-calcul" aria-live="polite"></div>
+
+          <div id="sc-resultat-verrerie" class="resultat-calcul" aria-live="polite"></div>
+
+        </div>
+
+        <h4 class="sc-suite">3. Sécurité de la solution mère</h4>
+
+        <div id="securite-bloc-sc"></div>
+
+        <ul id="sc-consignes" class="sc-liste"></ul>
+
+        <p class="warning">
+          ⚠ Toujours ajouter la solution concentrée à l'eau, jamais l'inverse. Ne jamais
+          pipeter directement dans le flacon : verser d'abord un peu de solution dans un bécher.
+        </p>
+
+        <h4 class="sc-suite">4. Récapitulatif des trois préparations</h4>
+
+        <p class="info">
+          Solutions filles de concentration C₂ = 0,100 mol·L⁻¹ dans une fiole jaugée de
+          V₂ = 100,0 mL (quantité de soluté visée : n = 0,100 × 0,100 = 0,0100 mol = 10,0 mmol).
+        </p>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <caption>Volume de solution mère à prélever pour 100 mL de solution à 0,100 mol·L⁻¹</caption>
+            <thead>
+              <tr>
+                <th scope="col">Solution</th>
+                <th scope="col">Solution mère (C₁)</th>
+                <th scope="col">Prélèvement V₁</th>
+                <th scope="col">Facteur de dilution</th>
+                <th scope="col">Verrerie de prélèvement</th>
+              </tr>
+            </thead>
+            <tbody id="sc-tbody-recap">
+            </tbody>
+          </table>
+        </div>
+
+        <h4 class="sc-suite">5. Protocole — dilution d'une solution commerciale</h4>
+
+        <ol class="etapes">
+          <li>Mettre les lunettes, la blouse et les gants. Pour l'acide chlorhydrique commercial, travailler sous la hotte (vapeurs de chlorure d'hydrogène).</li>
+          <li>Verser un peu de solution mère (15 à 20 mL) dans un bécher propre et sec.</li>
+          <li>Introduire environ 50 mL d'eau distillée dans la fiole jaugée de 100,0 mL : la solution mère s'ajoute toujours à l'eau.</li>
+          <li>Rincer la pipette graduée avec un peu de solution mère, puis prélever exactement le volume V₁ calculé (le bas du ménisque tangente la graduation).</li>
+          <li>Verser V₁ dans la fiole contenant déjà l'eau distillée.</li>
+          <li>Boucher, agiter doucement, ajouter de l'eau distillée jusqu'aux trois quarts de la fiole et homogénéiser.</li>
+          <li>Compléter à la pissette jusqu'au trait de jauge : les dernières gouttes se mettent au goutte à goutte (bas du ménisque sur le trait).</li>
+          <li>Boucher et homogénéiser par retournements successifs (au moins 10).</li>
+          <li>Étiqueter : formule et concentration (« 0,100 mol·L⁻¹ » pour NaOH, « ≈ 0,1 mol·L⁻¹ » pour HCl et CH₃COOH), date, nom du groupe. Fermer la solution de soude avec un bouchon en plastique et non en verre rodé.</li>
+        </ol>
+
+        <p class="success">
+          🌱 Préparer strictement le volume nécessaire (100 mL suffisent pour un binôme). Les
+          solutions acides ou basiques non utilisées sont neutralisées (pH entre 6 et 8) avant
+          rejet, selon les consignes de l'établissement.
+        </p>
+
+        <h4 class="sc-suite">6. Mes résultats</h4>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th scope="col">Solution</th>
+                <th scope="col">Concentration visée C₂</th>
+                <th scope="col">V₁ calculé</th>
+                <th scope="col">V₁ réellement prélevé (mL)</th>
+                <th scope="col">C obtenue = C₁ × V₁ / V₂ (mol/L)</th>
+                <th scope="col">Écart relatif</th>
+                <th scope="col">C mesurée par titrage (mol/L, facultatif)</th>
+                <th scope="col">Écart relatif (titrage)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="sc-table-nom">—</td>
+                <td id="sc-table-c1">—</td>
+                <td id="sc-table-v0">—</td>
+                <td><input id="sc-v0-reel" type="number" step="0.01" min="0" placeholder="mL"></td>
+                <td><input id="sc-c-obtenue" type="text" readonly placeholder="auto"></td>
+                <td id="sc-ecart-rel">—</td>
+                <td><input id="sc-c-titrage" type="number" step="0.001" min="0" placeholder="mol/L"></td>
+                <td id="sc-ecart-titrage">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="sc-resultat-ecart" class="resultat-calcul"></div>
+
+        <h4 class="sc-suite">7. Remarques générales</h4>
+
+        <div class="info">
+          <ul class="sc-liste">
+            <li><strong>Concentrations réelles :</strong> les valeurs indiquées sur les flacons commerciaux (23 %, 9,5°) sont approximatives et la masse volumique varie avec la température. Les solutions de HCl et de CH₃COOH ont donc une concentration voisine de 0,1 mol·L⁻¹ ; pour une valeur exacte, effectuer un titrage avec une solution étalon.</li>
+            <li><strong>NaOH :</strong> la solution mère à 50 g·L⁻¹ doit aussi être vérifiée par titrage, car NaOH est hygroscopique et se carbonate au contact de l'air.</li>
+            <li><strong>Autre volume V₂ :</strong> on recalcule V₁ = (C₂ × V₂) / C₁. Exemple pour 250,0 mL de NaOH : V₁ = 0,100 × 250,0 / 1,25 = 20,0 mL.</li>
+            <li><strong>Précision :</strong> préférer la verrerie jaugée à la verrerie graduée et éviter, si possible, les prélèvements inférieurs à 2 mL (passer alors par une solution intermédiaire ou une fiole plus grande).</li>
+            <li><strong>Rejets :</strong> les solutions non utilisées sont neutralisées (pH entre 6 et 8) avant rejet, selon les consignes de l'établissement.</li>
+          </ul>
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+</div>
+
+
+
+
+
+<!-- ====================================================== -->
+<!-- FIN DU CŒUR SPECIFIQUE TP                             -->
+<!-- ====================================================== -->
+
+<!-- ====================================================== -->
+<!-- CHIMIE ET ENVIRONNEMENT (spécifique TP01)                -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Chimie et environnement</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Calculer précisément C, V et m avant de peser ou de prélever : viser juste évite de produire un excédent de solution inutilisable.</li>
+      <li>Réutiliser une solution mère déjà préparée plutôt que d'en refaire une, quand la concentration convient.</li>
+      <li>Rincer la verrerie avec un minimum d'eau déminéralisée, en plusieurs petits volumes plutôt qu'un grand.</li>
+      <li>Ne jamais rejeter une solution à l'évier sans vérification : la collecter dans le bidon de déchets chimiques prévu (acide, basique ou métallique selon le cas).</li>
+      <li>Étiqueter systématiquement les solutions conservées (formule, concentration, date) pour permettre leur réemploi par un autre groupe.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">La dissolution et la dilution au service des enjeux actuels</h3>
+
+    <p>
+      Peser juste et diluer avec précision ne sont pas que des gestes de
+      laboratoire : ce sont des compétences directement mobilisées pour
+      répondre à des défis environnementaux et sanitaires actuels.
+    </p>
+
+    <ul class="liste-aeree">
+      <li><strong>Traitement des effluents industriels :</strong> avant rejet dans le milieu naturel, les eaux industrielles chargées en substances chimiques sont diluées et traitées pour respecter des seuils réglementaires de concentration.</li>
+      <li><strong>Dosage raisonné en agriculture :</strong> la préparation précise de solutions d'engrais ou de produits phytosanitaires à la concentration juste nécessaire limite le surdosage et son lessivage vers les cours d'eau et les nappes phréatiques.</li>
+      <li><strong>Réduction des déchets chimiques :</strong> une quantité de matière calculée au plus juste (n = C × V) est le premier levier pour limiter les déchets produits par une activité de laboratoire ou une production industrielle.</li>
+      <li><strong>Formulation de médicaments :</strong> la maîtrise rigoureuse des concentrations par dissolution est indispensable à la sécurité des préparations pharmaceutiques, où un écart de dosage peut avoir des conséquences sanitaires.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- TRACE ECRITE - COMPTE RENDU                            -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="bilan">
+
+
+  <div class="section-titre">
+
+    <div class="picto-section">📝</div>
+
+    <h2>Trace écrite - Compte rendu</h2>
+
+    <span class="chevron">▼</span>
+
+  </div>
+
+
+  <div class="section-corps">
+
+
+    <h3>Identification</h3>
+
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+
+    <h3 class="espace-haut-md">
+      Questions
+    </h3>
+
+
+    
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation
+      sélectionné. Répondre aux questions de l'onglet que vous avez réalisé :
+      les quatre premières portent sur l'objet du TP de l'onglet, la cinquième
+      répond à sa problématique.
+    </p>
+
+<div class="questions-bloc" data-tp="solutions" data-onglet="dissolution" data-onglet-nom="Dissolution">
+    <h4>Questions de l'onglet « Dissolution »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Définir une dissolution, écrire les relations n = C × V et m = n × M en précisant les unités, et justifier pourquoi on utilise une fiole jaugée plutôt qu'un bécher gradué pour préparer une solution précise.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dissolution-1" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Calculer la masse m à peser (n = C × V puis m = n × M) pour la solution préparée par dissolution dans l'onglet. Détailler les calculs avec les unités.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dissolution-2" rows="5" placeholder="Calculs et réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer la masse réellement pesée à la masse théorique, calculer l'écart relatif sur la concentration obtenue et identifier les principales sources d'erreurs de la préparation.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dissolution-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            En lien avec le contexte professionnel de votre filière (section « Contexte professionnel » ci-dessus), expliquer en quoi la maîtrise précise d'une dissolution constitue un enjeu à la fois environnemental et professionnel dans votre futur métier.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dissolution-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique posée en début de TP :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="dissolution"></p>
+        <div class="zone-eleve">
+          <textarea id="question-dissolution-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="solutions" data-onglet="dilution" data-onglet-nom="Dilution" hidden>
+    <h4>Questions de l'onglet « Dilution »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Définir une dilution, écrire la relation C₁V₁ = C₂V₂ en précisant ce qu'elle traduit (conservation de la quantité de matière), et indiquer pourquoi on utilise une pipette jaugée et une fiole jaugée.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dilution-1" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Calculer le volume V₁ de solution mère à prélever (C₁V₁ = C₂V₂) pour la dilution réalisée dans l'onglet. Détailler les calculs avec les unités.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dilution-2" rows="5" placeholder="Calculs et réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            En prenant C0 la concentration du tube D0 de la série de dilutions par 2, calculer la concentration de chaque tube D0 à D5, puis indiquer si la teinte observée sur la photo évolue de façon cohérente avec ces concentrations.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dilution-3" rows="5" placeholder="Calculs, tableau de concentrations et interprétation de la photo..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            En lien avec le contexte professionnel de votre filière (section « Contexte professionnel » ci-dessus), expliquer en quoi la maîtrise précise d'une dilution constitue un enjeu à la fois environnemental et professionnel dans votre futur métier.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-dilution-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique posée en début de TP :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="dilution"></p>
+        <div class="zone-eleve">
+          <textarea id="question-dilution-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- IDENTIFICATION D'IONS (ENQUETE) -->
+    <!-- ===================================================== -->
+
+    <div class="questions-bloc" data-tp="solutions" data-onglet="identification-ions" data-onglet-nom="Identification d'ions" hidden>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Pour chacun des quatre réactifs (nitrate d'argent, chlorure de
+            baryum, soude, oxalate d'ammonium), préciser quel(s) ion(s) il
+            permet de mettre en évidence et la couleur du précipité obtenu.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-identification-ions-1" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À l'aide de l'onglet « Identification d'ions », tester
+            l'échantillon fourni par votre professeur avec chacun des quatre
+            réactifs, en indiquant pour chaque test la formation ou
+            l'absence de précipité.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-identification-ions-2" rows="6" placeholder="Vos résultats..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir des ions identifiés, indiquer si l'échantillon testé
+            peut être évacué en l'état ou doit d'abord faire l'objet d'un
+            traitement. Justifier votre conclusion.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-identification-ions-3" rows="6" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            En lien avec votre filière professionnelle (voir Contexte
+            professionnel ci-dessus), citer une situation où l'identification
+            d'ions par précipitation est utilisée (contrôle d'une eau, d'un
+            effluent industriel...), et expliquer pourquoi les précipités
+            formés doivent être collectés comme déchets et non rejetés à
+            l'évier.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-identification-ions-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique posée en début de TP :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="identification-ions"></p>
+        <div class="zone-eleve">
+          <textarea id="question-identification-ions-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- SOLUTIONS COMMERCIALES (Tle) -->
+    <!-- ===================================================== -->
+
+    <div class="questions-bloc" data-tp="solutions" data-onglet="solutions-commerciales" data-onglet-nom="Solutions commerciales" hidden>
+    <h4>Questions de l'onglet « Solutions commerciales »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Expliquer comment déduire la concentration molaire C₁ d'une solution commerciale à partir de son titre massique P et de sa masse volumique ρ (préciser les unités). Pour le vinaigre blanc à 9,5°, que signifie le degré d'acidité ?
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-solutions-commerciales-1" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Pour la solution attribuée par votre professeur (NaOH à 50 g·L⁻¹, HCl à 23 % ou vinaigre à 9,5°), calculer C₁ puis le volume V₁ à prélever pour préparer 100,0 mL de solution à 0,100 mol·L⁻¹. Détailler les calculs et vérifier le résultat avec le facteur de dilution F = C₁ / C₂ = V₂ / V₁.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-solutions-commerciales-2" rows="6" placeholder="Calculs et réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer le volume réellement prélevé au volume théorique et calculer l'écart relatif sur la concentration obtenue. Pour l'acide chlorhydrique, le volume à prélever est inférieur à 2 mL : expliquer pourquoi cela pose un problème de précision et proposer une méthode pour l'améliorer (solution intermédiaire ou fiole de 250 mL).
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-solutions-commerciales-3" rows="6" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            En lien avec le contexte professionnel de votre filière, citer les consignes de sécurité propres à la solution utilisée (hotte, acide versé dans l'eau, bouchon en plastique pour la soude...) et expliquer comment les solutions non utilisées doivent être traitées avant rejet.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-solutions-commerciales-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique posée en début de TP :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="solutions-commerciales"></p>
+        <div class="zone-eleve">
+          <textarea id="question-solutions-commerciales-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- AUTO-ÉVALUATION  (trame commune — copie conforme TP03)  -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise
+      pour chaque compétence.
+    </p>
+
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Identifier les données utiles et préparer la manipulation.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Choisir une stratégie de calcul adaptée.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Effectuer correctement les calculs et la manipulation.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier la cohérence des résultats obtenus.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Présenter les résultats avec un vocabulaire scientifique.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <div class="radar-actions espace-haut-lg">
+
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+
+      <div class="espace-haut-md" id="radar-resultat"></div>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+    <!-- =============================================== -->
+    <!-- IMPRESSION COMPTE RENDU                         -->
+    <!-- =============================================== -->
+
+  <div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, Imprimer votre TP en PDF.
+       Envoyer à l'enseignant votre Compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>    
+
+    <div class="toolbar">
+
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+
+    </div>
+
+    <div class="info espace-haut-md">
+
+      L'impression récupère automatiquement :
+
+      <ul>
+        <li>les paramètres de la dissolution et de la dilution (dont la dilution d'une solution commerciale) ;</li>
+        <li>les réponses aux questions ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+
+
+<!-- ====================================================== -->
+<!-- NAVIGATION                                              -->
+<!-- ====================================================== -->
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire"
+          data-aller-accueil>
+      🏠 Accueil
+  </button>
+
+  <button class="btn btn-primaire"
+          data-aller-tp="tp02-ph-indicateurs">
+      TP02 →
+  </button>
+
+</div>
+  
+</div>
+
+
+</section>

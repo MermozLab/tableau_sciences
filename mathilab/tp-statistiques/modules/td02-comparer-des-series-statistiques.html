@@ -1,0 +1,716 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucune balise script dans ce fragment (le contrôleur js/td02-comparer-des-series-statistiques.js
+  est importé par navigation.js, qui appelle son export init()).
+  Structure conforme à claude_v7.md : objectif, contexte-pro, preparation,
+  bilan, auto-evaluation, impression_tp.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Mathi</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Comparer des séries à l'aide d'indicateurs statistiques</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">2nde</span>
+        <span class="tag">Statistique et probabilités</span>
+        <span class="tag">Indicateurs de position - </span><span class="tag">Indicateurs de dispersion - </span><span class="tag">Boîte à moustaches</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TD S02</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <ul>
+      <li><strong>2nde —</strong> Comparer et interpréter des séries statistiques à l'aide d'indicateurs de position et de dispersion calculés avec les fonctions statistiques d'une calculatrice ou d'un tableur.</li>
+      <li><strong>2nde —</strong> Indicateurs de position : mode, classe modale, moyenne, médiane, quartiles.</li>
+      <li><strong>2nde —</strong> Indicateurs de dispersion : étendue, écart type, écart interquartile Q3 − Q1.</li>
+      <li><strong>2nde —</strong> Construire le diagramme en boîte à moustaches associé à une série statistique, avec ou sans outils numériques.</li>
+      <li><strong>2nde —</strong> Comparer et interpréter des diagrammes en boîte à moustaches.</li>
+      <li><em>Domaine transversal — Co-intervention :</em> la moyenne et l'écart type calculés ici sont exactement ceux déjà utilisés dans les TP de sciences (SciLab) pour exprimer un résultat de mesure avec son incertitude ; la médiane et les quartiles en sont le prolongement mathématique.</li>
+      <li><em>Domaine transversal — Capacités mathématiques : chercher, modéliser, représenter, calculer, raisonner et communiquer.</em></li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Comparer deux séries de mesures, ce n'est pas seulement comparer
+      leurs moyennes : deux séries peuvent avoir la même moyenne et
+      être très différentes si l'une est beaucoup plus dispersée que
+      l'autre. C'est précisément ce que permettent de voir les
+      quartiles et la boîte à moustaches.
+    </div>
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte et la problématique associée.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">📐</div>
+    <h2>Activités</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="toolbar">
+      <a class="btn btn-secondaire" href="../../numworks/emulator.html" data-outil-index="Calculatrice NumWorks" target="_blank" rel="noopener">
+        🧮 Ouvrir la calculatrice NumWorks
+      </a>
+    </div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="indicateurs-serie">Calculer les indicateurs d'une série</button>
+        <button class="tab-btn" data-tab="comparer-series">Comparer deux séries</button>
+        <button class="tab-btn" data-tab="activites-puzzle">🧩 Activités Puzzle</button>
+      </div>
+
+      <!-- ============================================= -->
+      <!-- CALCULER LES INDICATEURS D'UNE SÉRIE          -->
+      <!-- ============================================= -->
+
+      <div class="tab-panel actif" id="indicateurs-serie">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="indicateurs-serie"></p>
+        </div>
+
+        <h3>Calculer les indicateurs de position et de dispersion</h3>
+
+        <div class="info">
+          Reprendre une série de mesures (temps de cycle, délai de
+          livraison, cote de pièce...) et saisir chaque valeur : les
+          indicateurs se calculent automatiquement, comme le ferait
+          une calculatrice ou un tableur.
+        </div>
+
+        <h4 class="espace-haut-lg">Méthodologie</h4>
+
+        <ol class="etapes espace-bas-lg">
+          <li>Relever ou reprendre une série d'au moins 8 mesures.</li>
+          <li>Saisir chaque valeur une à une.</li>
+          <li>Lire le tableau des indicateurs : comparer moyenne et médiane, étendue et écart interquartile.</li>
+          <li>Repérer sur la boîte à moustaches le minimum, le maximum, les quartiles et la médiane.</li>
+        </ol>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="is-valeur">Valeur mesurée</label>
+            <input id="is-valeur" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="is-ajouter" type="button" class="btn btn-primaire">
+              + Ajouter la valeur
+            </button>
+          </div>
+
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>Valeur</th>
+              </tr>
+            </thead>
+            <tbody id="is-tbody-valeurs">
+            </tbody>
+          </table>
+        </div>
+
+        <h4 class="espace-haut-lg">Indicateurs calculés</h4>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>Indicateur</th>
+                <th>Valeur</th>
+              </tr>
+            </thead>
+            <tbody id="is-tbody-indicateurs">
+              <tr><td colspan="2">Saisir au moins 4 valeurs pour afficher les indicateurs.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 class="espace-haut-lg">Boîte à moustaches</h4>
+
+        <div id="is-boite" class="graphique-conteneur"></div>
+
+      </div>
+
+      <!-- ============================================= -->
+      <!-- COMPARER DEUX SÉRIES                          -->
+      <!-- ============================================= -->
+
+      <div class="tab-panel" id="comparer-series">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="comparer-series"></p>
+        </div>
+
+        <h3>Comparer deux séries à l'aide de leur boîte à moustaches</h3>
+
+        <div class="info">
+          Saisir deux séries à comparer : deux réglages de machine,
+          deux transporteurs, deux équipes... Les indicateurs et les
+          boîtes à moustaches des deux séries s'affichent l'une
+          au-dessus de l'autre, sur la même échelle, pour permettre la
+          comparaison directe.
+        </div>
+
+        <h4 class="espace-haut-lg">Méthodologie</h4>
+
+        <ol class="etapes espace-bas-lg">
+          <li>Choisir deux situations comparables de votre filière (deux réglages, deux méthodes, deux transporteurs...).</li>
+          <li>Saisir au moins 8 valeurs pour chaque série.</li>
+          <li>Comparer les médianes : quelle série est centrée sur la valeur la plus favorable ?</li>
+          <li>Comparer les écarts interquartiles : quelle série est la plus régulière (la moins dispersée) ?</li>
+        </ol>
+
+        <div class="tp-row" style="gap:var(--gap-lg);flex-wrap:wrap;align-items:flex-start;">
+
+          <div style="flex:1;min-width:260px;">
+
+            <h4>Série A</h4>
+
+            <div class="form-group">
+              <label for="cs-label-a">Nom de la série A</label>
+              <input id="cs-label-a" type="text" placeholder="ex. Réglage 1" value="Série A">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cs-valeur-a">Valeur</label>
+                <input id="cs-valeur-a" type="number" step="0.1">
+              </div>
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <button id="cs-ajouter-a" type="button" class="btn btn-primaire">+ Ajouter</button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="tableau-resultats">
+                <thead><tr><th>N°</th><th>Valeur</th></tr></thead>
+                <tbody id="cs-tbody-a"></tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <div style="flex:1;min-width:260px;">
+
+            <h4>Série B</h4>
+
+            <div class="form-group">
+              <label for="cs-label-b">Nom de la série B</label>
+              <input id="cs-label-b" type="text" placeholder="ex. Réglage 2" value="Série B">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cs-valeur-b">Valeur</label>
+                <input id="cs-valeur-b" type="number" step="0.1">
+              </div>
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <button id="cs-ajouter-b" type="button" class="btn btn-primaire">+ Ajouter</button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="tableau-resultats">
+                <thead><tr><th>N°</th><th>Valeur</th></tr></thead>
+                <tbody id="cs-tbody-b"></tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+
+        <h4 class="espace-haut-lg">Tableau comparatif des indicateurs</h4>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>Indicateur</th>
+                <th id="cs-th-a">Série A</th>
+                <th id="cs-th-b">Série B</th>
+              </tr>
+            </thead>
+            <tbody id="cs-tbody-comparaison">
+              <tr><td colspan="3">Saisir au moins 4 valeurs dans chaque série pour afficher la comparaison.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 class="espace-haut-lg">Boîtes à moustaches comparées</h4>
+
+        <div id="cs-boites" class="graphique-conteneur"></div>
+
+      </div>
+
+      <!-- ---------- ACTIVITÉS PUZZLE (onglet indépendant, sans zone de saisie) ---------- -->
+      <div class="tab-panel" id="activites-puzzle">
+
+        <h3>🧩 Activités Puzzle</h3>
+
+        <div id="puzzle-info" class="info">
+          Sélectionner votre filière professionnelle dans la section « Contexte professionnel »
+          ci-dessus pour afficher les sujets.
+        </div>
+
+        <div class="info">
+          Organisation en <strong>classe puzzle</strong> : chaque groupe expert traite un sujet (position, dispersion, boîte à moustaches) à partir de la même série. En groupe mélangé, les experts rassemblent leurs résultats pour rédiger une analyse complète de la série.
+        </div>
+
+        <div class="toolbar">
+          <a class="btn btn-secondaire" href="../../roue/index.html" target="_blank" rel="noopener">
+            🎡 Ouvrir la roue (tirage des groupes)
+          </a>
+        </div>
+
+        <div class="sous-onglets" role="tablist">
+        <button class="sous-btn actif" data-sous="puzzle-sujet-a">Sujet A</button>
+        <button class="sous-btn" data-sous="puzzle-sujet-b">Sujet B</button>
+        <button class="sous-btn" data-sous="puzzle-sujet-c">Sujet C</button>
+        </div>
+
+      <div class="sous-panel actif" id="puzzle-sujet-a">
+        <div class="fiche-puzzle" data-titre="Indicateurs de position">
+          <div class="questions-bloc" data-tp="puzzle-a">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet A — Indicateurs de position</strong>
+                <span class="cartouche" data-comp="REA">REA</span></div>
+              <p class="info puzzle-contexte" id="puzzle-a-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-a-problematique"></p>
+              <ol id="puzzle-a-enonce" class="puzzle-questions"></ol>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+      <div class="sous-panel" id="puzzle-sujet-b">
+        <div class="fiche-puzzle" data-titre="Indicateurs de dispersion">
+          <div class="questions-bloc" data-tp="puzzle-b">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet B — Indicateurs de dispersion</strong>
+                <span class="cartouche" data-comp="ANA">ANA</span></div>
+              <p class="info puzzle-contexte" id="puzzle-b-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-b-problematique"></p>
+              <ol id="puzzle-b-enonce" class="puzzle-questions"></ol>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+      <div class="sous-panel" id="puzzle-sujet-c">
+        <div class="fiche-puzzle" data-titre="Boîte à moustaches">
+          <div class="questions-bloc" data-tp="puzzle-c">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet C — Boîte à moustaches</strong>
+                <span class="cartouche" data-comp="VAL">VAL</span></div>
+              <p class="info puzzle-contexte" id="puzzle-c-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-c-problematique"></p>
+              <ol id="puzzle-c-enonce" class="puzzle-questions"></ol>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées suivent l'onglet d'activité actif : ouvrir
+      l'onglet travaillé dans la section « Activités » pour répondre aux
+      questions correspondantes.
+    </p>
+
+    <div class="questions-bloc" data-tp="statistiques-indicateurs-serie" data-onglet="indicateurs-serie" data-onglet-nom="Calculer les indicateurs d'une série" hidden>
+      <h4>Questions de l'onglet « Calculer les indicateurs d'une série »</h4>
+      <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Donner la définition de la médiane et des quartiles Q1 et Q3 d'une série statistique.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-indicateurs-serie-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Calculer la moyenne, la médiane, Q1 et Q3 de la série étudiée, avec l'unité.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-indicateurs-serie-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Comparer la moyenne et la médiane, l'étendue et l'écart interquartile : que révèlent-ils sur la répartition des valeurs ?</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-indicateurs-serie-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier les valeurs lues sur la boîte à moustaches (minimum, Q1, médiane, Q3, maximum) en les comparant aux indicateurs calculés.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-indicateurs-serie-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="indicateurs-serie"></p>
+        <div class="zone-eleve"><textarea id="question-indicateurs-serie-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+      </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="statistiques-comparer-series" data-onglet="comparer-series" data-onglet-nom="Comparer deux séries" hidden>
+      <h4>Questions de l'onglet « Comparer deux séries »</h4>
+      <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Rappeler ce que mesurent l'écart type et l'écart interquartile, et expliquer pourquoi comparer deux séries ne se limite pas à comparer leurs moyennes.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-comparer-series-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Calculer et comparer l'écart type et l'écart interquartile des deux séries étudiées.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-comparer-series-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>À partir des deux boîtes à moustaches, expliquer quelle série est la plus régulière et laquelle est la mieux centrée.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-comparer-series-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier que la conclusion tirée des boîtes à moustaches est cohérente avec celle des écarts types, puis justifier le choix de la série retenue.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-comparer-series-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="comparer-series"></p>
+        <div class="zone-eleve"><textarea id="question-comparer-series-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+      </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="statistiques-activites-puzzle" data-onglet="activites-puzzle" data-onglet-nom="🧩 Activités Puzzle" hidden>
+      <h4>Questions de l'onglet « 🧩 Activités Puzzle »</h4>
+      <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Indiquer le sujet traité par votre groupe (A position, B dispersion, C boîte à moustaches) et rappeler la définition des indicateurs utilisés.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Donner les valeurs calculées pour votre sujet (moyenne, médiane, quartiles, écart type… selon le cas), avec l'unité.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Interpréter ces indicateurs dans la situation et les comparer à ceux des autres experts du groupe.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier vos calculs avec un second outil (calculatrice ou tableur) et contrôler que Q1 ≤ médiane ≤ Q3.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de votre sujet en vous appuyant sur vos résultats :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+      </ol>
+    <p class="info">Les fiches Sujet A, B et C de l'onglet « Activités Puzzle » sont des fiches de consigne : seules vos réponses à ces questions sont reprises dans le compte-rendu.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TD, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Identifier les indicateurs de position et de dispersion d'une série.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Calculer médiane, quartiles, écart interquartile et écart type d'une série.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Construire et interpréter une boîte à moustaches.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Comparer deux séries statistiques et justifier un choix.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Argumenter une comparaison de séries à l'oral ou à l'écrit.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" type="button" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div id="radar-resultat" class="espace-haut-md"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TD, imprimer votre travail en PDF.
+      Envoyer à l'enseignant votre compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" type="button" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les réponses aux questions de l'onglet affiché ;</li>
+        <li>l'auto-évaluation des compétences et le radar.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button type="button" class="btn btn-secondaire" data-aller-accueil>
+    🏠 Accueil
+  </button>
+
+  <button type="button" class="btn btn-primaire" data-aller-tp="td03-fluctuation-frequence-probabilites">
+    TD S03 →
+  </button>
+
+</div>
+
+</main>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

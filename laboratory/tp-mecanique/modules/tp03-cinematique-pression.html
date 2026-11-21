@@ -1,0 +1,1149 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Cinématique et pression</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">1ère</span>
+        <span class="tag">Mécanique</span>
+        <span class="tag">Accélération - </span><span class="tag">Pression - </span><span class="tag">Boyle-Mariotte</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP M03</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<div class="contenu-tp">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+    <ul>
+      <li><strong>1ère</strong> — Mesurer des vitesses et des accélérations dans le cas d'un mouvement rectiligne.</li>
+      <li><strong>1ère</strong> — Identifier la nature d'un mouvement à partir du graphe des vitesses.</li>
+      <li><strong>1ère</strong> — Connaître la relation entre la variation de vitesse, l'accélération et la durée pour une accélération de valeur constante.</li>
+      <li><strong>1ère</strong> — Mesurer la pression en un point d'un fluide et calculer une pression (P = F/S).</li>
+      <li><strong>1ère</strong> — Vérifier expérimentalement la loi de Boyle-Mariotte.</li>
+      <li><strong>1ère</strong> — Connaître la relation entre pression, volume, quantité de matière et température pour un gaz parfait.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="securite">
+
+  <div class="section-titre">
+    <div class="picto-section">⚠️</div>
+    <h2>Sécurité</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Ce TP met en œuvre un mobile en mouvement accéléré et une
+      seringue ou un vérin sous pression.
+    </div>
+
+    <ul class="liste-aeree">
+      <li><strong>Mobile accéléré :</strong> prévoir une zone d'arrêt dégagée en bout de course.</li>
+      <li><strong>Compression d'un gaz :</strong> ne jamais dépasser la pression maximale admissible de la seringue ou du manomètre.</li>
+      <li><strong>Relâchement brutal :</strong> tenir fermement le piston lors du relâchement de la pression.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+    <div class="picto-section">🧪</div>
+    <h2>Matériel nécessaire</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">⚗️</div>
+    <h2>Manipulations</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="tp03m-message-filiere" class="info" hidden></div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="vitesse-acceleration">Vitesse et accélération</button>
+        <button class="tab-btn" data-tab="pression-force">Pression et force pressante</button>
+        <button class="tab-btn" data-tab="acquisition-exao">Acquisition ExAO (pression)</button>
+      </div>
+
+      <!-- ============================ -->
+      <!-- VITESSE ET ACCÉLÉRATION       -->
+      <!-- ============================ -->
+
+      <div class="tab-panel actif" id="vitesse-acceleration">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="vitesse-acceleration"></p>
+        </div>
+
+
+        <h3>Mesurer une accélération en mouvement rectiligne</h3>
+
+        <div class="info">
+          Pour une accélération constante, la variation de vitesse est
+          proportionnelle à la durée : Δv = a × Δt, soit
+          a = (v₂ - v₁) / (t₂ - t₁).
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Enregistrer le mouvement rectiligne d'un mobile (vidéo, chronophotographie, ExAO ou simulateur ci-dessus).</li>
+          <li>Relever la vitesse du mobile à deux instants successifs.</li>
+          <li>Saisir ces valeurs pour calculer l'accélération moyenne, puis tracer le graphe des vitesses pour identifier la nature du mouvement.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/m3-vitesse-acceleration.svg" alt="Mode opératoire — vitesse et accélération d'un mouvement rectiligne" width="760" height="460" loading="lazy">
+        </div>
+
+        <h4 class="espace-haut-lg">Simulateur : enregistrer un mouvement rectiligne</h4>
+
+        <div class="info">
+          Pas de vidéo, de chronophotographie ni de dispositif ExAO sous la main ?
+          Ce simulateur anime le déplacement de <span id="acc-sim-mobile-nom">votre mobile</span>
+          sur un rail, avec un chronomètre et un compteur de vitesse comme
+          sur un véritable dispositif d'acquisition. Lancez l'enregistrement,
+          mettez-le en pause à deux instants différents, notez le temps et la
+          vitesse affichés, puis reportez ces valeurs dans les champs
+          ci-dessous pour calculer l'accélération moyenne.
+        </div>
+
+        <div class="simulateur-acceleration">
+
+          <div class="sim-acc-scene">
+            <canvas id="acc-sim-canvas"></canvas>
+          </div>
+
+          <div class="sim-acc-tableau-bord">
+            <div class="sim-acc-cadran">
+              <span class="sim-acc-cadran-label">⏱️ Chronomètre</span>
+              <span class="sim-acc-cadran-valeur" id="acc-sim-temps">0.00 s</span>
+            </div>
+            <div class="sim-acc-cadran">
+              <span class="sim-acc-cadran-label">🏁 Vitesse instantanée</span>
+              <span class="sim-acc-cadran-valeur" id="acc-sim-vitesse">0.00 m/s</span>
+            </div>
+          </div>
+
+          <div class="toolbar sim-acc-toolbar">
+            <button id="acc-sim-toggle" class="btn btn-primaire" type="button">▶️ Lancer l'enregistrement</button>
+            <button id="acc-sim-nouveau" class="btn btn-secondaire" type="button">🔁 Nouveau mouvement</button>
+            <button id="acc-sim-noter1" class="btn btn-secondaire" type="button" disabled>📍 Noter l'instant 1 (t₁, v₁)</button>
+            <button id="acc-sim-noter2" class="btn btn-secondaire" type="button" disabled>📍 Noter l'instant 2 (t₂, v₂)</button>
+          </div>
+
+          <div id="acc-sim-message" class="warning" hidden></div>
+
+          <h4 class="espace-haut-md">Graphe vitesse-temps v = f(t)</h4>
+
+          <div class="legende-courbe">
+            <span><i class="pastille-orange"></i> Instant 1 noté</span>
+            <span><i class="pastille-rouge"></i> Instant 2 noté</span>
+          </div>
+
+          <div class="sim-acc-graphe">
+            <canvas id="acc-sim-canvas-graphe"></canvas>
+          </div>
+
+        </div>
+
+        <h4 class="espace-haut-lg">Valeurs relevées</h4>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="acc-t1">Instant t₁ (s)</label>
+            <input id="acc-t1" type="number" step="0.01">
+          </div>
+
+          <div class="form-group">
+            <label for="acc-v1">Vitesse v₁ (m/s)</label>
+            <input id="acc-v1" type="number" step="0.01">
+          </div>
+
+          <div class="form-group">
+            <label for="acc-t2">Instant t₂ (s)</label>
+            <input id="acc-t2" type="number" step="0.01">
+          </div>
+
+          <div class="form-group">
+            <label for="acc-v2">Vitesse v₂ (m/s)</label>
+            <input id="acc-v2" type="number" step="0.01">
+          </div>
+
+        </div>
+
+        <div id="acc-resultat" class="resultat-calcul">
+          Saisir deux instants et les vitesses correspondantes pour
+          calculer l'accélération moyenne entre ces deux instants.
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- PRESSION ET FORCE PRESSANTE   -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="pression-force">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="pression-force"></p>
+        </div>
+
+
+        <h3>Pression, force pressante et loi de Boyle-Mariotte</h3>
+
+        <div class="info">
+          La pression exercée sur une surface est le quotient de la
+          force pressante par la surface pressée : P = F / S. Pour un
+          gaz parfait à température constante, la loi de
+          Boyle-Mariotte relie pression et volume : P₁ × V₁ = P₂ × V₂.
+        </div>
+
+        <div class="info">
+          Avec les deux dispositifs présentés plus bas (capteur
+          numérique ou manomètre relié à une seringue), la pression P
+          se lit directement sur l'appareil : F et S ne se mesurent
+          pas séparément avec ces montages. Pour relier la mesure à la
+          relation P = F/S :
+          <ul class="liste-compacte">
+            <li><strong>S</strong> est la surface interne du piston de la seringue, calculable à partir de son diamètre interne d : S = π × (d/2)².</li>
+            <li><strong>F</strong> est la force pressante exercée sur ce piston : elle se déduit de la pression P lue sur le capteur ou le manomètre, grâce à F = P × S.</li>
+          </ul>
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Mesurer la pression exercée par un vérin ou une presse sur une surface connue.</li>
+          <li>Choisir l'un des deux dispositifs (capteur numérique ou vérin à vis + manomètre analogique) et fermer le robinet de la seringue pour enfermer une quantité d'air.</li>
+          <li>Déplacer progressivement le piston (à la main ou à l'aide de la vis) pour imposer différents volumes ; relever à chaque fois le volume V et la pression P dans le tableau de mesures.</li>
+          <li>Calculer le produit P × V pour chaque mesure et comparer avec la pression prédite par la loi de Boyle-Mariotte.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/m3-pression.svg" alt="Mode opératoire — pression, force pressante et loi de Boyle-Mariotte" width="760" height="480" loading="lazy">
+        </div>
+
+        <h4 class="espace-haut-lg">Calculer S à partir du diamètre du piston</h4>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="pf-diametre">Diamètre interne du piston d (mm)</label>
+            <input id="pf-diametre" type="number" step="0.1">
+          </div>
+
+        </div>
+
+        <div id="pf-diametre-resultat" class="resultat-calcul">
+          Saisir le diamètre interne du piston (indiqué sur la
+          seringue) pour calculer automatiquement la surface pressée S
+          et la reporter ci-dessous.
+        </div>
+
+        <h4 class="espace-haut-lg">Calcul direct : P = F / S</h4>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="pf-force">Force pressante F (N)</label>
+            <input id="pf-force" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="pf-surface">Surface pressée S (cm²)</label>
+            <input id="pf-surface" type="number" step="0.01">
+          </div>
+
+        </div>
+
+        <div id="pf-resultat" class="resultat-calcul">
+          Saisir la force pressante et la surface pressée pour calculer
+          la pression correspondante.
+        </div>
+
+        <h4 class="espace-haut-lg">Calcul inverse : déduire F à partir de la pression lue sur le dispositif</h4>
+
+        <div class="info">
+          Cas d'usage réel avec les deux dispositifs photographiés : on
+          connaît la pression P affichée par le capteur ou le
+          manomètre, et la surface S du piston (calculée ci-dessus) ;
+          on en déduit la force pressante F exercée sur le piston.
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="pf-pression-lue">Pression lue P (hPa)</label>
+            <input id="pf-pression-lue" type="number" step="1">
+          </div>
+
+          <div class="form-group">
+            <label for="pf-surface-inverse">Surface pressée S (cm²)</label>
+            <input id="pf-surface-inverse" type="number" step="0.01">
+          </div>
+
+        </div>
+
+        <div id="pf-inverse-resultat" class="resultat-calcul">
+          Saisir la pression lue sur le dispositif et la surface du
+          piston pour déduire la force pressante F = P × S.
+        </div>
+
+        <h4 class="espace-haut-lg">Deux dispositifs pour étudier la pression d'un gaz enfermé</h4>
+
+        <div class="info">
+          Les deux dispositifs présentés ci-dessous permettent d'enfermer une
+          quantité d'air dans une seringue et de mesurer la pression du gaz
+          pour différents volumes, afin de vérifier la loi de Boyle-Mariotte.
+        </div>
+
+        <div class="grid grid-2 experiences-photos">
+
+          <div class="card experience-card">
+            <img src="./assets/illustrations/m3-exp-capteur-numerique.svg"
+                 alt="Seringue reliée par un tuyau à un capteur de pression numérique Jeulin affichant P = 1006 hPa"
+                 class="experience-image" width="480" height="300" loading="lazy">
+            <h4>Dispositif A — Capteur de pression numérique</h4>
+            <p>
+              Une seringue est reliée par un tuyau souple à un capteur de
+              pression Jeulin. Le piston est déplacé à la main pour fixer le
+              volume de gaz enfermé ; la pression correspondante est lue
+              directement en hPa sur l'écran numérique du capteur.
+            </p>
+          </div>
+
+          <div class="card experience-card">
+            <img src="./assets/illustrations/m3-exp-loi-mariotte.svg"
+                 alt="Dispositif Loi de Mariotte : seringue graduée entraînée par une vis, reliée à un manomètre analogique à aiguille"
+                 class="experience-image" width="480" height="300" loading="lazy">
+            <h4>Dispositif B — Vérin à vis et manomètre analogique</h4>
+            <p>
+              Une seringue graduée (0 à 60 cm³), entraînée par une vis
+              micrométrique fixée sur un support « Loi de Mariotte », est
+              reliée à un manomètre analogique gradué en bar et en hPa qui
+              affiche la pression du gaz enfermé pour chaque volume imposé.
+            </p>
+          </div>
+
+        </div>
+
+        <h4 class="espace-haut-lg">Calcul rapide entre deux points de mesure</h4>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="bm-p1">Pression initiale P₁ (hPa)</label>
+            <input id="bm-p1" type="number" step="1">
+          </div>
+
+          <div class="form-group">
+            <label for="bm-v1">Volume initial V₁ (mL)</label>
+            <input id="bm-v1" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="bm-v2">Volume final V₂ (mL)</label>
+            <input id="bm-v2" type="number" step="0.1">
+          </div>
+
+        </div>
+
+        <div id="bm-resultat" class="resultat-calcul">
+          Saisir la pression et le volume initiaux, puis le volume
+          final, pour calculer la pression finale attendue par la loi
+          de Boyle-Mariotte.
+        </div>
+
+        <h4 class="espace-haut-lg">Tableau de mesures — vérification sur plusieurs points</h4>
+
+        <div class="info">
+          Avec l'un des deux dispositifs, relever la pression du gaz pour
+          plusieurs volumes différents, puis vérifier que le produit P × V
+          reste approximativement constant à température constante.
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="tableau-resultats" id="bm-table">
+
+            <thead>
+              <tr>
+                <th>Mesure</th>
+                <th>Dispositif</th>
+                <th>Volume V (mL)</th>
+                <th>Pression P (hPa)</th>
+                <th>P × V (hPa·mL)</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody id="bm-table-corps">
+              <!-- Lignes générées dynamiquement par tp03-cinematique-pression.js -->
+            </tbody>
+
+          </table>
+
+        </div>
+
+        <div class="toolbar espace-haut-sm">
+          <button id="bm-ajouter-mesure" class="btn btn-secondaire" type="button">➕ Ajouter une mesure</button>
+        </div>
+
+        <div id="bm-table-resultat" class="resultat-calcul espace-haut-md">
+          Ajouter au moins deux mesures (V, P) pour vérifier la constance
+          du produit P × V.
+        </div>
+
+        <h4 class="espace-haut-lg">Courbe P = f(V)</h4>
+
+        <div class="info">
+          La courbe se met à jour automatiquement à chaque saisie ou
+          modification d'une mesure (V, P) dans le tableau ci-dessus.
+          Les points rouges sont les mesures ; la courbe bleue est la
+          courbe théorique P = k / V (k = produit moyen P × V), tracée
+          dès que deux mesures exploitables sont disponibles.
+        </div>
+
+        <div class="legende-courbe">
+          <span><i class="pastille-rouge"></i> Points mesurés</span>
+          <span><i class="pastille-bleue"></i> Courbe théorique P = k / V</span>
+        </div>
+
+        <div class="graphe-boyle-mariotte">
+          <canvas id="bm-canvas-courbe"></canvas>
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- ACQUISITION EXAO (PRESSION)   -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="acquisition-exao">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="acquisition-exao"></p>
+        </div>
+
+
+        <h3>Enregistrer la pression avec le pressiomètre ExAO</h3>
+
+        <div class="info">
+          Ce module permet d'enregistrer, pour chaque volume imposé à la
+          seringue graduée, la pression (en hPa) mesurée par le
+          pressiomètre Jeulin (réf. 251 181) relié en USB à
+          l'ordinateur, afin de vérifier la loi de Boyle-Mariotte.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Relier le pressiomètre Jeulin (réf. 251 181) à l'ordinateur par le câble USB, puis cliquer sur « Connecter l'appareil (USB) » et autoriser l'accès dans la fenêtre proposée par le navigateur (« Pressiometre » — Jeulin).</li>
+          <li>Ajuster le piston de la seringue sur le volume demandé (ligne surlignée du tableau), attendre la stabilisation de la pression instantanée affichée.</li>
+          <li>Valider la mesure avec la touche Entrée (ou le bouton « Valider ») : la ligne se remplit et le tableau passe automatiquement au volume suivant.</li>
+          <li>Recommencer pour chaque volume atteignable, puis observer la courbe P = f(V) et le produit P × V obtenus.</li>
+        </ol>
+
+        <div class="info exaop-navigateur-requis">
+          <strong>Navigateur requis :</strong> le pressiomètre Jeulin
+          (réf. 251 181) se présente à l'ordinateur comme un
+          périphérique USB « HID » (comme un clavier ou une manette).
+          La détection automatique utilise donc l'API WebHID,
+          disponible sur Chrome, Edge et les navigateurs Chromium
+          (ordinateur uniquement), et nécessite une connexion
+          sécurisée (https:// ou localhost). Elle n'est pas disponible
+          sur Firefox ni Safari : utiliser le mode démonstration dans
+          ce cas. Une fois l'appareil autorisé une première fois, le
+          navigateur le reconnecte automatiquement aux ouvertures
+          suivantes, sans redemander de confirmation.
+        </div>
+
+        <div class="exaop-barre-etat">
+          <span id="exaop-etat-point" class="exaop-etat-point"></span>
+          <span id="exaop-etat-texte">Appareil non connecté</span>
+        </div>
+
+        <div class="toolbar exaop-toolbar">
+          <button id="exaop-btn-connecter" class="btn btn-primaire" type="button">🔌 Connecter l'appareil (USB)</button>
+          <button id="exaop-btn-deconnecter" class="btn btn-secondaire" type="button" disabled>🔌 Déconnecter</button>
+          <button id="exaop-btn-demo" class="btn btn-secondaire" type="button">🧪 Mode démonstration</button>
+          <button id="exaop-btn-recommencer" class="btn btn-danger" type="button">🔁 Recommencer le tableau</button>
+        </div>
+
+        <div id="exaop-message" class="info" hidden></div>
+
+        <details class="exaop-details-calibration espace-haut-md">
+
+          <summary>⚙️ Réglage de la lecture des rapports HID (à faire une seule fois)</summary>
+
+          <div class="info espace-haut-sm">
+            L'interface Jeulin envoie ses mesures sous forme d'un
+            rapport HID binaire — pas de documentation publique fiable
+            sur l'emplacement exact de la valeur de pression à
+            l'intérieur de ce rapport. La ligne ci-dessous affiche le
+            dernier rapport brut reçu (en hexadécimal) : faire varier
+            la pression (comprimer/relâcher la seringue) et observer
+            quel(s) octet(s) changent, puis régler les paramètres pour
+            que la valeur affichée corresponde à la réalité (pression
+            atmosphérique ≈ 1013 hPa au repos).
+          </div>
+
+          <div class="exaop-trame-brute">
+            Dernier rapport reçu (hexadécimal) : <code id="exaop-trame-texte">—</code>
+          </div>
+
+          <div class="form-row espace-haut-sm">
+
+            <div class="form-group">
+              <label for="exaop-octet-depart">Octet de départ (0 = premier octet du rapport)</label>
+              <input id="exaop-octet-depart" type="number" min="0" step="1" value="1">
+            </div>
+
+            <div class="form-group">
+              <label for="exaop-longueur-octets">Nombre d'octets à lire</label>
+              <select id="exaop-longueur-octets">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="exaop-boutisme">Ordre des octets</label>
+              <select id="exaop-boutisme">
+                <option value="little" selected>Petit-boutiste (little-endian)</option>
+                <option value="big">Grand-boutiste (big-endian)</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="form-row">
+
+            <div class="form-group">
+              <label><input id="exaop-signe" type="checkbox"> Valeur signée</label>
+            </div>
+
+            <div class="form-group">
+              <label for="exaop-facteur">Facteur d'échelle</label>
+              <input id="exaop-facteur" type="number" step="0.001" value="1">
+            </div>
+
+            <div class="form-group">
+              <label for="exaop-decalage">Décalage additif (hPa)</label>
+              <input id="exaop-decalage" type="number" step="0.1" value="0">
+            </div>
+
+          </div>
+
+        </details>
+
+        <h4 class="espace-haut-lg">Pression instantanée</h4>
+
+        <div class="info">
+          Ajuster le piston de la seringue graduée sur le volume
+          demandé dans la ligne surlignée du tableau ci-dessous, puis
+          valider la mesure avec la touche <strong>Entrée</strong>
+          (ou le bouton dédié) une fois la pression stabilisée.
+        </div>
+
+        <div id="exaop-pression-instantanee" class="exaop-pression-instantanee">
+          <span class="exaop-pression-valeur">—</span>
+          <span class="exaop-pression-unite">hPa</span>
+        </div>
+
+        <div class="toolbar espace-haut-sm">
+          <button id="exaop-btn-valider" class="btn btn-primaire" type="button" disabled>✅ Valider la mesure (Entrée)</button>
+        </div>
+
+        <h4 class="espace-haut-lg">Tableau de mesures — pression en fonction du volume</h4>
+
+        <div class="info">
+          Volumes imposés par la seringue graduée (60 mL à 0 mL, par
+          pas de 5 mL). En pratique, le piston ne peut généralement pas
+          être comprimé en dessous de 20 mL : il est normal que les
+          lignes correspondant aux volumes inférieurs restent vides.
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="tableau-resultats" id="exaop-table">
+
+            <thead>
+              <tr>
+                <th>Volume V (mL)</th>
+                <th>Pression P (hPa)</th>
+                <th>P × V (hPa·mL)</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody id="exaop-table-corps">
+              <!-- Lignes générées dynamiquement par exao-pression.js -->
+            </tbody>
+
+          </table>
+
+        </div>
+
+        <div id="exaop-table-resultat" class="resultat-calcul espace-haut-md">
+          Valider au moins deux mesures pour vérifier la constance du
+          produit P × V.
+        </div>
+
+        <div class="toolbar espace-haut-sm">
+          <button id="exaop-btn-export-csv" class="btn btn-secondaire" type="button">⬇ Exporter en CSV</button>
+        </div>
+
+        <h4 class="espace-haut-lg">Courbe P = f(V)</h4>
+
+        <div class="info">
+          La courbe se met à jour automatiquement à chaque mesure
+          validée dans le tableau ci-dessus. Les points rouges sont les
+          mesures ; la courbe bleue est la courbe théorique P = k / V
+          (k = produit moyen P × V), tracée dès que deux mesures
+          exploitables sont disponibles.
+        </div>
+
+        <div class="legende-courbe">
+          <span><i class="pastille-rouge"></i> Points mesurés</span>
+          <span><i class="pastille-bleue"></i> Courbe théorique P = k / V</span>
+        </div>
+
+        <div class="graphe-boyle-mariotte exaop-graphe">
+          <canvas id="exaop-canvas-courbe"></canvas>
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Mécanique et prévention</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Relâcher progressivement la pression d'un gaz comprimé en fin de manipulation.</li>
+      <li>Ramener le mobile en position initiale avant de ranger le matériel.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">Pression et sécurité des équipements</h3>
+
+    <p>
+      Connaître la pression exercée par un vérin ou un système sous
+      pression permet de dimensionner correctement les équipements et
+      d'éviter tout dépassement des limites de sécurité indiquées par
+      le constructeur.
+    </p>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation
+      sélectionné. Répondre aux questions de l'onglet que vous avez réalisé :
+      les quatre premières portent sur l'objet du TP de l'onglet, la cinquième
+      répond à sa problématique.
+    </p>
+
+    <div class="questions-bloc" data-tp="cinematique-pression" data-onglet="vitesse-acceleration" data-onglet-nom="Vitesse et accélération">
+    <h4>Questions de l'onglet « Vitesse et accélération »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire la relation donnant l'accélération moyenne a en fonction des vitesses v₁ et v₂ et des instants t₁ et t₂, en précisant l'unité de chaque grandeur.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-vitesse-acceleration-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir des valeurs saisies (t₁, v₁, t₂, v₂), calculer l'accélération moyenne du mobile.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-vitesse-acceleration-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir du signe et de la valeur de l'accélération, indiquer si le mouvement est accéléré, ralenti ou uniforme, en justifiant.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-vitesse-acceleration-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier la cohérence de l'accélération moyenne obtenue : contrôler son signe au regard de l'évolution des vitesses et vérifier son unité (m/s²).
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-vitesse-acceleration-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Vitesse et accélération » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="vitesse-acceleration"></p>
+        <div class="zone-eleve">
+          <textarea id="question-vitesse-acceleration-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="cinematique-pression" data-onglet="pression-force" data-onglet-nom="Pression et force pressante" hidden>
+    <h4>Questions de l'onglet « Pression et force pressante »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire la relation entre la pression P, la force pressante F et la surface S, en précisant les unités, puis énoncer la loi de Boyle-Mariotte.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-pression-force-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Calculer la pression exercée à partir de la force pressante et de la surface mesurées.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-pression-force-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer la pression finale mesurée avec celle prédite par la loi de Boyle-Mariotte et commenter l'écart éventuel.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-pression-force-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier la cohérence de la pression obtenue : contrôler son unité (Pa) et comparer son ordre de grandeur à la pression atmosphérique (environ 1 013 hPa).
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-pression-force-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Pression et force pressante » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="pression-force"></p>
+        <div class="zone-eleve">
+          <textarea id="question-pression-force-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="cinematique-pression" data-onglet="acquisition-exao" data-onglet-nom="Acquisition ExAO (pression)" hidden>
+    <h4>Questions de l'onglet « Acquisition ExAO (pression) »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Expliquer le rôle du pressiomètre et de l'ordinateur dans l'acquisition ExAO de la pression.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-acquisition-exao-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir du tableau ExAO, relever la pression mesurée pour chaque volume et calculer le produit P × V.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-acquisition-exao-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Analyser l'allure de la courbe P = f(V) et le comportement du produit P × V, puis conclure sur la loi de Boyle-Mariotte.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-acquisition-exao-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier la fiabilité des mesures : indiquer si le produit P × V reste constant aux incertitudes près et citer une précaution expérimentale qui limite l'écart (attente de la stabilisation, fermeture du robinet…).
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-acquisition-exao-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Acquisition ExAO (pression) » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="acquisition-exao"></p>
+        <div class="zone-eleve">
+          <textarea id="question-acquisition-exao-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Distinguer vitesse et accélération.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Mesurer une pression et relever un volume de gaz.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Identifier la nature d'un mouvement à partir d'un graphe des vitesses.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier expérimentalement la loi de Boyle-Mariotte.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Exprimer une pression dans une unité adaptée à la situation.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div class="espace-haut-md" id="radar-resultat"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, Imprimer votre TP en PDF.
+      Envoyer à l'enseignant votre Compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les mesures de pression (loi de Boyle-Mariotte et acquisition ExAO) et leurs courbes ;</li>
+        <li>les réponses aux questions ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-tp="tp02-actions-mecaniques">
+    ← TP02
+  </button>
+
+  <button class="btn btn-primaire" data-aller-tp="tp04-equilibre-rotation-archimede">
+    TP04 →
+  </button>
+
+</div>
+
+</div>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

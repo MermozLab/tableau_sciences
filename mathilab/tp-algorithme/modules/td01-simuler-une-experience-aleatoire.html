@@ -1,0 +1,835 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Mathi</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Simuler une expérience aléatoire (Python / PyLab)</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">2nde</span>
+        <span class="tag">Algorithmique et programmation</span>
+        <span class="tag">Statistique et probabilités</span>
+        <span class="tag">Simulation - </span><span class="tag">Fonctions - </span><span class="tag">Loi des grands nombres</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TD Al01</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <ul>
+      <li>Modifier une simulation donnée (par exemple en augmentant la taille de l'échantillon) pour percevoir une version vulgarisée de la loi des grands nombres : « Lorsque n est grand, sauf exception, la fréquence observée est proche de la probabilité ».</li>
+      <li>Utiliser une simulation fournie pour estimer une probabilité non triviale.</li>
+      <li>Écrire des fonctions permettant de simuler une expérience aléatoire, une répétition d'expériences aléatoires indépendantes.</li>
+      <li><em>Domaine transversal — Co-intervention :</em> ce TD prolonge directement le TD S3 « Fluctuation d'une fréquence, probabilités » du domaine Statistique et probabilités — même vocabulaire (tirage, échantillon, fréquence), mais en écrivant et modifiant soi-même, en Python, le programme qui réalise la simulation.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Un contrôle qualité, un suivi de livraisons ou un contrôle de
+      production reposent souvent sur un taux connu (taux de
+      non-conformité, taux de retard...). Écrire un programme qui
+      simule ce phénomène permet de tester ce taux sur un grand nombre
+      d'échantillons virtuels, bien plus vite qu'en réalisant de vrais
+      contrôles.
+    </div>
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte et la problématique associée.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">🐍</div>
+    <h2>Activités</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="toolbar">
+      <a class="btn btn-secondaire" href="../../numworks/emulator.html" target="_blank" rel="noopener">
+        🧮 Ouvrir la calculatrice NumWorks
+      </a>
+    </div>
+
+    <div class="info">
+      Chaque exercice s'exécute réellement en <strong>Python</strong>
+      dans <strong>PyLab</strong> (nouvel onglet). Lire ou modifier le
+      code ci-dessous, puis cliquer sur « Ouvrir dans PyLab » : le
+      programme est déjà chargé, il ne reste qu'à cliquer sur
+      « Exécuter » dans PyLab.
+    </div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="modifier-simulation">Modifier une simulation donnée</button>
+        <button class="tab-btn" data-tab="utiliser-simulation">Utiliser une simulation fournie</button>
+        <button class="tab-btn" data-tab="ecrire-fonction">Écrire une fonction de simulation</button>
+        <button class="tab-btn" data-tab="frequence-lettre">Fréquence d'une lettre dans un mot</button>
+        <button class="tab-btn" data-tab="activites-puzzle">🧩 Activités Puzzle</button>
+      </div>
+
+      <!-- ============================================= -->
+      <!-- MODIFIER UNE SIMULATION DONNÉE                 -->
+      <!-- ============================================= -->
+
+      <div class="tab-panel actif" id="modifier-simulation">
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="modifier-simulation"></p>
+        </div>
+
+        <h3>Modifier une simulation donnée : la loi des grands nombres</h3>
+
+        <div class="info">
+          Le programme ci-dessous simule un pile ou face (probabilité
+          0,5) répété n fois, et affiche la fréquence de « pile »
+          obtenue. Modifier uniquement la valeur de <code>n</code>
+          (10, puis 100, puis 1000, puis 10000) et observer comment la
+          fréquence affichée se rapproche de 0,5.
+        </div>
+
+        <h4 style="margin-top:var(--gap-lg);">Méthodologie</h4>
+
+        <ol class="etapes" style="margin-bottom:var(--gap-lg);">
+          <li>Ouvrir le code dans PyLab avec n = 10, exécuter, puis noter la fréquence obtenue.</li>
+          <li>Revenir ici, modifier n (100, puis 1000, puis 10000), et recommencer à chaque fois.</li>
+          <li>Décrire ce qui se passe : la fréquence s'éloigne-t-elle ou se rapproche-t-elle de 0,5 quand n augmente ?</li>
+        </ol>
+
+        <div class="code-exercice" data-titre="Modifier une simulation donnée">
+
+          <textarea class="code-editeur-python" spellcheck="false">n, p, succes = 10, 0.5, 0   # Modifier uniquement la valeur de n, puis ouvrir dans PyLab
+for i in range(n):
+    if random.random() < p: succes += 1
+print("Effectif de succès :", succes)
+print("Fréquence observée :", succes / n)</textarea>
+
+          <div class="toolbar">
+            <button type="button" class="btn btn-primaire btn-pylab">🐍 Ouvrir dans PyLab</button>
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <!-- ============================================= -->
+      <!-- UTILISER UNE SIMULATION FOURNIE                -->
+      <!-- ============================================= -->
+
+      <div class="tab-panel" id="utiliser-simulation">
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="utiliser-simulation"></p>
+        </div>
+
+        <h3>Utiliser une simulation fournie pour estimer une probabilité non triviale</h3>
+
+        <div class="info">
+          Quelle est la probabilité d'obtenir <strong>au moins un 6</strong>
+          en lançant un dé <strong>4 fois</strong> ? Cette probabilité
+          n'est pas évidente à calculer directement en 2nde — le
+          programme ci-dessous simule directement l'expérience un
+          grand nombre de fois pour l'estimer. Ouvrir dans PyLab (sans
+          modifier le code) et relever le résultat affiché.
+        </div>
+
+        <h4 style="margin-top:var(--gap-lg);">Méthodologie</h4>
+
+        <ol class="etapes" style="margin-bottom:var(--gap-lg);">
+          <li>Exécuter le programme dans PyLab plusieurs fois et relever la fréquence obtenue à chaque fois.</li>
+          <li>La probabilité théorique de cet événement est d'environ 0,518 (52 %). Vos résultats s'en approchent-ils ?</li>
+          <li>Modifier <code>nb_essais</code> à 50000 dans PyLab : l'estimation devient-elle plus stable ?</li>
+        </ol>
+
+        <div class="code-exercice" data-titre="Utiliser une simulation fournie">
+
+          <textarea class="code-editeur-python" spellcheck="false">nb_essais, nb_succes = 5000, 0   # P("au moins un 6 en 4 lancers d'un dé")
+for i in range(nb_essais):
+    lancers = random.choices([1, 2, 3, 4, 5, 6], k=4)   # 4 lancers d'un dé
+    if 6 in lancers: nb_succes += 1
+print("Fréquence observée :", nb_succes / nb_essais)</textarea>
+
+          <div class="toolbar">
+            <button type="button" class="btn btn-primaire btn-pylab">🐍 Ouvrir dans PyLab</button>
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <!-- ============================================= -->
+      <!-- ÉCRIRE UNE FONCTION                            -->
+      <!-- ============================================= -->
+
+      <div class="tab-panel" id="ecrire-fonction">
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="ecrire-fonction"></p>
+        </div>
+
+        <h3>Écrire une fonction de simulation</h3>
+
+        <div class="info">
+          Compléter la fonction <code>estimer_probabilite</code>
+          ci-dessous : elle doit répéter <code>n</code> fois un tirage
+          à deux issues de probabilité <code>p</code> (avec
+          <code>random.random()</code>), compter le nombre de succès,
+          et renvoyer la fréquence observée. La fonction tient en 4 lignes :
+          il ne reste qu'à compléter la ligne de la boucle, pour ajouter 1 à
+          <code>succes</code> quand le nombre tiré est inférieur à <code>p</code>
+          (en Python, une comparaison vraie vaut 1 et une comparaison fausse
+          vaut 0 quand on l'additionne). Compléter le code puis l'ouvrir dans
+          PyLab pour le tester.
+        </div>
+
+        <h4 style="margin-top:var(--gap-lg);">Méthodologie</h4>
+
+        <ol class="etapes" style="margin-bottom:var(--gap-lg);">
+          <li>Compléter la ligne de la boucle <code>for</code> dans la fonction <code>estimer_probabilite</code>.</li>
+          <li>Tester dans PyLab avec p = 0,2, puis avec une probabilité correspondant à votre filière (voir contexte professionnel).</li>
+          <li>Vérifier que la fréquence obtenue se rapproche de la probabilité p choisie.</li>
+        </ol>
+
+        <div class="code-exercice" data-titre="Écrire une fonction de simulation">
+
+          <textarea class="code-editeur-python" spellcheck="false">def estimer_probabilite(n, p):
+    succes = 0
+    for i in range(n): succes += 0   # À compléter : remplacer 0 par la condition (random.random() < p)
+    return succes / n
+print("Fréquence estimée :", estimer_probabilite(1000, 0.2))</textarea>
+
+          <div class="toolbar">
+            <button type="button" class="btn btn-primaire btn-pylab">🐍 Ouvrir dans PyLab</button>
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <!-- ============================================= -->
+      <!-- FRÉQUENCE D'UNE LETTRE DANS UN MOT             -->
+      <!-- ============================================= -->
+
+      <div class="tab-panel" id="frequence-lettre">
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="frequence-lettre"></p>
+        </div>
+
+        <h3>Déterminer la fréquence d'apparition d'une lettre dans un mot</h3>
+
+        <div class="info">
+          Ce dernier exercice quitte les probabilités : il s'agit d'un
+          exemple classique d'algorithmique, indépendant du hasard. Le
+          programme parcourt un mot caractère par caractère, compte les
+          occurrences d'une lettre donnée, puis calcule sa fréquence
+          d'apparition (nombre d'occurrences ÷ longueur du mot) — exactement
+          le même principe de calcul qu'une fréquence statistique.
+        </div>
+
+        <h4 style="margin-top:var(--gap-lg);">Méthodologie</h4>
+
+        <ol class="etapes" style="margin-bottom:var(--gap-lg);">
+          <li>Repérer la ligne du tableau correspondant à votre filière et choisir un premier mot.</li>
+          <li>Modifier <code>mot</code> et <code>lettre</code> dans le programme (par exemple la lettre « e »), puis l'ouvrir dans PyLab.</li>
+          <li>Recommencer avec les quatre mots de votre filière, en gardant la même lettre à chaque fois.</li>
+          <li>Comparer les quatre fréquences obtenues : quel mot contient la fréquence la plus élevée pour cette lettre ?</li>
+        </ol>
+
+        <div class="code-exercice" data-titre="Compter les occurrences d'une lettre">
+          <textarea class="code-editeur-python" spellcheck="false">mot, lettre, occurrences = "Fraisage", "a", 0   # Modifier mot et lettre
+for c in mot.upper():
+    if c == lettre.upper(): occurrences += 1
+print("La lettre", lettre, "apparaît", occurrences, "fois dans", mot, "(", len(mot), "lettres ).")
+print("Fréquence d'apparition de la lettre", lettre, ":", occurrences / len(mot))</textarea>
+          <div class="toolbar">
+            <button type="button" class="btn btn-primaire btn-pylab">🐍 Ouvrir dans PyLab</button>
+          </div>
+        </div>
+
+        <h4 style="margin-top:var(--gap-lg);">Mots à tester selon votre filière</h4>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>Filière</th>
+                <th>4 mots du métier à tester</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>REMI — Réalisation d'Ensembles Mécaniques et Industriels</td>
+                <td>Fraisage, Tournage, Soudure, Maintenance</td>
+              </tr>
+              <tr>
+                <td>MCC — Métiers de la couture et de la confection</td>
+                <td>Couture, Patronage, Ourlet, Boutonnière</td>
+              </tr>
+              <tr>
+                <td>GATL — Gestion Administrative, du Transport et de la Logistique</td>
+                <td>Livraison, Entrepôt, Transport, Facturation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+
+      <!-- ---------- ACTIVITÉS PUZZLE (onglet indépendant) ---------- -->
+      <div class="tab-panel" id="activites-puzzle">
+
+        <h3>Activités Puzzle</h3>
+
+        <div id="puzzle-info" class="info">
+          Sélectionner votre filière professionnelle dans la section « Contexte professionnel »
+          ci-dessus pour afficher les sujets.
+        </div>
+
+          <div class="info">
+        Organisation en <strong>classe puzzle</strong> : chaque groupe
+        expert complète et exécute dans PyLab la même fonction Python
+        pour un contexte professionnel différent (une probabilité p
+        propre à chaque filière). En séance 2, les groupes puzzle
+        mélangés comparent leurs fréquences obtenues.
+      </div>
+
+
+      <div class="sous-onglets" role="tablist">
+        <button class="sous-btn actif" data-sous="puzzle-sujet-a">Sujet A</button>
+        <button class="sous-btn" data-sous="puzzle-sujet-b">Sujet B</button>
+        <button class="sous-btn" data-sous="puzzle-sujet-c">Sujet C</button>
+      </div>
+      <div class="sous-panel actif" id="puzzle-sujet-a">
+        <div class="fiche-puzzle" data-titre="Estimer une probabilité">
+          <div class="questions-bloc" data-tp="puzzle-a">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet A — Estimer une probabilité</strong>
+                <span class="cartouche" data-comp="REA">REA</span></div>
+              <p class="info puzzle-contexte" id="puzzle-a-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-a-problematique"></p>
+              <ol id="puzzle-a-enonce" class="puzzle-questions"></ol>
+                  <div class="code-exercice" data-titre="Estimer une probabilité">
+                    <textarea class="code-editeur-python" id="puzzle-a-code" spellcheck="false"></textarea>
+                    <div class="toolbar"><button type="button" class="btn btn-primaire btn-pylab">🐍 Ouvrir dans PyLab</button></div>
+                  </div>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+      <div class="sous-panel" id="puzzle-sujet-b">
+        <div class="fiche-puzzle" data-titre="Taille de l'échantillon">
+          <div class="questions-bloc" data-tp="puzzle-b">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet B — Taille de l'échantillon</strong>
+                <span class="cartouche" data-comp="ANA">ANA</span></div>
+              <p class="info puzzle-contexte" id="puzzle-b-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-b-problematique"></p>
+              <ol id="puzzle-b-enonce" class="puzzle-questions"></ol>
+                  <div class="code-exercice" data-titre="Taille de l'échantillon">
+                    <textarea class="code-editeur-python" id="puzzle-b-code" spellcheck="false"></textarea>
+                    <div class="toolbar"><button type="button" class="btn btn-primaire btn-pylab">🐍 Ouvrir dans PyLab</button></div>
+                  </div>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+      <div class="sous-panel" id="puzzle-sujet-c">
+        <div class="fiche-puzzle" data-titre="Fluctuation d'échantillonnage">
+          <div class="questions-bloc" data-tp="puzzle-c">
+            <ol class="questions-tp"><li>
+              <div class="question-entete"><strong>Sujet C — Fluctuation d'échantillonnage</strong>
+                <span class="cartouche" data-comp="VAL">VAL</span></div>
+              <p class="info puzzle-contexte" id="puzzle-c-contexte"></p>
+              <p class="puzzle-problematique" id="puzzle-c-problematique"></p>
+              <ol id="puzzle-c-enonce" class="puzzle-questions"></ol>
+                  <div class="code-exercice" data-titre="Fluctuation d'échantillonnage">
+                    <textarea class="code-editeur-python" id="puzzle-c-code" spellcheck="false"></textarea>
+                    <div class="toolbar"><button type="button" class="btn btn-primaire btn-pylab">🐍 Ouvrir dans PyLab</button></div>
+                  </div>
+            </li></ol>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">Les questions affichées suivent l'onglet sélectionné dans « Activités » : quatre portent sur l'objet de l'onglet, la cinquième sur sa problématique. Seules les questions de l'onglet actif sont imprimées.</p>
+
+    <div class="questions-bloc" data-tp="simuler-experience-aleatoire-modifier-simulation" data-onglet="modifier-simulation" data-onglet-nom="Modifier une simulation donnée">
+    <h4>Questions de l'onglet « Modifier une simulation donnée »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer avec vos mots ce qu'est la loi des grands nombres, à partir de l'activité « Modifier une simulation donnée ».</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-modifier-simulation-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Donner le rôle de chaque paramètre de la fonction estimer_probabilite(n, p).</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-modifier-simulation-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Pourquoi la fréquence obtenue par simulation n'est-elle jamais exactement égale à la probabilité théorique p, même avec un grand nombre d'essais ?</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-modifier-simulation-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Comparer les fréquences obtenues pour n = 100, n = 2000 et n = 20000 et vérifier qu'elles se rapprochent du taux annoncé.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-modifier-simulation-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="modifier-simulation"></p>
+        <div class="zone-eleve"><textarea id="question-modifier-simulation-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="simuler-experience-aleatoire-utiliser-simulation" data-onglet="utiliser-simulation" data-onglet-nom="Utiliser une simulation fournie" hidden>
+    <h4>Questions de l'onglet « Utiliser une simulation fournie »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer ce que fait la simulation fournie (tirage aléatoire, boucle, comptage des succès).</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-utiliser-simulation-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Donner les fréquences obtenues en exécutant la simulation pour différentes valeurs de n.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-utiliser-simulation-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer comment le nombre d'essais n influence la précision de l'estimation obtenue.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-utiliser-simulation-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Exécuter plusieurs fois la simulation avec le même n et vérifier que les fréquences obtenues restent proches les unes des autres.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-utiliser-simulation-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="utiliser-simulation"></p>
+        <div class="zone-eleve"><textarea id="question-utiliser-simulation-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="simuler-experience-aleatoire-ecrire-fonction" data-onglet="ecrire-fonction" data-onglet-nom="Écrire une fonction de simulation" hidden>
+    <h4>Questions de l'onglet « Écrire une fonction de simulation »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Décrire la structure d'une fonction Python (def, paramètres, return) et son intérêt pour une simulation.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-ecrire-fonction-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Écrire la fonction de simulation demandée et donner la fréquence obtenue après exécution.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-ecrire-fonction-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer comment la condition random.random() < p simule un succès de probabilité p.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-ecrire-fonction-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Tester la fonction avec p = 0 puis p = 1 et vérifier que les fréquences obtenues sont cohérentes avec ces cas limites.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-ecrire-fonction-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="ecrire-fonction"></p>
+        <div class="zone-eleve"><textarea id="question-ecrire-fonction-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="simuler-experience-aleatoire-frequence-lettre" data-onglet="frequence-lettre" data-onglet-nom="Fréquence d'une lettre dans un mot" hidden>
+    <h4>Questions de l'onglet « Fréquence d'une lettre dans un mot »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer ce qu'est une chaîne de caractères en Python et comment parcourir ses lettres.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-frequence-lettre-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Donner le nombre d'occurrences et la fréquence de la lettre étudiée dans le mot proposé.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-frequence-lettre-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer comment le programme compte les occurrences d'une lettre (parcours de la chaîne et condition).</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-frequence-lettre-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier le résultat obtenu en comptant la lettre à la main dans le mot proposé.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-frequence-lettre-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="frequence-lettre"></p>
+        <div class="zone-eleve"><textarea id="question-frequence-lettre-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="simuler-experience-aleatoire-activites-puzzle" data-onglet="activites-puzzle" data-onglet-nom="Activités Puzzle" hidden>
+    <h4>Questions de l'onglet « Activités Puzzle »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Indiquer le sujet traité par votre groupe (A, B ou C) et nommer la fonction ou la méthode Python utilisée.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Donner les résultats chiffrés obtenus pour votre sujet, avec les unités.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer la démarche suivie et justifier le choix des paramètres du programme.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier la cohérence d'un résultat de votre sujet (ordre de grandeur, second calcul ou seconde exécution).</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de votre sujet (rappelée ci-dessous) en vous appuyant sur vos résultats :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <div class="puzzle-rappel" id="puzzle-rappel" aria-live="polite"></div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <p class="info">Onglet « Activités Puzzle » : traiter un sujet (A, B ou C), puis rédiger ici vos réponses. La problématique rappelée en question 5 est celle du sujet actif ; elle dépend de la classe et de la filière choisies dans « Contexte professionnel ».</p>
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TD, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Lire et comprendre un programme Python de simulation fourni.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Modifier un paramètre d'une simulation et compléter une fonction simple.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Interpréter l'effet de la taille de l'échantillon sur la fréquence observée.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier qu'une fréquence simulée est cohérente avec une probabilité connue.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Expliquer le fonctionnement d'un programme de simulation à l'oral ou à l'écrit.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions" style="margin-top:var(--gap-lg);">
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div id="radar-resultat" style="margin-top:var(--gap-md);"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TD, imprimer votre travail en PDF.
+      Envoyer à l'enseignant votre compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info" style="margin-top:var(--gap-md);">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>le code Python écrit dans chaque exercice ;</li>
+        <li>les réponses aux questions ;</li>
+        <li>les fiches puzzle et l'auto-évaluation des compétences.</li>
+      </ul>
+      Penser à reporter les fréquences lues dans PyLab dans le tableau
+      de résultats avant d'imprimer.
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" onclick="location.href='../index.html'">
+    🏠 Accueil
+  </button>
+
+  <button class="btn btn-primaire" onclick="loadTP('td02-statistiques-probabilites-python')">
+    TD02 →
+  </button>
+
+</div>
+
+</main>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

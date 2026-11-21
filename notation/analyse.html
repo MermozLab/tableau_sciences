@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analyse des comptes rendus PDF — Mermoz Lab</title>
+  <link rel="stylesheet" href="analyse.css">
+</head>
+<body>
+
+<header class="bandeau">
+  <h1>Analyse des comptes rendus PDF</h1>
+  <nav aria-label="Navigation">
+    <a href="index.html" class="lien-nav">← Grille d’évaluation</a>
+    <button type="button" id="btn-deco" class="btn btn-discret" hidden>Se déconnecter</button>
+  </nav>
+</header>
+
+<!-- ============ Connexion enseignant ============ -->
+<main id="vue-connexion" class="carte carte-etroite">
+  <h2>Accès enseignant</h2>
+  <p class="aide">Cette page contient des noms d’élèves : l’accès est protégé. Les données ne sont lisibles que par le compte enseignant.</p>
+  <form id="form-connexion" autocomplete="on">
+    <label for="email">Adresse e-mail</label>
+    <input id="email" type="email" required autocomplete="username" inputmode="email">
+    <label for="mdp">Mot de passe</label>
+    <input id="mdp" type="password" required autocomplete="current-password">
+    <button type="submit" class="btn btn-principal">Se connecter</button>
+    <p id="msg-connexion" class="message" role="status" aria-live="polite"></p>
+  </form>
+</main>
+
+<!-- ============ Application ============ -->
+<main id="vue-app" hidden>
+
+  <div class="onglets" role="tablist">
+    <button role="tab" id="tab-analyse" aria-selected="true" aria-controls="panneau-analyse" class="onglet actif">① Analyser des copies</button>
+    <button role="tab" id="tab-base" aria-selected="false" aria-controls="panneau-base" class="onglet">② Copies enregistrées</button>
+  </div>
+
+  <section id="panneau-analyse" role="tabpanel" aria-labelledby="tab-analyse">
+    <div id="zone-depot" class="depot" tabindex="0">
+      <p><strong>Déposez ici un ou plusieurs PDF</strong> (un ou plusieurs élèves)</p>
+      <p class="aide">Comptes rendus générés par MathiLab, SciLab… (MermozLab_Nom_Prénom_id….pdf)</p>
+      <input id="fichiers" type="file" accept="application/pdf,.pdf" multiple>
+      <label for="fichiers" class="btn btn-principal">Choisir des fichiers PDF</label>
+    </div>
+    <p id="msg-depot" class="message" role="status" aria-live="polite"></p>
+
+    <div id="barre-globale" class="barre" hidden>
+      <button type="button" id="btn-tout-analyser" class="btn btn-principal">Analyser toutes les copies</button>
+      <button type="button" id="btn-tout-enregistrer" class="btn">Enregistrer toutes les copies</button>
+      <button type="button" id="btn-vider" class="btn btn-discret">Vider la liste</button>
+    </div>
+
+    <div id="liste-copies"></div>
+  </section>
+
+  <section id="panneau-base" role="tabpanel" aria-labelledby="tab-base" hidden>
+    <form id="filtres" class="barre" role="search">
+      <label for="f-nom" class="sr-only">Nom</label>
+      <input id="f-nom" type="search" placeholder="Nom ou prénom">
+      <label for="f-domaine" class="sr-only">Domaine</label>
+      <input id="f-domaine" type="search" placeholder="Domaine (ex. GÉOMÉTRIE)">
+      <label for="f-niveau" class="sr-only">Niveau</label>
+      <select id="f-niveau"><option value="">Tous niveaux</option><option>2nde</option><option>1ère</option><option>Terminale</option></select>
+      <button type="submit" class="btn btn-principal">Rechercher</button>
+      <button type="button" id="btn-csv" class="btn">Exporter en CSV</button>
+    </form>
+    <p id="msg-base" class="message" role="status" aria-live="polite"></p>
+    <div class="table-wrapper">
+      <table id="table-base">
+        <thead><tr><th>Date</th><th>Élève</th><th>Classe</th><th>Domaine</th><th>TD / TP</th><th>Niveau</th><th>Note /10</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <aside class="carte repere">
+    <h2>Barème de cotation (adapté Bac Pro)</h2>
+    <ul>
+      <li><strong>0</strong> — pas de réponse, hors sujet, ou copier-coller d’une IA suspecté.</li>
+      <li><strong>1</strong> — une bonne idée, mais trop imprécise ou incomplète.</li>
+      <li><strong>2</strong> — bonne réponse, bonne maîtrise.</li>
+    </ul>
+    <p class="aide">L’orthographe et la qualité de la rédaction ne sont pas pénalisées : on évalue l’idée. La note sur 10 est la somme des cotations des questions, ramenée sur 10. La cotation proposée par l’IA reste modifiable : l’enseignant a le dernier mot.</p>
+  </aside>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script type="module" src="analyse.js"></script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+/**
+ * tp-acoustique/js/tp04-propagation-du-son.js
+ *
+ * Contrôleur du TP04 « Propagation du son ».
+ * Chargé par navigation.js juste après l'injection du fragment
+ * tp-acoustique/modules/tp04-propagation-du-son.html dans #content.
+ *
+ * Convention SciLab :
+ *  - le fragment HTML est la référence fixe, ce fichier s'adapte à lui
+ *  - navigation.js exécute module.init() après l'import : le point
+ *    d'entrée DOIT donc s'appeler init(), pas initTP04()
+ */
+
+import { initZoomVisuels } from '../../../js/zoom-visuel.js';
+import { $, arrondir, initSections, initTabs, initModesOperatoires } from '../../../js/utils.js';
+import { initContextePro } from '../../../js/contexte-pro.js';
+import FILIERES_PRO from '../../data/filieres.js';
+import { initRadarCompetences } from '../../../js/radar.js';
+import { initImpressionCompteRendu, sectionValeurs } from './compte-rendu-acoustique.js';
+import { initQuestionsParOnglet } from './questions-par-onglet.js';
+import { initNavigationTP } from './nav-tp.js';
+import { initMateriel } from '../../../js/materiel.js';
+import laboratoryEquipment from '../../data/equipment.js';
+import { initExaoAcquisition } from './exao01.js';
+import { initOngletsParFiliere } from '../../../js/onglets-filiere.js';
+
+// Contexte professionnel par filière (clé "niveau-idFiliere")
+// D'après le référentiel, la capacité « Caractériser la propagation d'un
+// signal sonore » (qui couvre TP04 et TP05) n'est évaluée qu'en 1ère pour
+// la filière Métiers de la couture et de la confection, et en Terminale
+// pour les filières Technicien en chaudronnerie industrielle et Technicien
+// en réalisation de produits mécaniques. Le menu est donc restreint à ces
+// 3 combinaisons via FILIERES_AUTORISEES (voir plus bas), même si 1ère et
+// Tle proposent par ailleurs les mêmes filières dans data/filieres.js.
+const CONTEXTES_PRO = {
+
+  '1ere-mcc': {
+    contexte: "En Métiers de la couture et de la confection, certains capteurs de proximité utilisés sur les lignes de production reposent sur la mesure du temps de propagation d'une onde sonore réfléchie.",
+    problematiques: {
+      "milieu-materiel": "Pourquoi le son a-t-il besoin d'un milieu matériel pour se propager ?",
+      "vitesse-propagation": "Comment déterminer la vitesse de propagation du son dans l'air et dans l'eau à l'aide de deux microphones ?",
+      "longueur-onde": "Comment calculer la longueur d'onde d'un son à partir de sa fréquence et de sa vitesse de propagation ?",
+      "acquisition-exao": "Comment automatiser la mesure de la vitesse du son par acquisition ExAO et corrélation croisée ?",
+    },
+  },
+
+  'tle-tci': {
+    contexte: "En Technicien en chaudronnerie industrielle, le contrôle non destructif par ultrasons exploite la propagation du son dans les métaux pour détecter des défauts internes (soufflures, fissures) invisibles à l'œil nu, notamment sur les cordons de soudure.",
+    problematiques: {
+      "milieu-materiel": "Pourquoi le son a-t-il besoin d'un milieu matériel pour se propager ?",
+      "vitesse-propagation": "Comment déterminer la vitesse de propagation du son dans l'air et dans l'eau à l'aide de deux microphones ?",
+      "longueur-onde": "Comment calculer la longueur d'onde d'un son à partir de sa fréquence et de sa vitesse de propagation ?",
+      "acquisition-exao": "Comment automatiser la mesure de la vitesse du son par acquisition ExAO et corrélation croisée ?",
+    },
+  },
+
+  'tle-trpm': {
+    contexte: "En Réalisation de produits mécaniques, le contrôle non destructif par ultrasons permet de vérifier l'intégrité interne d'une pièce usinée sans la détériorer, en s'appuyant sur la propagation du son dans les matériaux.",
+    problematiques: {
+      "milieu-materiel": "Pourquoi le son a-t-il besoin d'un milieu matériel pour se propager ?",
+      "vitesse-propagation": "Comment déterminer la vitesse de propagation du son dans l'air et dans l'eau à l'aide de deux microphones ?",
+      "longueur-onde": "Comment calculer la longueur d'onde d'un son à partir de sa fréquence et de sa vitesse de propagation ?",
+      "acquisition-exao": "Comment automatiser la mesure de la vitesse du son par acquisition ExAO et corrélation croisée ?",
+    },
+  },
+
+};
+
+// Restreint le menu déroulant "filière professionnelle" aux seules
+// combinaisons réellement évaluées pour ce TP (cf. commentaire ci-dessus).
+const FILIERES_AUTORISEES = ['1ere-mcc', 'tle-tci', 'tle-trpm'];
+
+// Petit mot affiché sous le menu pour expliquer la restriction : les
+// filières/niveaux non listés ci-dessus n'étudient pas cette capacité ici.
+const NOTE_RESTRICTION_REFERENTIEL =
+  "D'après le référentiel, cette capacité n'est évaluée qu'en 1ère (Métiers de la couture et de la confection) et en Terminale (Technicien en chaudronnerie industrielle, Technicien en réalisation de produits mécaniques). Ce TP n'est pas évalué pour les autres niveaux et filières professionnelles.";
+
+// Vitesses de référence usuelles (ordres de grandeur, en m/s)
+const VITESSE_REFERENCE = {
+  air: 340,
+  eau: 1500,
+};
+
+// Exécute une étape d'initialisation ; une erreur dans une étape est
+// journalisée sans empêcher les suivantes de s'exécuter.
+function etape(nom, fn) {
+  try {
+    fn();
+  } catch (err) {
+    console.error(`[tp-acoustique] étape « ${nom} » en erreur :`, err);
+  }
+}
+
+// ---------------------------------------------------------------
+// Point d'entrée, appelé automatiquement par navigation.js
+// ---------------------------------------------------------------
+export function init() {
+
+  etape('initZoomVisuels', () => {
+    initZoomVisuels();
+  });
+
+  etape('initMilieuMateriel', () => {
+    initMilieuMateriel();
+  });
+
+  etape('initVitessePropagation', () => {
+    initVitessePropagation();
+  });
+
+  etape('initLongueurOnde', () => {
+    initLongueurOnde();
+  });
+
+  etape('initExaoAcquisition', () => {
+    initExaoAcquisition();
+  });
+
+  etape('initMateriel', () => {
+    initMateriel({
+      equipementId: 'materiel-equipements',
+      equipment: laboratoryEquipment,
+      categorie: 'Acoustique',
+    });
+  });
+
+  etape('initContextePro', () => {
+    initContextePro({
+      afficherProblematique: false,
+      filieres: FILIERES_PRO,
+      contextes: CONTEXTES_PRO,
+      filieresAutorisees: FILIERES_AUTORISEES,
+      noteRestriction: NOTE_RESTRICTION_REFERENTIEL,
+    });
+  });
+
+  etape('initOngletsParFiliere', () => {
+    initOngletsParFiliere({
+      mapping: {
+        '1ere-mcc': ['milieu-materiel', 'vitesse-propagation', 'longueur-onde', 'acquisition-exao'],
+        'tle-tci':  ['milieu-materiel', 'vitesse-propagation', 'longueur-onde', 'acquisition-exao'],
+        'tle-trpm': ['milieu-materiel', 'vitesse-propagation', 'longueur-onde', 'acquisition-exao'],
+      },
+      messageId: 'tp04-message-filiere',
+      messageTexte: "Ce TP n'est pas au programme de votre filière à ce niveau. Reportez-vous au niveau où il est étudié dans votre spécialité.",
+    });
+  });
+
+  etape('initSections', () => {
+    initSections();
+  });
+
+  etape('initTabs', () => {
+    initTabs();
+  });
+
+  etape('initModesOperatoires', () => {
+    initModesOperatoires();
+  });
+
+  etape('initRadarCompetences', () => {
+    initRadarCompetences();
+  });
+
+  etape('initQuestionsParOnglet', () => {
+    initQuestionsParOnglet();
+  });
+
+  etape('initNavigationTP', () => {
+    initNavigationTP();
+  });
+
+  etape('initImpressionCompteRendu', () => {
+    initImpressionCompteRendu({
+      titre: 'Propagation du son',
+      tp: 'TP04',
+      // Mesures saisies (valeurs, tableaux, graphiques), insérées avant les questions.
+      sectionsSupplementaires: () => [
+        sectionMilieuCompteRendu(),
+        sectionVitesseCompteRendu(),
+        sectionLongueurCompteRendu(),
+        sectionExaoCompteRendu(),
+      ].filter(Boolean),
+    });
+  });
+
+}
+
+// =================================================================
+// Onglet 1 — Nécessité d'un milieu matériel (cloche à vide)
+// Conclusion générée à partir des deux observations qualitatives
+// =================================================================
+function initMilieuMateriel() {
+
+  const selectNormal = $('son-air-normal');
+  const selectVide = $('son-vide-partiel');
+  const conclusion = $('milieu-materiel-resultat');
+
+  if (!selectNormal || !selectVide || !conclusion) return;
+
+  // Conclusion dans un élément <strong> : .resultat-calcul n'est repris dans
+  // le compte rendu que s'il contient au moins un élément enfant.
+  function afficher(texte) {
+    const fort = document.createElement('strong');
+    fort.textContent = texte;
+    conclusion.replaceChildren(fort);
+  }
+
+  function mettreAJour() {
+
+    const normal = selectNormal.value;
+    const vide = selectVide.value;
+
+    if (!normal || !vide) {
+      conclusion.textContent = 'Compléter les deux observations ci-dessus pour afficher la conclusion.';
+      return;
+    }
+
+    if (vide === 'non' || vide === 'attenue') {
+      afficher('Conclusion : le son est perçu normalement à pression atmosphérique mais s\'atténue voire disparaît lorsque l\'air est extrait. La propagation du son nécessite donc un milieu matériel.');
+    } else {
+      afficher('Résultat inattendu : si le son reste perçu à l\'identique sous vide partiel, vérifier l\'étanchéité de la cloche ou refaire l\'essai.');
+    }
+  }
+
+  selectNormal.addEventListener('change', mettreAJour);
+  selectVide.addEventListener('change', mettreAJour);
+}
+
+// =================================================================
+// Onglet 2 — Vitesse de propagation par méthode du retard
+// v = d / Δt, comparaison à la valeur de référence du milieu choisi
+// =================================================================
+function initVitessePropagation() {
+
+  const selectMilieu = $('propagation-milieu');
+  const inputDistance = $('propagation-distance');
+  const inputRetard = $('propagation-retard');
+  const outputVitesse = $('propagation-vitesse');
+  const comparaison = $('propagation-comparaison');
+
+  if (!selectMilieu || !inputDistance || !inputRetard || !outputVitesse) return;
+
+  function calculer() {
+
+    const distance = parseFloat(inputDistance.value);
+    const retardMs = parseFloat(inputRetard.value);
+
+    if (Number.isNaN(distance) || Number.isNaN(retardMs) || retardMs <= 0) {
+      outputVitesse.textContent = '—';
+      if (comparaison) comparaison.textContent = '—';
+      return;
+    }
+
+    const retardS = retardMs / 1000;
+    const vitesse = distance / retardS;
+
+    outputVitesse.textContent = `${arrondir(vitesse, 0)} m/s`;
+
+    if (comparaison) {
+      const reference = VITESSE_REFERENCE[selectMilieu.value] ?? VITESSE_REFERENCE.air;
+      const ecartPourcent = ((vitesse - reference) / reference) * 100;
+      comparaison.textContent = `Valeur de référence dans ${selectMilieu.value === 'eau' ? "l'eau" : "l'air"} : ${reference} m/s (écart de ${arrondir(ecartPourcent, 1)} %).`;
+    }
+  }
+
+  selectMilieu.addEventListener('change', calculer);
+  inputDistance.addEventListener('input', calculer);
+  inputRetard.addEventListener('input', calculer);
+}
+
+// =================================================================
+// Onglet 3 — Longueur d'onde : λ = v / f
+// =================================================================
+function initLongueurOnde() {
+
+  const inputVitesse = $('onde-vitesse');
+  const inputFrequence = $('onde-frequence');
+  const outputLongueur = $('onde-longueur');
+
+  if (!inputVitesse || !inputFrequence || !outputLongueur) return;
+
+  function calculer() {
+
+    const vitesse = parseFloat(inputVitesse.value);
+    const frequence = parseFloat(inputFrequence.value);
+
+    if (Number.isNaN(vitesse) || Number.isNaN(frequence) || frequence <= 0) {
+      outputLongueur.textContent = '—';
+      return;
+    }
+
+    const longueurOnde = vitesse / frequence;
+    outputLongueur.textContent = `${arrondir(longueurOnde, 3)} m`;
+  }
+
+  inputVitesse.addEventListener('input', calculer);
+  inputFrequence.addEventListener('input', calculer);
+}
+
+// =================================================================
+// Sections transmises à js/compte-rendu.js
+// =================================================================
+
+function sectionMilieuCompteRendu() {
+  return sectionValeurs('Observations : nécessité d\'un milieu matériel', [
+    ['Son perçu à pression atmosphérique', 'son-air-normal'],
+    ['Son perçu sous vide partiel', 'son-vide-partiel'],
+    ['Conclusion', 'milieu-materiel-resultat', /^(Conclusion|Résultat)/],
+  ]);
+}
+
+function sectionVitesseCompteRendu() {
+  // Menu « milieu » rempli par défaut : section reprise seulement si une mesure est saisie.
+  if (!$('propagation-distance')?.value && !$('propagation-retard')?.value) return null;
+  return sectionValeurs('Mesures : vitesse de propagation (méthode du retard)', [
+    ['Milieu étudié', 'propagation-milieu'],
+    ['Distance entre les microphones (m)', 'propagation-distance'],
+    ['Retard mesuré Δt (ms)', 'propagation-retard'],
+    ['Vitesse calculée', 'propagation-vitesse'],
+    ['Comparaison', 'propagation-comparaison', /^Valeur de référence/],
+  ]);
+}
+
+function sectionLongueurCompteRendu() {
+  return sectionValeurs('Calcul : longueur d\'onde', [
+    ['Vitesse de propagation (m/s)', 'onde-vitesse'],
+    ['Fréquence (Hz)', 'onde-frequence'],
+    ['Longueur d\'onde calculée', 'onde-longueur'],
+  ]);
+}
+
+// Tableau des mesures de l'acquisition ExAO (exao01.js remplit #dataBody) :
+// colonnes à en-tête vide (boutons de suppression) ignorées.
+function sectionExaoCompteRendu() {
+  const tbody = $('dataBody');
+  if (!tbody || !tbody.children.length) return null;
+
+  const table = tbody.closest('table');
+  const entetes = [...table.querySelectorAll('thead th')].map(th => (th.textContent || '').trim());
+  const gardees = entetes.map((h, i) => (h ? i : -1)).filter(i => i >= 0);
+
+  return {
+    titre: 'Acquisition ExAO : mesures du retard et de la vitesse',
+    tableau: {
+      entetes: gardees.map(i => entetes[i]),
+      lignes: [...tbody.querySelectorAll('tr')].map(tr =>
+        gardees.map(i => (tr.children[i]?.textContent || '').trim())),
+    },
+  };
+}

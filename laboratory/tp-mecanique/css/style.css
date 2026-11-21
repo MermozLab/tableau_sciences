@@ -1,0 +1,685 @@
+/* ── Tokens globaux, composants TP, impression ────────────────── */
+/* Chaîne CSS complète, dans l'ordre documenté (css/global.css) :
+   global → reset → tp → animations → print. compte-rendu.css est chargé
+   à la demande par js/compte-rendu.js ; les <link> de index.html ont été retirés. */
+@import url("../../../css/global.css");
+@import url("../../../css/reset.css");
+@import url("../../../css/tp.css");
+@import url("../../../css/animations.css");
+@import url("../../../css/print.css");
+
+/* ── Overrides communs à tous les domaines (header, nav, cartes,
+   tableaux, EPI, radar, graphique...) — paramétrés par les variables
+   de couleur ci-dessous ── */
+@import url("../../../css/domaine.css");
+
+/* ════════════════════════════════════════════════════════════════
+   IDENTITÉ DU DOMAINE MÉCANIQUE
+   L'ordre d'écriture n'a pas d'importance pour la résolution des
+   var() : ces valeurs s'appliquent à css/domaine.css même si celui-ci
+   est importé plus haut dans ce fichier.
+   ════════════════════════════════════════════════════════════════ */
+:root {
+  --domaine-accent:       #46607A;
+  --domaine-accent-fonce: #28394A;
+  --domaine-accent-rgb:   70, 96, 122;
+}
+
+/* Tout le reste (header, nav, cartes, formulaires, tableaux, EPI,
+   matériel, radar, graphique, histogramme, cartouches, quiz,
+   problématique, champ-erreur...) vient désormais de tp.css et
+   css/domaine.css — plus aucune duplication propre à ce domaine. */
+
+/* ── Résultats de calcul guidé (.resultat-calcul) ──────────────────
+   tp.css colore ce bloc en vert-acide fixe (section 14, calcul-guide),
+   sans override par domaine dans domaine.css : recoloré ici dans la
+   teinte du domaine Mécanique pour rester cohérent avec le reste de
+   la charte (bandeau, onglets, boutons, cartouches...). */
+.resultat-calcul {
+  color: var(--domaine-accent-fonce);
+}
+
+/* ── Numéros de question et d'étape (médaillons numérotés) ─────────
+   tp.css colore ces médaillons en bleu-cuivre fixe (sections 17),
+   sans override par domaine dans domaine.css : recolorés ici dans la
+   teinte du domaine Mécanique. */
+.questions-tp .question-entete::before,
+.etapes li::before {
+  background: var(--domaine-accent);
+}
+
+/* ── Photos des dispositifs expérimentaux (TP03, onglet « Pression et
+   force pressante ») ────────────────────────────────────────────── */
+.experiences-photos {
+  margin-top: var(--gap-md);
+}
+.experience-card {
+  display: flex;
+  flex-direction: column;
+}
+.experience-image {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  background: var(--blanc-paillasse);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+  margin-bottom: var(--gap-sm);
+}
+.experience-card h4 {
+  margin: 0 0 .4rem;
+  color: var(--domaine-accent-fonce);
+}
+.experience-card p {
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+/* ── Courbe P = f(V) (TP03, tableau de mesures Boyle-Mariotte) ──── */
+.graphe-boyle-mariotte {
+  position: relative;
+  width: 100%;
+  min-height: 340px;
+  margin-top: var(--gap-sm);
+}
+#bm-canvas-courbe {
+  display: block;
+  width: 100% !important;
+  height: 320px !important;
+  background: var(--blanc);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+}
+
+/* ── Onglet « Acquisition ExAO (pression) », TP03 ──────────────────
+   Canvas partagé avec la classe .graphe-boyle-mariotte (même mise en
+   page) ; styles propres au reste de l'interface d'acquisition. ── */
+#exaop-canvas-courbe {
+  display: block;
+  width: 100% !important;
+  height: 320px !important;
+  background: var(--blanc);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+}
+
+.exaop-navigateur-requis {
+  font-size: var(--fs-sm);
+}
+
+.exaop-barre-etat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: var(--gap-sm) 0;
+  font-weight: 600;
+}
+.exaop-etat-point {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gris-clair);
+  flex-shrink: 0;
+}
+.exaop-etat-point.exaop-etat-connecte { background: #2e7d32; }
+.exaop-etat-point.exaop-etat-erreur   { background: #c0392b; }
+
+.exaop-toolbar {
+  flex-wrap: wrap;
+}
+
+.exaop-details-calibration {
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+  padding: var(--gap-sm) var(--gap-md);
+  background: var(--blanc-paillasse);
+}
+.exaop-details-calibration summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--domaine-accent-fonce);
+}
+.exaop-trame-brute {
+  margin-top: var(--gap-sm);
+  font-size: var(--fs-sm);
+}
+.exaop-trame-brute code {
+  background: var(--blanc);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-sm);
+  padding: 2px 6px;
+}
+
+.exaop-pression-instantanee {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: var(--gap-sm) 0;
+  padding: var(--gap-sm) var(--gap-md);
+  border: 1px solid var(--domaine-accent);
+  border-radius: var(--r-md);
+  background: var(--blanc-paillasse);
+  width: fit-content;
+}
+.exaop-pression-valeur {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--domaine-accent-fonce);
+}
+.exaop-pression-unite {
+  font-size: var(--fs-md);
+  color: var(--gris-fonce, #555);
+}
+
+/* ── Simulateur d'accélération (TP03, onglet « Vitesse et accélération »)
+   Anime le déplacement d'un mobile sur un rail lorsqu'aucune vidéo, ni
+   chronophotographie, ni acquisition ExAO n'est disponible : l'élève
+   relève lui-même deux instants (t, v) sur le tableau de bord simulé. ── */
+.simulateur-acceleration {
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+  background: var(--blanc-paillasse);
+  padding: var(--gap-md);
+  margin: var(--gap-sm) 0 var(--gap-md);
+}
+
+.sim-acc-scene {
+  width: 100%;
+  margin-bottom: var(--gap-sm);
+}
+#acc-sim-canvas {
+  display: block;
+  width: 100% !important;
+  height: 150px !important;
+  background: var(--blanc);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+}
+
+.sim-acc-tableau-bord {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-md);
+  margin-bottom: var(--gap-sm);
+}
+.sim-acc-cadran {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: var(--gap-sm) var(--gap-md);
+  border: 1px solid var(--domaine-accent);
+  border-radius: var(--r-md);
+  background: var(--blanc);
+  min-width: 170px;
+}
+.sim-acc-cadran-label {
+  font-size: var(--fs-sm);
+  color: var(--gris-moyen);
+}
+.sim-acc-cadran-valeur {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--domaine-accent-fonce);
+  font-variant-numeric: tabular-nums;
+}
+
+.sim-acc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+  margin-bottom: var(--gap-sm);
+}
+
+.sim-acc-graphe {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+}
+#acc-sim-canvas-graphe {
+  display: block;
+  width: 100% !important;
+  height: 200px !important;
+  background: var(--blanc);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+}
+
+#exaop-table tbody tr {
+  cursor: pointer;
+}
+#exaop-table tbody tr.exaop-ligne-active {
+  background: rgba(var(--domaine-accent-rgb), .15);
+  outline: 2px solid var(--domaine-accent);
+  outline-offset: -2px;
+}
+#exaop-table tbody tr.exaop-ligne-hors-portee {
+  color: var(--gris-fonce, #888);
+  font-style: italic;
+}
+.exaop-refaire {
+  padding: 2px 8px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SIMULATEUR DE FLEXION (TP04, onglet « Flexion d'une poutre »)
+   Poutre sur deux appuis, diagrammes V et Mf, contraintes, flèche,
+   jusqu'à la rupture. Tous les états sont distingués par une icône,
+   un libellé ET un style de bordure (pas par la couleur seule).
+   ════════════════════════════════════════════════════════════════ */
+
+.flex-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-sm);
+  margin-bottom: var(--gap-md);
+}
+.flex-presets-label {
+  font-weight: 700;
+  color: var(--domaine-accent-fonce);
+}
+
+.flex-simulateur {
+  display: grid;
+  grid-template-columns: minmax(250px, 320px) minmax(0, 1fr);
+  gap: var(--gap-md);
+  align-items: start;
+}
+@media (max-width: 880px) {
+  .flex-simulateur { grid-template-columns: minmax(0, 1fr); }
+}
+
+.flex-commandes,
+.flex-affichage {
+  min-width: 0;
+}
+
+/* ── Commandes ── */
+.flex-groupe {
+  min-width: 0;
+  margin: 0 0 var(--gap-sm);
+  padding: var(--gap-sm) var(--gap-md);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+  background: var(--blanc-paillasse);
+}
+.flex-groupe legend {
+  padding: 0 .4rem;
+  font-weight: 700;
+  color: var(--domaine-accent-fonce);
+}
+.flex-groupe select,
+.flex-groupe input[type="number"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+.flex-groupe input[type="range"] {
+  width: 100%;
+  accent-color: var(--domaine-accent);
+}
+.flex-groupe .form-row .form-group {
+  min-width: 90px;
+}
+.flex-groupe [hidden] {
+  display: none !important;
+}
+.flex-boutons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+  margin: var(--gap-sm) 0;
+}
+
+/* ── Bandeau d'état de la poutre ── */
+.flex-etat {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-bottom: var(--gap-sm);
+  padding: var(--gap-sm) var(--gap-md);
+  border: 2px solid var(--gris-clair);
+  border-radius: var(--r-md);
+  background: var(--blanc);
+  font-weight: 700;
+  color: var(--gris-ardoise);
+}
+.flex-etat[data-etat="ok"] {
+  border-style: solid;
+  border-color: var(--domaine-accent);
+  background: rgba(var(--domaine-accent-rgb), .08);
+  color: var(--domaine-accent-fonce);
+}
+.flex-etat[data-etat="fleche"],
+.flex-etat[data-etat="contrainte"] {
+  border-style: dashed;
+  border-color: var(--etat-attention-fg);
+  background: var(--etat-attention-bg);
+  color: var(--etat-attention-fg);
+}
+.flex-etat[data-etat="rupture"] {
+  border-style: double;
+  border-width: 5px;
+  border-color: var(--danger-texte);
+  background: var(--danger-bg);
+  color: var(--danger-texte);
+}
+
+/* ── Dessins SVG ── */
+.flex-svg-defilement {
+  overflow-x: auto;
+  margin-bottom: var(--gap-sm);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+  background: var(--blanc);
+}
+.flex-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.flex-svg--scene,
+.flex-svg--diagrammes {
+  min-width: 540px;
+}
+
+.flex-texte {
+  font-family: var(--font-corps);
+  font-size: 13px;
+  fill: var(--gris-ardoise);
+}
+.flex-texte--titre  { font-weight: 700; fill: var(--domaine-accent-fonce); }
+.flex-texte--valeur { font-weight: 700; fill: var(--domaine-accent-fonce); }
+.flex-texte--note   { font-size: 11px; fill: var(--gris-moyen); }
+.flex-texte--lettre { font-weight: 700; font-size: 15px; fill: var(--domaine-accent-fonce); }
+.flex-texte--charge { font-weight: 700; fill: var(--noir-crayon); }
+.flex-texte--alerte { font-weight: 700; fill: var(--danger-texte); }
+
+.flex-poutre {
+  fill: rgba(var(--domaine-accent-rgb), .30);
+  stroke: var(--domaine-accent-fonce);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.flex-poutre--rompue {
+  fill: var(--danger-bg);
+  stroke: var(--danger-texte);
+  stroke-dasharray: 7 3;
+}
+.flex-appui {
+  fill: var(--blanc);
+  stroke: var(--gris-ardoise);
+  stroke-width: 2;
+}
+.flex-appui-sol {
+  stroke: var(--gris-ardoise);
+  stroke-width: 3;
+  fill: none;
+}
+.flex-charge {
+  stroke: var(--noir-crayon);
+  stroke-width: 2.5;
+  fill: none;
+}
+.flex-reaction {
+  stroke: var(--domaine-accent);
+  stroke-width: 3;
+  fill: none;
+}
+.flex-pointe-charge   { fill: var(--noir-crayon); }
+.flex-pointe-reaction { fill: var(--domaine-accent); }
+.flex-pointe-cote     { fill: var(--gris-moyen); }
+.flex-cote {
+  stroke: var(--gris-moyen);
+  stroke-width: 1.2;
+  fill: none;
+}
+.flex-fissure {
+  stroke: var(--danger-texte);
+  stroke-width: 3;
+  fill: none;
+  stroke-linejoin: miter;
+}
+.flex-rotule {
+  fill: none;
+  stroke: var(--danger-texte);
+  stroke-width: 3;
+  stroke-dasharray: 5 3;
+}
+
+.flex-axe {
+  stroke: var(--gris-moyen);
+  stroke-width: 1.5;
+}
+.flex-repere {
+  stroke: var(--gris-moyen);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+.flex-diag-v,
+.flex-diag-m {
+  fill: rgba(var(--domaine-accent-rgb), .18);
+  stroke: var(--domaine-accent-fonce);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.flex-diag-m {
+  fill: rgba(var(--domaine-accent-rgb), .28);
+}
+.flex-point-max {
+  fill: var(--domaine-accent-fonce);
+  stroke: var(--blanc);
+  stroke-width: 2;
+}
+
+/* Secousse brève à l'instant de la rupture */
+@keyframes flex-secousse {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-5px, 2px); }
+  40%  { transform: translate(5px, -2px); }
+  60%  { transform: translate(-3px, 1px); }
+  80%  { transform: translate(3px, 0); }
+  100% { transform: translate(0, 0); }
+}
+.flex-scene--secousse {
+  animation: flex-secousse .5s ease-in-out 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .flex-scene--secousse { animation: none; }
+}
+
+/* ── Indicateurs ── */
+.flex-titre {
+  margin: var(--gap-md) 0 var(--gap-sm);
+  color: var(--domaine-accent-fonce);
+}
+.flex-resultats {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  gap: var(--gap-md);
+  align-items: start;
+}
+@media (max-width: 640px) {
+  .flex-resultats { grid-template-columns: minmax(0, 1fr); }
+}
+.flex-indicateurs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--gap-sm);
+}
+.flex-indic {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  padding: var(--gap-xs) var(--gap-sm);
+  border: 1px solid var(--gris-clair);
+  border-left: 4px solid var(--domaine-accent);
+  border-radius: var(--r-md);
+  background: var(--blanc);
+}
+.flex-indic-label {
+  font-size: var(--fs-sm);
+  color: var(--gris-moyen);
+}
+.flex-indic-valeur {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--domaine-accent-fonce);
+}
+.flex-indic[data-etat="fleche"],
+.flex-indic[data-etat="contrainte"] {
+  border-left-style: dashed;
+  border-left-color: var(--etat-attention-fg);
+}
+.flex-indic[data-etat="rupture"] {
+  border-left-style: double;
+  border-left-width: 8px;
+  border-left-color: var(--danger-texte);
+  background: var(--danger-bg);
+}
+.flex-indic[data-etat="rupture"] .flex-indic-valeur {
+  color: var(--danger-texte);
+}
+
+.flex-section-bloc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--gap-xs);
+  border: 1px solid var(--gris-clair);
+  border-radius: var(--r-md);
+  background: var(--blanc);
+}
+.flex-svg--section {
+  max-width: 150px;
+}
+.flex-section-forme {
+  fill: rgba(var(--domaine-accent-rgb), .35);
+  stroke: var(--domaine-accent-fonce);
+  stroke-width: 2;
+}
+.flex-axe-neutre {
+  stroke: var(--gris-moyen);
+  stroke-width: 1;
+  stroke-dasharray: 5 3;
+}
+.flex-section-legende {
+  font-size: var(--fs-xs);
+  color: var(--gris-moyen);
+}
+
+/* ── Jauge σmax / σ limite ── */
+.flex-jauge {
+  margin-top: var(--gap-md);
+}
+.flex-jauge-barre {
+  position: relative;
+  height: 22px;
+  border: 2px solid var(--gris-ardoise);
+  border-radius: var(--r-md);
+  background: var(--blanc);
+  overflow: visible;
+}
+.flex-jauge-remplissage {
+  height: 100%;
+  width: 0;
+  border-radius: 5px 0 0 5px;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--domaine-accent) 0 8px,
+    var(--domaine-accent-fonce) 8px 16px
+  );
+  transition: width .08s linear;
+}
+.flex-jauge-repere {
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  width: 0;
+  border-left: 3px dashed var(--danger-texte);
+}
+.flex-jauge-repere::after {
+  content: "σadm";
+  position: absolute;
+  top: -1.2em;
+  left: -1.4em;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--danger-texte);
+}
+.flex-jauge-graduation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: .2rem;
+  font-size: var(--fs-xs);
+  color: var(--gris-moyen);
+}
+.flex-jauge-texte {
+  margin: .3rem 0 0;
+  font-size: var(--fs-sm);
+  color: var(--gris-ardoise);
+}
+
+/* ── Détail des calculs ── */
+.flex-calcul {
+  margin: 0;
+  padding-left: 1.5rem;
+  line-height: 1.7;
+}
+.flex-calcul li {
+  margin-bottom: var(--gap-xs);
+  padding: var(--gap-xs) var(--gap-sm);
+  border-left: 3px solid rgba(var(--domaine-accent-rgb), .45);
+  background: var(--blanc-paillasse);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  overflow-wrap: anywhere;
+}
+
+/* ── Relevés ── */
+.flex-table-releves td {
+  font-size: var(--fs-sm);
+}
+.flex-releves-vide {
+  margin: .4rem 0 0;
+  font-size: var(--fs-sm);
+  color: var(--gris-moyen);
+}
+.flex-releves-vide[hidden] {
+  display: none;
+}
+
+/* ── Remplacements des styles en ligne des fragments (CLAUDE v4, §2.4) ──
+   espace-haut-md, espace-haut-lg et liste-aeree viennent de css/domaine.css.
+   Les classes ci-dessous n'y figurent pas : définies ici, à migrer vers
+   domaine.css si un autre domaine les réutilise. */
+.espace-haut-sm {
+  margin-top: var(--gap-sm);
+}
+.liste-compacte {
+  margin: .5rem 0 0;
+  padding-left: 1.2rem;
+}
+
+/* Schémas de mode opératoire (img.mode-image) : règle propre à chaque
+   domaine qui affiche des .mode-image (absente de domaine.css). */
+.mode-op .mode-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Pastilles de couleur des légendes de courbes (.legende-courbe) */
+.legende-courbe i.pastille-rouge  { background: #c0392b; }
+.legende-courbe i.pastille-orange { background: #e67e22; }
+.legende-courbe i.pastille-bleue  { background: #1B6CA8; }
+
+/* Message d'avertissement masqué par l'attribut hidden (le JS ne pose
+   plus style.display). */
+.warning[hidden],
+#exaop-message[hidden] {
+  display: none;
+}

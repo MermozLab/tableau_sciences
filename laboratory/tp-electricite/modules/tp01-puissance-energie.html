@@ -1,0 +1,730 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Puissance et énergie électrique</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">1ère</span>
+        <span class="tag">Électricité</span>
+        <span class="tag">Puissance - </span><span class="tag">Énergie - </span><span class="tag">Régime continu</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP E01</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+    <ul>
+      <li><strong>1ère</strong> — Distinguer énergie et puissance électrique.</li>
+      <li><strong>1ère</strong> — Mesurer la puissance électrique reçue et l'énergie électrique reçue pendant une durée donnée par un appareil utilisé en régime continu.</li>
+      <li><strong>1ère</strong> — Calculer la puissance électrique reçue et l'énergie électrique reçue pendant une durée donnée.</li>
+      <li><strong>1ère</strong> — Établir expérimentalement la relation entre la puissance électrique reçue, la tension et l'intensité en régime continu.</li>
+      <li><strong>1ère</strong> — Connaître la relation E = P × t entre l'énergie électrique reçue, la puissance et la durée.</li>
+      <li><strong>1ère</strong> — Connaître la relation P = U × I entre la puissance électrique, la tension et l'intensité en régime continu.</li>
+      <li><strong>1ère</strong> — Savoir que le joule est l'unité d'énergie du système international et connaître d'autres unités, dont le kilowattheure (kWh).</li>
+      <li><em>Domaine transversal — Sécurité :</em> justifier la présence des dispositifs de protection des matériels et des personnes (fusible, disjoncteur, mise à la terre).</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="securite">
+
+  <div class="section-titre">
+    <div class="picto-section">⚠️</div>
+    <h2>Sécurité</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Ce TP met en œuvre une alimentation électrique de laboratoire.
+      Toute manipulation d'un circuit électrique impose le respect de
+      règles simples pour éviter tout risque de choc électrique ou de
+      court-circuit.
+    </div>
+
+    <ul class="liste-aeree">
+      <li><strong>Avant de modifier un montage :</strong> couper l'alimentation, réaliser les branchements, puis remettre sous tension.</li>
+      <li><strong>Multimètre :</strong> vérifier le calibre et le mode (V, A) avant chaque mesure ; un ampèremètre se branche toujours en série.</li>
+      <li><strong>Lampe 21 W et rhéostat :</strong> ils chauffent en fonctionnement, ne pas les toucher ; vérifier que le rhéostat supporte au moins 2 A (courant nominal de la lampe : 21 W ÷ 12 V = 1,75 A).</li>
+      <li><strong>Dispositifs de protection :</strong> un fusible ou un disjoncteur coupe automatiquement l'alimentation en cas de surintensité, protégeant matériel et personnes.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+    <div class="picto-section">🧪</div>
+    <h2>Matériel nécessaire</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">⚗️</div>
+    <h2>Manipulations</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="tp01-message-filiere" class="info" hidden></div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="mesure-puissance">Mesure de la puissance</button>
+        <button class="tab-btn" data-tab="energie-consommee">Énergie consommée</button>
+      </div>
+
+      <!-- ============================ -->
+      <!-- MESURE DE PUISSANCE          -->
+      <!-- ============================ -->
+
+      <div class="tab-panel actif" id="mesure-puissance">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="mesure-puissance"></p>
+        </div>
+
+
+        <h3>Établir la relation P = U × I</h3>
+
+        <div class="info">
+          En régime continu, la puissance électrique reçue par un
+          dipôle est le produit de la tension à ses bornes par
+          l'intensité du courant qui le traverse.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Réaliser le montage du schéma ci-dessous, interrupteur ouvert : générateur 12 V continu, interrupteur, rhéostat et lampe 12 V – 21 W en série, ampèremètre en série, voltmètre en dérivation aux bornes de la lampe.</li>
+          <li>Brancher le wattmètre : bornes « intensité » en série avec la lampe, bornes « tension » en dérivation aux bornes de la lampe.</li>
+          <li>Placer le rhéostat à sa résistance maximale, vérifier le calibre des appareils, puis fermer l'interrupteur après validation par l'enseignant.</li>
+          <li>Diminuer progressivement la résistance du rhéostat pour faire varier la tension aux bornes de la lampe (de 3 V environ jusqu'à 12 V, au moins 5 valeurs).</li>
+          <li>Pour chaque réglage, relever U (voltmètre), I (ampèremètre) et P lue sur le wattmètre, puis saisir le trio de mesures : la puissance U × I, l'erreur absolue et l'erreur relative par rapport au wattmètre sont calculées automatiquement.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp01-montage-puissance.svg" alt="Schéma normalisé du montage : générateur 12 V continu, interrupteur, rhéostat, ampèremètre A, wattmètre W (bornes I en série, bornes U en dérivation) et lampe 21 W avec voltmètre V en dérivation ; borne COM de l&#x27;ampèremètre et du voltmètre" width="896" height="370" loading="lazy">
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="pui-tension">Tension mesurée U (V)</label>
+            <input id="pui-tension" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="pui-intensite">Intensité mesurée I (A)</label>
+            <input id="pui-intensite" type="number" step="0.01">
+          </div>
+
+          <div class="form-group">
+            <label for="pui-wattmetre">Puissance lue au wattmètre P (W)</label>
+            <input id="pui-wattmetre" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="pui-ajouter" type="button" class="btn btn-primaire">
+              + Ajouter la mesure
+            </button>
+          </div>
+
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>U (V)</th>
+                <th>I (A)</th>
+                <th>P = U×I (W)</th>
+                <th>P wattmètre (W)</th>
+                <th>Erreur absolue (W)</th>
+                <th>Erreur relative</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-puissance">
+            </tbody>
+          </table>
+        </div>
+
+        <div id="pui-erreurs" class="resultat-calcul">
+          Saisir U, I et la puissance lue au wattmètre pour calculer l'erreur
+          absolue et l'erreur relative.
+        </div>
+
+        <!-- Graphique P(wattmètre) = f(U×I) : droite de régression de toutes les mesures -->
+        <div class="espace-haut-lg" id="pui-graphique-bloc">
+          <h4>Puissance lue au wattmètre en fonction de U × I</h4>
+          <p id="pui-graphique-msg" class="info">
+            Saisir au moins 3 mesures complètes (U, I et P au wattmètre) :
+            la droite de régression est tracée automatiquement.
+            Si P = U × I, la pente vaut 1.
+          </p>
+          <canvas hidden class="graphique-canvas" id="pui-canvas" width="640" height="380"
+                  role="img"
+                  aria-label="Graphique de la puissance lue au wattmètre en fonction du produit U fois I avec droite de régression"></canvas>
+          <div hidden id="pui-regression" class="resultat-calcul"></div>
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- ÉNERGIE CONSOMMÉE             -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="energie-consommee">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="energie-consommee"></p>
+        </div>
+
+
+        <h3>Établir la relation E = P × t</h3>
+
+        <div class="info">
+          L'énergie électrique reçue par un appareil en régime continu
+          est le produit de la puissance reçue par la durée de
+          fonctionnement : E = P × t, avec E en joules (J), P en watts (W)
+          et t en secondes (s). Le kilowattheure (kWh) est une autre unité
+          d'énergie : 1 kWh = 3,6 × 10⁶ J.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Conserver le montage de l'onglet précédent, en réglant le rhéostat pour que la lampe soit alimentée sous 12 V (tension nominale). Le wattmètre est utilisé avec sa fonction « énergie » (joulemètre).</li>
+          <li>Interrupteur ouvert, remettre à zéro le compteur d'énergie, puis fermer l'interrupteur et déclencher simultanément le chronomètre.</li>
+          <li>Sans ouvrir l'interrupteur, relever à intervalles réguliers (par exemple 60 s, 120 s, 180 s, 240 s et 300 s) la durée t, la puissance P lue au wattmètre et l'énergie E lue au joulemètre.</li>
+          <li>Saisir chaque relevé : l'énergie E = P × t, l'erreur absolue et l'erreur relative par rapport à l'énergie lue sont calculées automatiquement.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp01-montage-energie.svg" alt="Schéma normalisé du montage : générateur 12 V continu, interrupteur, rhéostat, joulemètre J (bornes I en série, bornes U en dérivation) et lampe 21 W avec voltmètre V en dérivation ; borne COM du voltmètre" width="896" height="370" loading="lazy">
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="ener-puissance">Puissance lue au wattmètre P (W)</label>
+            <input id="ener-puissance" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="ener-duree">Durée mesurée t (s)</label>
+            <input id="ener-duree" type="number" step="1">
+          </div>
+
+          <div class="form-group">
+            <label for="ener-lue">Énergie lue au joulemètre E (J)</label>
+            <input id="ener-lue" type="number" step="1">
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="ener-ajouter" type="button" class="btn btn-primaire">
+              + Ajouter la mesure
+            </button>
+          </div>
+
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>P (W)</th>
+                <th>t (s)</th>
+                <th>E = P×t (J)</th>
+                <th>E (Wh)</th>
+                <th>E joulemètre (J)</th>
+                <th>Erreur absolue (J)</th>
+                <th>Erreur relative</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-energie">
+            </tbody>
+          </table>
+        </div>
+
+        <div id="ener-resultat" class="resultat-calcul">
+          Saisir la puissance et la durée pour calculer l'énergie
+          consommée.
+        </div>
+
+        <!-- Graphique E(joulemètre) = f(P×t) : droite de régression de toutes les mesures -->
+        <div class="espace-haut-lg" id="ener-graphique-bloc">
+          <h4>Énergie lue au joulemètre en fonction de P × t</h4>
+          <p id="ener-graphique-msg" class="info">
+            Saisir au moins 3 mesures complètes (P, t et E au joulemètre) :
+            la droite de régression est tracée automatiquement.
+            Si E = P × t, la pente vaut 1.
+          </p>
+          <canvas hidden class="graphique-canvas" id="ener-canvas" width="640" height="380"
+                  role="img"
+                  aria-label="Graphique de l'énergie lue au joulemètre en fonction du produit P fois t avec droite de régression"></canvas>
+          <div hidden id="ener-regression" class="resultat-calcul"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Électricité et sobriété énergétique</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Couper l'alimentation dès la fin des relevés de mesure.</li>
+      <li>Ne pas laisser un appareil sous tension inutilement.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">Consommation et usages éco-responsables</h3>
+
+    <p>
+      Connaître la puissance et l'énergie consommées par un appareil
+      permet d'identifier les usages les plus énergivores et d'agir
+      pour réduire la facture énergétique, que ce soit à l'échelle
+      d'un logement ou d'un atelier professionnel.
+    </p>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation
+      sélectionné. Répondre aux questions de l'onglet que vous avez réalisé :
+      les quatre premières portent sur l'objet du TP de l'onglet, la cinquième
+      répond à sa problématique.
+    </p>
+
+    <div class="questions-bloc" data-tp="puissance-energie" data-onglet="mesure-puissance" data-onglet-nom="Mesure de la puissance">
+
+    <h4>Questions de l'onglet « Mesure de la puissance »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire la relation entre la puissance électrique reçue par un dipôle en régime continu, la tension à ses bornes et l'intensité du courant qui le traverse, en précisant le nom et l'unité de chaque grandeur. Indiquer comment se branchent le voltmètre et l'ampèremètre pour mesurer ces grandeurs.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-mesure-puissance-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Relever dans votre tableau la mesure réalisée sous 12 V (ou la plus proche de 12 V) : calculer la puissance U × I, la comparer à la puissance lue sur le wattmètre (erreur absolue et erreur relative), puis à la puissance nominale de la lampe (21 W).
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-mesure-puissance-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir de la droite P(wattmètre) = f(U × I), relever son équation et la valeur de sa pente. Interpréter cette pente et conclure sur la validité de la relation P = U × I.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-mesure-puissance-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Exprimer la puissance reçue par la lampe sous 12 V sous la forme P = … W, avec un nombre adapté de chiffres significatifs et l'unité correcte. Proposer deux causes possibles des écarts observés entre U × I et la valeur lue au wattmètre.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-mesure-puissance-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Mesure de la puissance » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="mesure-puissance"></p>
+        <div class="zone-eleve">
+          <textarea id="question-mesure-puissance-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="puissance-energie" data-onglet="energie-consommee" data-onglet-nom="Énergie consommée" hidden>
+
+    <h4>Questions de l'onglet « Énergie consommée »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire la relation entre l'énergie électrique reçue par un appareil en régime continu, sa puissance et la durée de fonctionnement, en précisant le nom et l'unité SI de chaque grandeur. Donner la valeur de 1 kWh en joules et expliquer en une phrase la différence entre puissance et énergie.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-energie-consommee-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Relever dans votre tableau la mesure correspondant à la plus grande durée t : calculer l'énergie E = P × t en joules puis en wattheures, et la comparer à l'énergie lue au joulemètre (erreur absolue et erreur relative).
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-energie-consommee-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir de la droite E(joulemètre) = f(P × t), relever son équation et la valeur de sa pente. Conclure sur la validité de la relation E = P × t et indiquer comment évolue l'énergie reçue lorsque la durée double, la puissance restant constante.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-energie-consommee-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir de la puissance mesurée sous 12 V, calculer en kWh l'énergie consommée par la lampe pour une heure d'utilisation, puis pour une journée de 8 heures. Présenter les calculs avec les unités et un nombre adapté de chiffres significatifs.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-energie-consommee-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Énergie consommée » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="energie-consommee"></p>
+        <div class="zone-eleve">
+          <textarea id="question-energie-consommee-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Distinguer puissance et énergie électrique.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Mesurer une tension et une intensité en régime continu.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Calculer une puissance et une énergie électrique.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier la cohérence d'un résultat avec l'ordre de grandeur attendu.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Exprimer un résultat avec un nombre adapté de chiffres significatifs et l'unité correcte.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div class="espace-haut-md" id="radar-resultat"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, Imprimer votre TP en PDF.
+      Envoyer à l'enseignant votre Compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les tableaux des mesures saisies et les graphiques P = f(U×I) et E = f(P×t) ;</li>
+        <li>les réponses aux questions ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-accueil>
+    🏠 Accueil
+  </button>
+
+  <button class="btn btn-primaire" data-aller-tp="tp02-transport-energie">
+    TP02 →
+  </button>
+
+</div>
+
+</main>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

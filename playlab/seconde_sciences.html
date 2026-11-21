@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sciences - 2nde Pro</title>
+
+    <link rel="stylesheet" href="arcade.css">
+</head>
+
+<body>
+
+<header class="top-bar">
+    <h1>🎮 SCIENCES - 2NDE PRO 🎮</h1>
+
+    <button class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </button>
+</header>
+
+
+<!-- PAGE ACCUEIL -->
+<div class="home-dashboard" id="homeDashboard">
+
+<!-- ===================== CHIMIE ===================== -->
+<section class="arcade-column">
+    <h2>🧪 Chimie</h2>
+
+    <div class="game-card" onclick="loadPage('./playsciences/22/index.html')">
+        <h3>👾 C1</h3>
+        <p>Solutions — Dissolution, dilution, identification des ions</p>
+        <div class="tag-row">
+            <span class="tag cap2">Novice</span>
+            <span class="tag classe">2nde</span>
+        </div>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playsciences/23/index.html')">
+        <h3>👾 C2</h3>
+        <p>pH - Indicateurs — Indicateurs colorés, papier pH, calculs de pH</p>
+        <div class="tag-row">
+            <span class="tag cap2">Novice</span>
+            <span class="tag classe">2nde</span>
+        </div>
+    </div>
+
+</section>
+
+<!-- ===================== ACOUSTIQUE ===================== -->
+<section class="arcade-column">
+    <h2>🔊 Acoustique</h2>
+
+    <div class="game-card" onclick="loadPage('./playsciences/27/index.html')">
+        <h3>👾 A1</h3>
+        <p>Caractériser un son — Période, fréquence, niveau d'intensité acoustique, classement des sons</p>
+        <div class="tag-row">
+            <span class="tag cap2">Novice</span>
+            <span class="tag classe">2nde</span>
+        </div>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playsciences/28/index.html')">
+        <h3>👾 A2</h3>
+        <p>Isolation phonique — Mesure de l'atténuation, classement des isolants</p>
+        <div class="tag-row">
+            <span class="tag cap2">Novice</span>
+            <span class="tag classe">2nde</span>
+        </div>
+    </div>
+    
+</section>
+
+<!-- ===================== OPTIQUE ===================== -->
+<section class="arcade-column">
+    <h2>💡 Optique</h2>
+
+    <div class="game-card" onclick="loadPage('./playsciences/32/index.html')">
+        <h3>👾 O1</h3>
+        <p>Réflexion et réfraction — Loi de la réflexion, loi de la réfraction, angle limite</p>
+        <div class="tag-row">
+            <span class="tag cap2">Novice</span>
+            <span class="tag classe">2nde</span>
+        </div>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playsciences/33/index.html')">
+        <h3>👾 O2</h3>
+        <p>Spectre de la lumière blanche — Décomposition/recomposition, échelle des longueurs d'onde, IR/UV</p>
+        <div class="tag-row">
+            <span class="tag cap2">Novice</span>
+            <span class="tag classe">2nde</span>
+        </div>
+    </div>
+    
+</section>
+
+<!-- ===================== MÉCANIQUE ===================== -->
+<section class="arcade-column">
+    <h2>⚙️ Mécanique</h2>
+
+    <div class="game-card" onclick="loadPage('./playsciences/38/index.html')">
+        <h3>👾 M1</h3>
+        <p>Décrire un mouvement — Trajectoire et référentiel, vitesse moyenne, fréquence de rotation</p>
+        <div class="tag-row">
+            <span class="tag cap2">Novice</span>
+            <span class="tag classe">2nde</span>
+        </div>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playsciences/39/index.html')">
+        <h3>👾 M2</h3>
+        <p>Actions mécaniques et équilibre — Modéliser une force, poids d'un corps, équilibre de forces concourantes</p>
+        <div class="tag-row">
+            <span class="tag cap2">Novice</span>
+            <span class="tag classe">2nde</span>
+        </div>
+    </div>
+    
+</section>
+
+<!-- ===================== THERMIQUE ===================== -->
+<section class="arcade-column">
+    <h2>🔥 Thermique</h2>
+
+    <div class="game-card" onclick="loadPage('./playsciences/43/index.html')">
+        <h3>👾 T1</h3>
+        <p>Capteurs de température — Échelles Celsius/Kelvin, thermistance, sonde Pt100, thermocouple</p>
+        <div class="tag-row">
+            <span class="tag cap2">Novice</span>
+            <span class="tag classe">2nde</span>
+        </div>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playsciences/44/index.html')">
+        <h3>👾 T2</h3>
+        <p>Équilibre thermique — Mélange de deux corps, énergie échangée Q = mcΔθ, suivi temporel</p>
+        <div class="tag-row">
+            <span class="tag cap2">Novice</span>
+            <span class="tag classe">2nde</span>
+        </div>
+    </div>
+    
+</section>
+
+<!-- ===================== ÉLECTRICITÉ ===================== -->
+<section class="arcade-column">
+    <h2>⚡ Électricité</h2>
+
+    
+</section>
+
+</div>
+
+<!-- ===================== FRAME ===================== -->
+<div class="frame-container" id="frameContainer">
+    <iframe id="contentFrame" src=""></iframe>
+</div>
+
+
+<!-- ===================== MENU ===================== -->
+<div class="side-menu" id="sideMenu">
+    <button class="home-btn" onclick="returnHome()">
+        🏠 Retour accueil
+    </button>
+</div>
+
+<script src="arcade.js"></script>
+
+</body>
+</html>
