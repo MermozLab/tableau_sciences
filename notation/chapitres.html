@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moyenne par chapitre — Notation · Mermoz Lab</title>
+<link rel="stylesheet" href="chapitres.css">
+</head>
+<body>
+<header class="entete">
+  <div>
+    <p class="fil"><a href="index.html">Grille d’évaluation</a> · <a href="analyse.html">Analyse des copies</a> · <strong>Moyenne par chapitre</strong></p>
+    <h1 id="titre-page">Moyenne par chapitre</h1>
+  </div>
+  <button type="button" id="btn-deconnexion" class="btn secondaire" hidden>Se déconnecter</button>
+</header>
+
+<main>
+  <!-- Connexion enseignant -->
+  <section id="panneau-connexion" class="carte" hidden aria-labelledby="t-connexion">
+    <h2 id="t-connexion">Connexion enseignant</h2>
+    <p>Cette page est réservée au compte enseignant (mêmes identifiants que l’analyse des copies).</p>
+    <form id="form-connexion" class="connexion">
+      <label>Adresse e-mail <input type="email" id="cx-email" autocomplete="username" required></label>
+      <label>Mot de passe <input type="password" id="cx-mdp" autocomplete="current-password"></label>
+      <div class="rangee">
+        <button type="submit" class="btn">Me connecter</button>
+        <button type="button" id="cx-lien" class="btn secondaire">Recevoir un lien par e-mail</button>
+      </div>
+      <p id="cx-message" class="message" role="status"></p>
+    </form>
+  </section>
+
+  <!-- Tableau de bord -->
+  <section id="panneau-principal" hidden>
+    <div class="carte barre">
+      <label>Chapitre <select id="f-chapitre"></select></label>
+      <label>Classe <select id="f-classe"><option value="">Toutes</option></select></label>
+      <label>Élève <input type="search" id="f-recherche" placeholder="Nom ou prénom"></label>
+      <label>Plusieurs tentatives
+        <select id="f-agg">
+          <option value="best">Meilleure note</option>
+          <option value="last">Dernière note</option>
+          <option value="mean">Moyenne des tentatives</option>
+        </select>
+      </label>
+      <label class="case"><input type="checkbox" id="f-nonvalides"> Inclure les copies « à valider »</label>
+      <label class="case"><input type="checkbox" id="f-pmseul"> Inclure les élèves présents seulement dans PlayMaths</label>
+      <div class="rangee">
+        <button type="button" id="btn-actualiser" class="btn secondaire">Actualiser</button>
+        <button type="button" id="btn-csv" class="btn secondaire">Export CSV</button>
+        <button type="button" id="btn-imprimer" class="btn secondaire">Imprimer</button>
+      </div>
+    </div>
+
+    <p id="statut" class="message" role="status" aria-live="polite"></p>
+    <div id="alertes"></div>
+
+    <div class="onglets" role="tablist" aria-label="Vue">
+      <button type="button" role="tab" id="tab-moyennes" aria-selected="true" aria-controls="zone">Moyenne /20 et reste à faire</button>
+      <button type="button" role="tab" id="tab-competences" aria-selected="false" aria-controls="zone">Compétences</button>
+    </div>
+
+    <div id="zone" class="carte tableau-conteneur" role="tabpanel" tabindex="0"></div>
+    <div id="affectations"></div>
+    <div id="aide" class="aide"></div>
+  </section>
+</main>
+
+<div id="menu-niveau" class="menu-niveau" role="menu" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="chapitres-config.js"></script>
+<script src="chapitres.js"></script>
+</body>
+</html>
