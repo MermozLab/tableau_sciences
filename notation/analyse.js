@@ -6,7 +6,7 @@
    Accès protégé : connexion Supabase Auth + règles RLS (supabase/notation.sql).
    ========================================================================== */
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
-import { lignesDepuisPdf, analyserLignes } from "./analyse-parser.js";
+import { lignesDepuisPdf, analyserLignes, retirerIdPdf } from "./analyse-parser.js";
 import { ajouterRubriques, appliquerControles, recalculerAuto, evaluerRubriquesPhysique, questionsReelles, estRubrique } from "./analyse-rubriques.js";
 
 const SUPABASE_URL = "https://obsqakmhtvfuwnoxoksr.supabase.co";
@@ -617,7 +617,7 @@ async function ouvrirEnregistree(id) {
       contexte: r.contexte_pro || "", manipulation: "", problematique: r.problematique || "",
       autoevaluation: r.autoevaluation || [], avertissements: [],
       materiel: null, manipulationValeurs: [], manipulationResultats: [], rubriquesGelees: true,
-      questions: reps.map(x => ({ code: x.code, competence: x.competence || "", enonce: x.enonce || "", reponse: x.reponse || "",
+      questions: reps.map(x => ({ code: x.code, competence: x.competence || "", enonce: x.enonce || "", reponse: retirerIdPdf(x.reponse || ""),
         cotation: x.cotation_prof ?? x.cotation_ia, cotationIA: x.cotation_ia, signal: x.signal_ia, justification: x.justification || "",
         ...(estRubrique(x) ? { rubrique: true, facultatif: false, manuel: x.cotation_prof !== null && x.cotation_prof !== undefined } : {}) })),
       commentaireProf: r.commentaire_prof || "", commentaireNote: r.commentaire_note || "", analysePar: r.analyse_par || "",
