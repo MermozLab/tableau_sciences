@@ -23,6 +23,20 @@ const RE_PIED = [
   /^MathiLab\s+—\s+Mermoz Lab/i,
   /^SciLab\s+—\s+Mermoz Lab/i
 ];
+/* Identifiant de pied de page « id=71d54f6b » (ajouté par js/id-pdf.js) : ne doit jamais faire partie d'une réponse. */
+const RE_ID = /(?:^|\s)id\s*=\s*[0-9a-f]{6,}\b/i;
+const RE_ID_G = /(?:^|\s)id\s*=\s*[0-9a-f]{6,}\b/gi;
+
+/** Retire de n'importe quel texte les identifiants « id=xxxxxxxx » et les lignes devenues vides. */
+export function retirerIdPdf(texte) {
+  return String(texte ?? "")
+    .split("\n")
+    .map(l => l.replace(RE_ID_G, "").replace(/[ \t]+$/g, ""))
+    .filter((l, i, a) => l.trim() !== "" || a.length === 1)
+    .join("\n")
+    .trim();
+}
+
 const RE_QUESTION = /^(?:(Sujet\s+[ABC])\s*[—–-]\s*)?Q\s?(\d+)\s*[.)]\s*(.*)$/i;
 const TERMINAISON = /[.?!:;…)»"]\s*$/;
 
@@ -109,15 +123,22 @@ function depuisNomFichier(nom) {
 
 export function analyserLignes(lignes, nomFichier = "") {
   const fich = depuisNomFichier(nomFichier);
-  const L = lignes.filter(l => !RE_PIED.some(re => re.test(l.texte)));
+  // l'id est lu d'abord (n'importe où dans une ligne), puis retiré de toutes les lignes avant l'analyse
+  const idTrouve = lignes.map(l => /(?:^|\s)id\s*=\s*([0-9a-f]{6,})\b/i.exec(l.texte)).find(Boolean);
+  const sansId = lignes
+    .map(l => RE_ID.test(l.texte)
+      ? { ...l, texte: l.texte.replace(RE_ID_G, "").trim(),
+          cellules: l.cellules.map(c => c.replace(RE_ID_G, "").trim()).filter(Boolean) }
+      : l)
+    .filter(l => l.texte !== "");
+  const L = sansId.filter(l => !RE_PIED.some(re => re.test(l.texte)));
   const res = {
     matiere: "", domaine: "", codeTd: "", titre: "", niveau: "", classe: "",
     nom: fich.nom || "", prenom: fich.prenom || "", dateCopie: "", pdfId: fich.pdfId || "",
     filiere: "", contexte: "", manipulation: "", problematique: "",
     questions: [], autoevaluation: [], avertissements: []
   };
-  const idLigne = lignes.map(l => /^id=([0-9a-f]+)/i.exec(l.texte)).find(Boolean);
-  if (idLigne) res.pdfId = idLigne[1];
+  if (idTrouve) res.pdfId = idTrouve[1];
 
   // --- En-tête : matière, domaine, titre
   const iNom = L.findIndex(l => /^NOM\b/.test(l.texte) && /PR[ÉE]NOM/.test(l.texte));
@@ -188,8 +209,8 @@ export function analyserLignes(lignes, nomFichier = "") {
   let probLignes = [];
   const clore = () => {
     if (!q) return;
-    q.enonce = nettoyer(q.enonce);
-    q.reponse = q.reponse.join("\n").replace(/\n{2,}/g, "\n").trim();
+    q.enonce = nettoyer(retirerIdPdf(q.enonce));
+    q.reponse = retirerIdPdf(q.reponse.join("\n")).replace(/\n{2,}/g, "\n").trim();
     if (/^\(pas de r[ée]ponse saisie\)$/i.test(q.reponse)) q.reponse = "";
     res.questions.push(q);
     q = null;
@@ -233,6 +254,7 @@ export function analyserLignes(lignes, nomFichier = "") {
   }
   if (phase === "problematique" && q && probLignes.length) q.problematique = nettoyer(probLignes[0]);
   clore();
+  res.questions.forEach(x => { if (x.problematique) x.problematique = nettoyer(retirerIdPdf(x.problematique)); });
   const avecProb = res.questions.find(x => x.problematique);
   if (avecProb) res.problematique = avecProb.problematique;
 
