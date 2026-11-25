@@ -42,7 +42,7 @@ window.CHAPITRES_CONFIG = {
      filtre   : { domaines:[fragments du domaine, sans accents], code_td:'TD01' | 'TP02' }
      onglets  : [ [id_onglet, libellé, {niveaux:['1ere'|'tle'|'2nde'], facultatif:true}] ]
                 « niveaux » : l'onglet ne concerne que ces classes ; « facultatif » : compté s'il est fait,
-                jamais « à faire » (onglets réservés à certaines filières).
+                jamais « à faire » (onglets réservés à certaines filières, activités atelier).
      puzzle   : { sujets:['A','B','C'], requis:1 }  (copies « Sujet A/B/C » ; requis = sujets à réaliser)
      quiz     : { categorie:'playmaths'|'playsciences', code:'G01', niveaux:[...] }  (notes /10 du quiz) */
   chapitres: [
