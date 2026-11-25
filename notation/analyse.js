@@ -233,17 +233,33 @@ function afficherCompteur() {
 async function appelerIA(charge) {
   const { data, error } = await sb.functions.invoke("analyser-copie", { body: { copie: charge } });
   if (!error && data && !data.erreur) return data;
-  let detail = data?.erreur || "", statut = 0, delai = 0;
+  let detail = data?.erreur || "", statut = 0, delai = 0, brut = "";
   try {
     statut = error?.context?.status || 0;
-    const j = await error?.context?.json?.();
-    if (j?.erreur) detail = j.erreur;
-    delai = Number(j?.reessayer_dans_s) || 0;
-  } catch { /* corps non JSON */ }
-  const e = new Error(detail || error?.message || "réponse vide");
-  e.quota = statut === 429; e.delai = delai;
+    // Le corps ne se lit qu'une fois : on le prend en texte, puis on tente de l'interpréter en JSON.
+    brut = ((await error?.context?.text?.()) || "").trim();
+    try {
+      const j = JSON.parse(brut);
+      detail = j?.erreur || j?.error || j?.message || j?.msg || detail;
+      delai = Number(j?.reessayer_dans_s) || 0;
+    } catch { /* corps non JSON : on garde le texte brut ci-dessous */ }
+  } catch { /* corps illisible (erreur réseau, CORS…) */ }
+  if (!detail && brut) detail = brut.slice(0, 200);
+  if (!detail) {
+    if (statut === 401 || statut === 403) detail = "accès refusé : reconnectez-vous (session expirée) ou vérifiez la clé publique";
+    else if (statut === 404) detail = "fonction « analyser-copie » introuvable : non déployée sur ce projet Supabase ?";
+    else if (statut === 429) detail = "quota gratuit atteint";
+    else if (statut >= 500) detail = "erreur interne de la fonction (clé IA absente, quota ou fournisseur indisponible) : voir les logs de la fonction dans Supabase";
+    else if (!statut) detail = "fonction injoignable (réseau, CORS ou projet Supabase en pause)";
+    else detail = error?.message || "réponse vide";
+  }
+  console.warn("[notation] Échec analyser-copie", { statut, detail, brut, error });
+  const e = new Error(statut ? `HTTP ${statut} : ${detail}` : detail);
+  e.quota = statut === 429; e.delai = delai; e.statut = statut;
   throw e;
 }
+
+let derniereErreurIA = "";
 
 /** Une copie → IA. Retourne "ia" | "locale" | "quota" (quota seulement en mode lot). */
 async function analyserCopie(c, { lot = false, attenteQuota = false } = {}) {
@@ -267,10 +283,12 @@ async function analyserCopie(c, { lot = false, attenteQuota = false } = {}) {
           }
           throw err;
         }
-        if (essai >= 2) throw err;
-        await attendre(3000);                      // erreur passagère : un seul nouvel essai
+        // Inutile de réessayer si la cause est durable (accès refusé, fonction absente) : un seul nouvel essai sinon.
+        if (essai >= 2 || [400, 401, 403, 404].includes(err.statut)) throw err;
+        await attendre(3000);                      // erreur passagère
       }
     }
+    if (!Array.isArray(data?.questions)) throw new Error("réponse de l’IA incomplète (liste de questions absente)");
     const parCode = new Map(data.questions.map(x => [x.code, x]));
     questionsReelles(c).forEach(q => {
       const x = parCode.get(q.code);
@@ -290,6 +308,7 @@ async function analyserCopie(c, { lot = false, attenteQuota = false } = {}) {
       c.occupe = false; afficherCarte(c);
       return "quota";
     }
+    derniereErreurIA = err.message;                 // affichée dans le bilan du lot
     preAnalyse(c);
     c.commentaireNote = commentaireLocal(c);
     if (!lot) message(msg, `Module IA indisponible (${err.message}) : pré-analyse locale appliquée à ${c.prenom} ${c.nom}, à vérifier question par question.`, "erreur");
@@ -328,7 +347,7 @@ $("#btn-tout-analyser").addEventListener("click", async () => {
   lotEnCours = false; bouton.disabled = false; stop.hidden = true; prog.hidden = true;
   const restantes = copies.filter(c => c.etat === "lue").length;
   let t = `${ia} copie(s) analysée(s) par IA`;
-  if (locales) t += `, ${locales} en pré-analyse locale (à vérifier de près)`;
+  if (locales) t += `, ${locales} en pré-analyse locale (à vérifier de près)` + (derniereErreurIA ? ` — dernière erreur IA : ${derniereErreurIA}` : "");
   if (auto) t += `, ${enreg} enregistrée(s)` + (echecEnreg ? ` (${echecEnreg} échec(s) : vérifiez nom et prénom)` : "");
   t += ".";
   if (restantes) t += ` ${restantes} restante(s).`;
