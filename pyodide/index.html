@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyLab</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Feuille de style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- =====================================================
+     MENU LATÉRAL
+     ===================================================== -->
+<nav class="menu" aria-label="Menu principal PyLab">
+
+    <!-- ACCUEIL -->
+    <button class="menu-item active" id="homeButton" type="button" data-tooltip="Accueil" aria-label="Afficher l'accueil">
+        <i class="fas fa-home"></i>
+    </button>
+
+    <!-- PYLAB -->
+    <button class="menu-item" id="pythonButton" type="button" data-tooltip="PyLab" aria-label="Ouvrir PyLab">
+        <i class="fab fa-python"></i>
+    </button>
+
+    <!-- EXEMPLES -->
+    <div class="menu-wrapper">
+        <button class="menu-item" id="examplesButton" type="button" data-tooltip="Bibliothèque" aria-label="Ouvrir la bibliothèque de programmes">
+            <i class="fas fa-book-open"></i>
+        </button>
+
+        <div class="submenu" id="examplesMenu">
+            <!-- Programmes .py du dossier « programmes/ » (rempli par app.js) -->
+            <div id="libraryTitle" class="submenu-title" hidden>
+                <i class="fas fa-folder-open"></i> Mes programmes
+            </div>
+            <div id="libraryList"></div>
+        </div>
+    </div>
+
+    <!-- EFFACER -->
+    <button class="menu-item" id="menuClear" type="button" data-tooltip="Effacer" aria-label="Effacer le programme">
+        <i class="fas fa-eraser"></i>
+    </button>
+
+</nav>
+
+<!-- =====================================================
+     CONTENU
+     ===================================================== -->
+<div id="content-container">
+
+    <!-- =================================================
+         PAGE D'ACCUEIL
+         ================================================= -->
+    <section id="home-message" class="page active-page">
+
+        <div class="home-icon">
+            <i class="fab fa-python"></i>
+        </div>
+
+        <h2>Bienvenue dans</h2>
+
+        <div class="pylab-logo" aria-label="PyLab">
+            <span class="py">Py</span>
+            <span class="lab">Lab</span>
+        </div>
+
+        <p class="pylab-tagline">un projet basé sur Pyodide</p>
+
+        <p>PyLab permet d'écrire et d'exécuter des programmes Python directement dans le navigateur.</p>
+
+        <p>Aucun logiciel n'est nécessaire. Écris ton programme, clique sur <strong>Exécuter</strong> et observe immédiatement le résultat.</p>
+
+        <div class="home-actions">
+            <button id="startButton" class="start-button" type="button">
+                <i class="fas fa-play"></i>
+                Commencer à programmer
+            </button>
+        </div>
+
+        <p class="signature">
+            <strong>PyLab</strong> — « Learn • Apply • Build »
+            <br>
+            Apprendre, mettre en pratique et construire.
+        </p>
+
+    </section>
+
+    <!-- =================================================
+         PAGE PYLAB
+         ================================================= -->
+    <section id="python-page" class="page">
+
+        <!-- EN-TÊTE -->
+        <div class="page-header">
+            <div>
+                <h1><i class="fab fa-python"></i></h1>
+                <div class="pylab-logo" aria-label="PyLab">
+                    <span class="py">Py</span>
+                    <span class="lab">Lab</span>
+                </div>
+                <p>Écris, exécute et teste tes programmes Python.</p>
+            </div>
+
+            <!-- Utilisé par app.js -->
+            <span id="status" class="status-loading" aria-live="polite">Chargement de Python...</span>
+        </div>
+
+        <!-- =================================================
+             ESPACE DE PROGRAMMATION
+             ================================================= -->
+        <div class="lab-grid">
+
+            <!-- ÉDITEUR -->
+            <section class="editor-panel">
+
+                <div class="panel-title">
+                    <span><i class="fas fa-file-code"></i> Éditeur Python</span>
+                    <div class="title-tools">
+                        <span class="file-name">programme.py</span>
+
+                        <!-- Zoom pour le vidéoprojecteur : + ouvre, - ferme -->
+                        <button id="zoomOpen" class="zoom-btn" type="button"
+                                title="Agrandir le code" aria-label="Agrandir le code (ouvrir la fenêtre de zoom)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button id="zoomClose" class="zoom-btn" type="button"
+                                title="Fermer le zoom" aria-label="Fermer la fenêtre de zoom">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Utilisé par app.js -->
+                <textarea id="code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Écris ton programme Python ici">print("Bienvenue dans PyLab !")
+
+for nombre in range(1, 6):
+    print(nombre)</textarea>
+
+                <!-- ACTIONS -->
+                <div class="editor-actions">
+
+                    <!-- Boutons répartis sur deux lignes (3 + 3) -->
+                    <div class="editor-buttons">
+
+                        <!-- Utilisé par app.js -->
+                        <button id="run" class="run-button" type="button" disabled>
+                            <i class="fas fa-play"></i>
+                            Exécuter
+                        </button>
+
+                        <!-- Importer un script Python (.py) dans l'éditeur -->
+                        <button id="import" class="import-button" type="button">
+                            <i class="fas fa-file-import"></i>
+                            Importer le script
+                        </button>
+
+                        <!-- Sélecteur de fichier caché, déclenché par le bouton ci-dessus -->
+                        <input id="importFile" type="file" accept=".py,.txt,text/x-python,text/plain" hidden>
+
+                        <!-- Exporter le script Python -->
+                        <button id="export" class="export-button" type="button">
+                            <i class="fas fa-file-export"></i>
+                            Exporter le script
+                        </button>
+
+                        <!-- Dictée vocale (transcription de la voix dans l'éditeur) -->
+                        <button id="mic" class="mic-button" type="button" data-mic
+                                aria-pressed="false"
+                                title="Dicter le code à la voix">
+                            <i class="fas fa-microphone"></i>
+                            <span class="mic-label">Dicter</span>
+                        </button>
+
+                        <button id="clear" class="clear-button" type="button">
+                            <i class="fas fa-eraser"></i>
+                            Effacer
+                        </button>
+
+                        <!-- Compte rendu PDF : contenu de l'éditeur + résultat de la console -->
+                        <button id="printPdf" class="pdf-button" type="button"
+                                title="Imprimer l'éditeur et le résultat en PDF">
+                            <i class="fas fa-file-pdf"></i>
+                            Imprimer en PDF
+                        </button>
+
+                    </div>
+
+                    <div class="editor-info">
+
+                        <span id="micStatus" class="mic-status" aria-live="polite"></span>
+
+                        <span class="shortcut">
+                            <i class="fas fa-keyboard"></i>
+                            Ctrl + Entrée
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- RÉSULTAT -->
+            <section class="result-panel">
+
+                <div class="panel-title result-title">
+                    <span><i class="fas fa-terminal"></i> Résultat</span>
+                    <div class="title-tools">
+                        <span class="result-indicator">● Console Python</span>
+
+                        <!-- Zoom pour le vidéoprojecteur : + ouvre, - ferme -->
+                        <button id="consoleZoomOpen" class="zoom-btn" type="button"
+                                title="Agrandir la console" aria-label="Agrandir la console (ouvrir la fenêtre de zoom)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button id="consoleZoomClose" class="zoom-btn" type="button"
+                                title="Fermer le zoom" aria-label="Fermer la fenêtre de zoom de la console">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Utilisé par app.js -->
+                <pre id="output" aria-live="polite">Chargement de Python et Matplotlib...</pre>
+
+            </section>
+
+        </div>
+
+        <!-- =================================================
+             TRACE ÉCRITE — IDENTIFICATION
+             Les identifiants (nom-eleve, prenom-eleve, classe-eleve,
+             date-eleve) sont lus par js/compte-rendu.js (racine)
+             et reportés dans l'en-tête du PDF.
+             ================================================= -->
+        <details id="trace-ecrite" class="identity-panel" open>
+
+            <summary>
+                <span class="identity-icon"><i class="fas fa-pen-to-square"></i></span>
+                <span>Trace écrite - Compte rendu</span>
+                <span class="identity-arrow" aria-hidden="true"></span>
+            </summary>
+
+            <div class="identity-body">
+
+                <h2 class="identity-title">Identification</h2>
+
+                <div class="identity-grid">
+
+                    <div class="identity-field">
+                        <label for="nom-eleve">Nom</label>
+                        <input id="nom-eleve" type="text" autocomplete="family-name" spellcheck="false">
+                    </div>
+
+                    <div class="identity-field">
+                        <label for="prenom-eleve">Prénom</label>
+                        <input id="prenom-eleve" type="text" autocomplete="given-name" spellcheck="false">
+                    </div>
+
+                    <div class="identity-field">
+                        <label for="classe-eleve">Classe</label>
+                        <input id="classe-eleve" type="text" autocomplete="off" spellcheck="false">
+                    </div>
+
+                    <div class="identity-field">
+                        <label for="date-eleve">Date</label>
+                        <input id="date-eleve" type="date">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </details>
+
+        <!-- AIDE -->
+        <section class="help-card">
+            <i class="fas fa-lightbulb"></i>
+            <div>
+                <strong>Astuce</strong>
+                <p>
+                    Utilise les exemples du menu pour découvrir progressivement les instructions Python.
+                    L'exemple « Graphique » utilise NumPy et Matplotlib, chargés automatiquement au démarrage de PyLab.
+                    Le bouton <strong>Dicter</strong> transcrit ta voix dans l'éditeur (navigateur Chrome, Edge ou Safari).
+                    Le bouton <strong>Imprimer en PDF</strong> génère un document avec ton programme et son résultat.
+                </p>
+            </div>
+        </section>
+
+    </section>
+</div>
+
+<!-- =====================================================
+     FENÊTRE DE ZOOM DU CODE
+     ===================================================== -->
+<div id="zoomModal" class="zoom-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Code en grand">
+    <div class="zoom-window">
+        <div class="zoom-window-bar">
+            <span><i class="fas fa-file-code"></i> programme.py</span>
+            <div class="title-tools">
+                <button id="micZoom" class="zoom-btn mic-zoom" type="button" data-mic
+                        aria-pressed="false"
+                        title="Dicter le code à la voix" aria-label="Dicter le code à la voix">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            <button id="zoomModalClose" class="zoom-btn" type="button"
+                    title="Fermer le zoom" aria-label="Fermer la fenêtre de zoom">
+                <i class="fas fa-minus"></i>
+            </button>
+            </div>
+        </div>
+        <textarea id="zoomContent" class="zoom-content" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Code Python en grand (modifiable)"></textarea>
+    </div>
+</div>
+
+<!-- =====================================================
+     FENÊTRE DE ZOOM DE LA CONSOLE
+     ===================================================== -->
+<div id="consoleZoomModal" class="zoom-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Console en grand">
+    <div class="zoom-window">
+        <div class="zoom-window-bar">
+            <span><i class="fas fa-terminal"></i> Résultat — Console Python</span>
+            <button id="consoleZoomModalClose" class="zoom-btn" type="button"
+                    title="Fermer le zoom" aria-label="Fermer la fenêtre de zoom de la console">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+        <div id="consoleZoomContent" class="zoom-content zoom-console" tabindex="0" role="log" aria-label="Résultat en grand"></div>
+    </div>
+</div>
+
+<!-- =====================================================
+     SCRIPTS
+     ===================================================== -->
+
+<!-- Moteur Python Pyodide Core -->
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+
+<!-- Interface PyLab + exécution Python -->
+<script src="./app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,776 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Les chemins (./assets/…) sont relatifs à la page du domaine
+  (tp-algebre/index.html), pas à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Mathi</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Résoudre un problème du premier degré</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">2nde</span>
+        <span class="tag">Algèbre - Analyse</span>
+        <span class="tag">Équations - </span><span class="tag">Inéquations - </span><span class="tag">Intervalles de ℝ</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TD A01</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <ul>
+      <li>Traduire un problème par une équation ou une inéquation du premier degré à une inconnue.</li>
+      <li>Résoudre algébriquement, graphiquement, avec ou sans outils numériques, une équation du premier degré.</li>
+      <li>Résoudre algébriquement, graphiquement, avec ou sans outils numériques, une inéquation du premier degré.</li>
+      <li>Choisir et mettre en œuvre une méthode de résolution adaptée au problème.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Sélectionner votre filière professionnelle pour afficher un contexte adapté à votre spécialité ; la problématique de chaque onglet s'affiche dans l'onglet.
+    </div>
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">📐</div>
+    <h2>Activités</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="alg01-message" class="feedback-verification" role="alert"></div>
+
+    <!-- ============================================================
+         ONGLETS PAR THÈME
+         Pattern identique aux autres TD du site : la classe .actif
+         (et non .active) est posée en dur sur le premier bouton et le
+         premier panneau ; js/onglets-filiere.js gère entièrement la
+         bascule .tab-panel + aria-selected au clic.
+         ============================================================ -->
+    <div class="toolbar">
+      <a class="btn btn-secondaire" href="../../numworks/emulator.html" target="_blank" rel="noopener">
+        🧮 Ouvrir la calculatrice NumWorks
+      </a>
+    </div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="tab-equation">Équation</button>
+        <button class="tab-btn" data-tab="tab-inequation">Inéquation</button>
+        <button class="tab-btn" data-tab="tab-intervalles">Intervalles de ℝ</button>
+        <button class="tab-btn" data-tab="tab-probleme">Traduire un problème</button>
+        <button class="tab-btn" data-tab="activites-puzzle">🧩 Activités Puzzle</button>
+      </div>
+
+      <!-- ---------- ONGLET 1 : ÉQUATION DU PREMIER DEGRÉ ---------- -->
+      <div class="tab-panel actif" id="tab-equation">
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="tab-equation"></p>
+        </div>
+
+        <h3>Résoudre une équation ax + b = c</h3>
+        <p class="info">
+          Résoudre une équation de la forme <strong>ax + b = c</strong> :
+          saisir les trois nombres puis afficher la résolution pas à pas.
+        </p>
+
+        <h4 style="margin-top:var(--gap-lg);">Méthodologie</h4>
+
+        <ol class="etapes" style="margin-bottom:var(--gap-lg);">
+          <li>Saisir les trois nombres a, b et c de l'équation ax + b = c.</li>
+          <li>Isoler le terme en x : soustraire b aux deux membres.</li>
+          <li>Diviser les deux membres par a (a ≠ 0) pour obtenir x.</li>
+          <li>Vérifier en remplaçant x par la valeur trouvée dans l'équation de départ.</li>
+        </ol>
+
+        <div class="form-row">
+          <label for="eq-a">a</label>
+          <input type="number" id="eq-a" step="any" value="3">
+          <span>x +</span>
+          <label for="eq-b">b</label>
+          <input type="number" id="eq-b" step="any" value="5">
+          <span>=</span>
+          <label for="eq-c">c</label>
+          <input type="number" id="eq-c" step="any" value="20">
+        </div>
+
+        <button id="eq-resoudre" class="btn btn-primaire">Résoudre</button>
+
+        <ol class="etapes-resolution" id="eq-etapes"></ol>
+      </div>
+
+      <!-- ---------- ONGLET 2 : INÉQUATION DU PREMIER DEGRÉ ---------- -->
+      <div class="tab-panel" id="tab-inequation">
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="tab-inequation"></p>
+        </div>
+
+        <h3>Résoudre une inéquation ax + b _ c</h3>
+        <p class="info">
+          Résoudre une inéquation de la forme <strong>ax + b</strong> puis
+          un symbole de comparaison <strong>c</strong>. Attention au sens de
+          l'inégalité lorsque a est négatif.
+        </p>
+
+        <h4 style="margin-top:var(--gap-lg);">Méthodologie</h4>
+
+        <ol class="etapes" style="margin-bottom:var(--gap-lg);">
+          <li>Saisir a, b et c, puis choisir le symbole de comparaison.</li>
+          <li>Soustraire b aux deux membres : le sens de l'inégalité ne change pas.</li>
+          <li>Diviser par a : si a est positif le sens est conservé, si a est négatif il est inversé.</li>
+          <li>Écrire l'ensemble des solutions sous la forme d'un intervalle.</li>
+        </ol>
+
+        <div class="form-row">
+          <label for="in-a">a</label>
+          <input type="number" id="in-a" step="any" value="-2">
+          <span>x +</span>
+          <label for="in-b">b</label>
+          <input type="number" id="in-b" step="any" value="4">
+
+          <select id="in-op">
+            <option value="lt">&lt;</option>
+            <option value="le">&le;</option>
+            <option value="gt">&gt;</option>
+            <option value="ge" selected>&ge;</option>
+          </select>
+
+          <label for="in-c">c</label>
+          <input type="number" id="in-c" step="any" value="0">
+        </div>
+
+        <button id="in-resoudre" class="btn btn-primaire">Résoudre</button>
+
+        <ol class="etapes-resolution" id="in-etapes"></ol>
+
+        <div id="in-notation" class="intervalle-notation" style="display:none;"></div>
+
+        <div id="in-droite"></div>
+      </div>
+
+      <!-- ---------- ONGLET 3 : INTERVALLES DE ℝ ---------- -->
+      <div class="tab-panel" id="tab-intervalles">
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="tab-intervalles"></p>
+        </div>
+
+        <h3>Intervalles de ℝ</h3>
+        <p class="info">
+          Un intervalle de ℝ est un ensemble de nombres réels vérifiant une
+          ou deux inégalités. Une borne <em>fermée</em> (crochet tourné vers
+          l'intervalle) inclut la valeur ; une borne <em>ouverte</em> (crochet
+          tourné vers l'extérieur) l'exclut.
+        </p>
+
+        <h4 style="margin-top:var(--gap-lg);">Méthodologie</h4>
+
+        <ol class="etapes" style="margin-bottom:var(--gap-lg);">
+          <li>Identifier les deux bornes de l'ensemble de nombres étudié.</li>
+          <li>Pour chaque borne, décider si elle est incluse (fermée) ou exclue (ouverte).</li>
+          <li>Écrire l'intervalle avec la notation à crochets et vérifier avec l'inégalité correspondante.</li>
+        </ol>
+
+        <div class="generateur-intervalle">
+          <h4>Générateur d'intervalle</h4>
+          <div class="form-row">
+            <span>Borne gauche</span>
+            <div class="toggle-borne" id="gi-toggle-gauche">
+              <button type="button" data-etat="ferme" class="actif">fermée [</button>
+              <button type="button" data-etat="ouvert">ouverte ]</button>
+            </div>
+            <input type="number" id="gi-a" step="any" value="-3">
+
+            <input type="number" id="gi-b" step="any" value="5">
+            <div class="toggle-borne" id="gi-toggle-droite">
+              <button type="button" data-etat="ouvert" class="actif">ouverte [</button>
+              <button type="button" data-etat="ferme">fermée ]</button>
+            </div>
+            <span>Borne droite</span>
+          </div>
+          <div id="gi-resultat" class="intervalle-notation"></div>
+          <div id="gi-droite"></div>
+        </div>
+
+        <h4>Quiz d'association</h4>
+        <p class="info">
+          Pour chaque inégalité, cliquer sur la notation d'intervalle
+          correspondante.
+        </p>
+        <div class="quiz-intervalle-liste" id="qi-liste"></div>
+        <div class="quiz-intervalle-score" id="qi-score"></div>
+      </div>
+
+      <!-- ---------- ONGLET 4 : TRADUIRE UN PROBLÈME ---------- -->
+      <div class="tab-panel" id="tab-probleme">
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="tab-probleme"></p>
+        </div>
+
+        <h3>Traduire et résoudre un problème</h3>
+        <p class="info">
+          Choisir un énoncé, proposer l'équation qui le traduit, puis la
+          résoudre pour répondre à la question posée.
+        </p>
+
+        <h4 style="margin-top:var(--gap-lg);">Méthodologie</h4>
+
+        <ol class="etapes" style="margin-bottom:var(--gap-lg);">
+          <li>Lire l'énoncé et repérer l'inconnue x (ce que l'on cherche).</li>
+          <li>Traduire les données de l'énoncé par une équation de la forme ax + b = c.</li>
+          <li>Résoudre l'équation.</li>
+          <li>Répondre à la question par une phrase avec l'unité, après avoir vérifié que le résultat est cohérent.</li>
+        </ol>
+
+        <div class="form-row">
+          <label for="pb-select">Énoncé</label>
+          <select id="pb-select"></select>
+        </div>
+
+        <p id="pb-enonce" class="resultat-calcul"></p>
+
+        <div class="form-row">
+          <label for="pb-equation">Votre équation</label>
+          <input type="text" id="pb-equation" placeholder="ex. 15x+40=190">
+          <button id="pb-verifier" class="btn btn-secondaire">Vérifier</button>
+        </div>
+
+        <div id="pb-feedback" class="feedback-verification" role="alert"></div>
+
+        <button id="pb-solution" class="btn btn-primaire" style="display:none;">
+          Afficher la résolution
+        </button>
+
+        <ol class="etapes-resolution" id="pb-etapes"></ol>
+        <p id="pb-interpretation" class="resultat-calcul"></p>
+      </div>
+
+      <!-- ---------- ONGLET 5 : ACTIVITÉS PUZZLE (sous-onglets) ---------- -->
+      <div class="tab-panel" id="activites-puzzle">
+        <h3>Activités Puzzle</h3>
+        <div id="puzzle-info" class="info">
+          Sélectionner votre filière professionnelle dans la section « Contexte
+          professionnel » ci-dessus pour afficher les trois sujets.
+        </div>
+        <div class="sous-onglets" role="tablist">
+          <button class="sous-btn actif" data-sous="puzzle-sujet-a">Sujet A</button>
+          <button class="sous-btn" data-sous="puzzle-sujet-b">Sujet B</button>
+          <button class="sous-btn" data-sous="puzzle-sujet-c">Sujet C</button>
+        </div>
+        <div class="sous-panel actif" id="puzzle-sujet-a">
+          <div class="fiche-puzzle" data-titre="Résoudre une équation">
+            <div class="questions-bloc" data-tp="puzzle-a">
+              <ol class="questions-tp"><li>
+                <div class="question-entete"><strong>Sujet A — Résoudre une équation</strong>
+                  <span class="cartouche" data-comp="REA">REA</span></div>
+                <p class="info puzzle-contexte" id="puzzle-a-contexte"></p>
+                <p class="puzzle-problematique" id="puzzle-a-problematique"></p>
+                <ol id="puzzle-a-enonce" class="puzzle-questions"></ol>
+              </li></ol>
+            </div>
+          </div>
+        </div>
+        <div class="sous-panel" id="puzzle-sujet-b">
+          <div class="fiche-puzzle" data-titre="Résoudre une inéquation">
+            <div class="questions-bloc" data-tp="puzzle-b">
+              <ol class="questions-tp"><li>
+                <div class="question-entete"><strong>Sujet B — Résoudre une inéquation</strong>
+                  <span class="cartouche" data-comp="ANA">ANA</span></div>
+                <p class="info puzzle-contexte" id="puzzle-b-contexte"></p>
+                <p class="puzzle-problematique" id="puzzle-b-problematique"></p>
+                <ol id="puzzle-b-enonce" class="puzzle-questions"></ol>
+              </li></ol>
+            </div>
+          </div>
+        </div>
+        <div class="sous-panel" id="puzzle-sujet-c">
+          <div class="fiche-puzzle" data-titre="Comparer deux offres">
+            <div class="questions-bloc" data-tp="puzzle-c">
+              <ol class="questions-tp"><li>
+                <div class="question-entete"><strong>Sujet C — Comparer deux offres</strong>
+                  <span class="cartouche" data-comp="VAL">VAL</span></div>
+                <p class="info puzzle-contexte" id="puzzle-c-contexte"></p>
+                <p class="puzzle-problematique" id="puzzle-c-problematique"></p>
+                <ol id="puzzle-c-enonce" class="puzzle-questions"></ol>
+              </li></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">Les questions affichées suivent l'onglet sélectionné dans « Activités » : quatre portent sur l'objet de l'onglet, la cinquième sur sa problématique. Seules les questions de l'onglet actif sont imprimées.</p>
+
+    <div class="questions-bloc" data-tp="resolution-probleme-premier-degre-tab-equation" data-onglet="tab-equation" data-onglet-nom="Équation">
+    <h4>Questions de l'onglet « Équation »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Rappeler la forme d'une équation du premier degré ax + b = c et la méthode pour isoler x en opérant sur les deux membres.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-equation-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Résoudre 4x − 7 = 13 avec l'onglet, en détaillant chaque étape.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-equation-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer pourquoi on effectue la même opération sur les deux membres, et ce qui se passe lorsque a = 0.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-equation-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier la solution trouvée en la remplaçant dans l'équation de départ.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-equation-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="tab-equation"></p>
+        <div class="zone-eleve"><textarea id="question-tab-equation-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="resolution-probleme-premier-degre-tab-inequation" data-onglet="tab-inequation" data-onglet-nom="Inéquation" hidden>
+    <h4>Questions de l'onglet « Inéquation »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Donner la différence entre résoudre une équation et résoudre une inéquation du premier degré.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-inequation-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Résoudre −2x + 4 ≥ 0 avec l'onglet et donner l'ensemble des solutions.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-inequation-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer pourquoi le sens de l'inégalité change quand on multiplie ou divise les deux membres par un nombre négatif, en s'aidant d'un exemple.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-inequation-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier, par le calcul, qu'une valeur de l'ensemble des solutions convient et qu'une valeur extérieure ne convient pas.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-inequation-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="tab-inequation"></p>
+        <div class="zone-eleve"><textarea id="question-tab-inequation-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="resolution-probleme-premier-degre-tab-intervalles" data-onglet="tab-intervalles" data-onglet-nom="Intervalles de ℝ" hidden>
+    <h4>Questions de l'onglet « Intervalles de ℝ »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Donner la définition d'un intervalle de ℝ et expliquer le rôle des crochets (ouvert ou fermé).</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-intervalles-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Écrire sous forme d'intervalle la solution de l'inéquation étudiée, avec le générateur d'intervalle.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-intervalles-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Représenter cet intervalle sur une droite graduée et justifier la position des crochets.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-intervalles-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier, avec le quiz d'association, que chaque inégalité est associée au bon intervalle, puis corriger vos erreurs éventuelles.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-intervalles-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="tab-intervalles"></p>
+        <div class="zone-eleve"><textarea id="question-tab-intervalles-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="resolution-probleme-premier-degre-tab-probleme" data-onglet="tab-probleme" data-onglet-nom="Traduire un problème" hidden>
+    <h4>Questions de l'onglet « Traduire un problème »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Indiquer les étapes pour traduire un problème par une équation : choix de l'inconnue, mise en équation, résolution, réponse.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-probleme-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Écrire l'équation qui traduit le problème choisi dans l'onglet.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-probleme-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Résoudre cette équation et interpréter la solution dans le contexte de l'énoncé.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-probleme-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier que la solution convient à l'énoncé et rédiger la réponse avec l'unité.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-tab-probleme-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="tab-probleme"></p>
+        <div class="zone-eleve"><textarea id="question-tab-probleme-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="resolution-probleme-premier-degre-activites-puzzle" data-onglet="activites-puzzle" data-onglet-nom="Activités Puzzle" hidden>
+    <h4>Questions de l'onglet « Activités Puzzle »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Indiquer le sujet traité par votre groupe (A, B ou C) et nommer la propriété, la formule ou la méthode utilisée.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-1" rows="4" placeholder="Sujet traité, propriété, formule ou méthode..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Donner les résultats chiffrés obtenus pour votre sujet, avec les unités.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer la démarche suivie et justifier le choix de la méthode.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-3" rows="5" placeholder="Démarche et justification..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier la cohérence d'un résultat de votre sujet (unité, ordre de grandeur, second calcul).</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de votre sujet (rappelée ci-dessous) en vous appuyant sur vos résultats :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <div class="puzzle-rappel" id="puzzle-rappel" aria-live="polite"></div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+    <p class="info">Onglet « Activités Puzzle » : traiter un sujet (A, B ou C), puis rédiger ici vos réponses. La problématique rappelée en question 5 est celle du sujet actif ; elle dépend de la classe et de la filière choisies dans « Contexte professionnel ».</p>
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TD, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Identifier l'inconnue et traduire un énoncé par une équation ou une inéquation.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Résoudre algébriquement une équation ou une inéquation du premier degré.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA RAI">
+            <td>Analyser / Raisonner</td>
+            <td>ANA RAI</td>
+            <td>Choisir une méthode adaptée (algébrique ou graphique) et justifier le sens d'une inégalité.</td>
+            <td><input type="radio" name="ANA RAI" value="0"></td>
+            <td><input type="radio" name="ANA RAI" value="1"></td>
+            <td><input type="radio" name="ANA RAI" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier qu'une valeur est bien solution d'une équation ou d'une inéquation.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Exprimer un résultat sous forme d'intervalle et rédiger une réponse au problème posé.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions" style="margin-top:var(--gap-lg);">
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div id="radar-resultat" style="margin-top:var(--gap-md);"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TD, imprimer votre travail en PDF.
+      Envoyer à l'enseignant votre compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info" style="margin-top:var(--gap-md);">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les réponses aux questions ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-accueil>
+    🏠 Accueil
+  </button>
+
+  <button class="btn btn-primaire" data-aller-tp="td02-suites-numeriques">
+    TD02 →
+  </button>
+
+</div>
+
+</main>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

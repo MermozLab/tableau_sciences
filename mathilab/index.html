@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MathiLab</title>
+
+  <!-- CSS principal -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+  <!-- Bouton Dys : même forme que MLDS (classes partagées), seule la couleur change.
+       Supprimer ce bloc pour garder exactement la couleur du bouton MLDS. -->
+  <style>
+    .tp-card.mlds.dys:not(:hover):not(:focus-visible) { background: #1D6F7A; }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ================= CONTENU ================= -->
+  <div class="container">
+
+    <!-- ====== PAGE ACCUEIL ====== -->
+    <div id="tp-home" class="section active">
+
+      <!-- Logo d'accueil MathiLab -->
+      <header class="lab-welcome" aria-label="Bienvenue dans MathiLab">
+        <div class="lab-welcome__icone" aria-hidden="true">
+          <!-- Pictogramme : symbole somme Σ -->
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M18 4H6v2l6.5 6L6 18v2h12v-3h-7.5l5-5-5-5H18V4z"/>
+          </svg>
+        </div>
+        <p class="lab-welcome__texte">Bienvenue dans</p>
+        <p class="lab-welcome__logo">Mathi<span>Lab</span></p>
+      </header>
+
+      <h1 class="tp-title">Choisir un domaine</h1>
+
+      <div class="tp-grid">
+
+        <div class="tp-card statistiques" id="openStatistiques" data-domaine="statistiques">
+          <i class="fas fa-chart-column"></i>
+          <span>Statistique et probabilités</span>
+        </div>
+
+        <div class="tp-card algebre" id="openAlgebre" data-domaine="algebre">
+          <i class="fas fa-cogs"></i>
+          <span>Algèbre – Analyse</span>
+        </div>
+
+        <div class="tp-card geometrie" id="openGeometrie" data-domaine="geometrie">
+          <i class="fas fa-draw-polygon"></i>
+          <span>Géométrie</span>
+        </div>
+
+        <div class="tp-card algorithme" id="openAlgorithme" data-domaine="algorithme">
+          <i class="fas fa-code"></i>
+          <span>Algorithmique et programmation</span>
+        </div>
+
+      </div>
+
+      <h1 class="tp-title outils-title">Outils d'aide aux calculs</h1>
+
+      <div class="tp-grid tp-grid-outils">
+
+        <div class="tp-card tp-card-outil convertisseur" id="openConvertisseur" data-domaine="convertisseur">
+          <i class="fas fa-ruler-combined"></i>
+          <span>Convertisseur d'unités</span>
+        </div>
+
+        <!-- MLDS : même rangée et même taille que le convertisseur, forme décagone -->
+        <div class="tp-card-outil-wrap mlds-wrap">
+          <button type="button" id="openMLDS" class="tp-card tp-card-outil mlds" data-domaine="mlds"
+            aria-label="Ouvrir l'atelier MLDS Maths : coup de pouce cuisine pour la remobilisation">
+            <i class="fas fa-life-ring"></i>
+            <span>MLDS Maths</span>
+          </button>
+        </div>
+
+        <!-- DYS : même rangée, même taille et même forme décagone que MLDS
+             (ouverture gérée par js/app.js, id="openDys") -->
+        <div class="tp-card-outil-wrap mlds-wrap dys-wrap">
+          <button type="button" id="openDys" class="tp-card tp-card-outil mlds dys" data-domaine="dys"
+            aria-label="Ouvrir le parcours Dys Maths : outils et activités pour les élèves dyscalculiques">
+            <i class="fas fa-shapes"></i>
+            <span>Dys Maths</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    
+    <!-- ====== EXTERNE ====== -->
+    <div id="external-content" class="section">
+      <iframe id="external-frame" title="Contenu externe"></iframe>
+    </div>
+
+  </div>
+
+
+  <!-- ================= NAVIGATION JS ================= -->
+  <script>
+    function setActive(element) {
+      document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
+      if (element) element.classList.add("active");
+    }
+
+    function showSection(sectionId, element = null) {
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      document.getElementById(sectionId)?.classList.add("active");
+      setActive(element);
+    }
+
+    function loadInFrame(url, element = null) {
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      const frameSection = document.getElementById("external-content");
+      const iframe = document.getElementById("external-frame");
+
+      iframe.src = url;
+      frameSection.classList.add("active");
+
+      setActive(element);
+    }
+
+    window.setActive = setActive;
+    window.showSection = showSection;
+    window.loadInFrame = loadInFrame;
+  </script>
+
+  <!-- ================= IMPORTANT : MODULE UNIQUEMENT ================= -->
+  <script type="module" src="js/app.js"></script>
+
+  <!-- ====== VIEWER TP ====== -->
+  <div id="tpViewer" class="tp-viewer hidden">
+    <div class="viewer-topbar">
+      <h2>Travaux Dirigés</h2>
+      <button id="closeViewer">✖ Fermer</button>
+    </div>
+    <iframe id="tpFrame" title="Travaux dirigés"></iframe>
+  </div>
+
+  <!-- ====== VISIONNEUSE D'OUTIL (GéoGébra, calculatrice NumWorks…) ======
+       Ouverte par les TD affichés dans #tpViewer (message « mathilab:ouvrir-outil »).
+       Placée après #tpViewer pour s'afficher au-dessus du TD. -->
+  <div id="outilViewer" class="tp-viewer hidden" role="dialog" aria-modal="true" aria-labelledby="outilTitre">
+    <div class="viewer-topbar">
+      <h2 id="outilTitre">Outil</h2>
+      <button id="closeOutil" type="button">✖ Fermer l'outil</button>
+    </div>
+    <iframe id="outilFrame" title="Outil" allow="fullscreen"></iframe>
+  </div>
+
+  <script>
+    (function () {
+      const viewer = document.getElementById("outilViewer");
+      const frame = document.getElementById("outilFrame");
+      const titre = document.getElementById("outilTitre");
+      const fermer = document.getElementById("closeOutil");
+      if (!viewer || !frame) return;
+
+      // Sources autorisées : ce site et GéoGébra.
+      const AUTORISES = [window.location.origin, "https://www.geogebra.org"];
+
+      function ouvrirOutil(url, nom) {
+        titre.textContent = nom || "Outil";
+        frame.title = nom || "Outil";
+        frame.src = url;
+        viewer.classList.remove("hidden");
+        fermer.focus();
+      }
+
+      function fermerOutil() {
+        viewer.classList.add("hidden");
+        frame.src = "about:blank";
+      }
+
+      window.addEventListener("message", (e) => {
+        if (e.origin !== window.location.origin) return;
+        const d = e.data;
+        if (!d || d.type !== "mathilab:ouvrir-outil" || typeof d.url !== "string") return;
+        let cible;
+        try { cible = new URL(d.url, window.location.href); } catch { return; }
+        if (!AUTORISES.includes(cible.origin)) return;
+        ouvrirOutil(cible.href, typeof d.titre === "string" ? d.titre : "");
+      });
+
+      fermer.addEventListener("click", fermerOutil);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !viewer.classList.contains("hidden")) fermerOutil();
+      });
+    })();
+  </script>
+
+
+</body>
+</html>

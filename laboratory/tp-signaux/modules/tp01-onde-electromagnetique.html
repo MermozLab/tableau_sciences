@@ -1,0 +1,781 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du domaine (tp-signaux).
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Caractériser une onde électromagnétique</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">1ère</span>
+        <span class="tag">Signaux</span>
+        <span class="tag">Spectre électromagnétique</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP S01</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <ul>
+      <li><strong>1ère</strong> — Identifier le domaine spectral d'un rayonnement électromagnétique à partir de sa longueur d'onde dans le vide.</li>
+      <li><strong>1ère</strong> — Identifier des sources et détecteurs d'ondes électromagnétiques dans les objets de la vie courante.</li>
+      <li><strong>1ère</strong> — Connaître la relation entre longueur d'onde dans le vide, vitesse de la lumière dans le vide et fréquence (λ = c/f).</li>
+      <li><strong>1ère</strong> — Connaître les différents domaines du spectre électromagnétique : rayonnements gamma, X, UV, visible, IR, micro-ondes, ondes hertziennes.</li>
+      <li><strong>1ère</strong> — Connaître les domaines de longueur d'onde des ondes électromagnétiques utilisées dans la vie courante (réseau wifi, réseau de téléphone cellulaire, RFID...).</li>
+      <li><strong>1ère</strong> — Connaître le domaine de longueurs d'onde perceptibles par l'œil humain.</li>
+      <li><strong>1ère</strong> — Savoir qu'une onde électromagnétique permet de transmettre des informations.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="securite">
+
+  <div class="section-titre">
+    <div class="picto-section">⚠️</div>
+    <h2>Sécurité</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Ce TP ne met pas en œuvre de produit chimique ni de source dangereuse : il repose sur des données de spectre fournies et des appareils du quotidien (routeur wifi, téléphone).
+    </div>
+
+    <ul class="liste-aeree">
+      <li><strong>Rayonnements non visibles :</strong> ne jamais regarder directement une diode émettrice infrarouge ou ultraviolette de puissance, même si aucune lumière n'est perçue.</li>
+      <li><strong>Téléphonie et wifi :</strong> ne pas approcher une antenne d'émission de la tête ou des yeux lors d'un test en fonctionnement.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+    <div class="picto-section">🧪</div>
+    <h2>Matériel nécessaire</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">⚗️</div>
+    <h2>Manipulations</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="tp01-message-filiere" class="info" hidden></div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="relation-lambda-c-f">Relation λ = c/f</button>
+        <button class="tab-btn" data-tab="domaine-spectral">Domaine spectral</button>
+        <button class="tab-btn" data-tab="sources-vie-courante">Sources de la vie courante</button>
+      </div>
+
+      <div class="tab-panel actif" id="relation-lambda-c-f">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="relation-lambda-c-f"></p>
+        </div>
+
+        <h3>Longueur d'onde, célérité et fréquence</h3>
+
+        <div class="info">
+          Dans le vide, la longueur d'onde λ, la vitesse de la lumière
+          c = 3,00×10⁸ m/s et la fréquence f d'une onde électromagnétique
+          sont liées par la relation λ = c / f.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Relever la fréquence de fonctionnement d'un routeur wifi (2,4 GHz ou 5 GHz) et calculer la longueur d'onde associée.</li>
+          <li>Relever la fréquence d'une bande de téléphonie mobile utilisée localement et calculer sa longueur d'onde.</li>
+          <li>Comparer les deux longueurs d'onde obtenues et leur ordre de grandeur.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp01-relation-lambda-c-f.svg" alt="Schéma : une source de fréquence f émet une onde qui se propage dans le vide à la vitesse c = 3,00×10⁸ m/s ; la longueur d&#x27;onde λ est la distance entre deux crêtes successives ; relations λ = c/f et f = c/λ" width="640" height="240" loading="lazy">
+        </div>
+
+        <div class="formule">
+          λ = c / f, avec c = 3,00 × 10⁸ m/s
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="onde-frequence-em">Fréquence (Hz)</label>
+            <input id="onde-frequence-em" type="number" step="any" placeholder="Ex : 2.4e9">
+          </div>
+
+          <div class="form-group">
+            <label for="onde-longueur-em">Longueur d'onde (m)</label>
+            <input id="onde-longueur-em" type="number" step="any" placeholder="Ex : 0.125">
+          </div>
+
+        </div>
+
+        <p class="info">
+          Saisir une valeur dans l'un ou l'autre champ : le calcul se
+          fait automatiquement dans les deux sens (fréquences et
+          longueurs d'onde en écriture scientifique acceptées, ex :
+          2.4e9).
+        </p>
+
+        <div id="onde-resultat" class="resultat-calcul">Saisir une fréquence ou une longueur d'onde pour calculer l'autre grandeur.</div>
+
+      </div>
+
+      <div class="tab-panel" id="domaine-spectral">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="domaine-spectral"></p>
+        </div>
+
+        <h3>Identifier le domaine spectral</h3>
+
+        <div class="info">
+          À partir de sa longueur d'onde dans le vide, un rayonnement
+          électromagnétique appartient à l'un des domaines du spectre :
+          gamma, X, UV, visible, infrarouge (IR), micro-ondes ou ondes
+          hertziennes. Les ondes hertziennes désignent l'ensemble des ondes
+          radioélectriques ; les micro-ondes (de 1 mm à 1 m, soit de 300 MHz
+          à 300 GHz) en sont une sous-catégorie, comme le wifi ou le four à
+          micro-ondes.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Reprendre les longueurs d'onde calculées dans l'onglet précédent (wifi, téléphonie) et identifier leur domaine spectral.</li>
+          <li>Tester d'autres longueurs d'onde fournies (rayons X médicaux, UV d'une lampe de bronzage, IR d'une télécommande...) et vérifier leur position sur la frise.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp01-spectre-electromagnetique.svg" alt="Frise du spectre électromagnétique selon la longueur d&#x27;onde dans le vide, en échelle logarithmique : gamma, X, UV, visible (400 à 700 nm), infrarouge, micro-ondes (1 mm à 1 m) et ondes hertziennes ; les micro-ondes sont une sous-catégorie des ondes hertziennes, qui désignent l&#x27;ensemble des ondes radio" width="720" height="250" loading="lazy">
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="spectre-longueur-onde">Longueur d'onde dans le vide (m)</label>
+            <input id="spectre-longueur-onde" type="number" step="any" placeholder="Ex : 5e-7">
+          </div>
+
+          <div class="form-group">
+            <label for="spectre-domaine-out">Domaine identifié</label>
+            <div class="input-unite">
+              <output id="spectre-domaine-out">—</output>
+            </div>
+          </div>
+
+        </div>
+
+        <div id="spectre-em" class="spectre-em-conteneur">
+        </div>
+
+      </div>
+
+      <div class="tab-panel" id="sources-vie-courante">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="sources-vie-courante"></p>
+        </div>
+
+        <h3>Sources et détecteurs de la vie courante</h3>
+
+        <div class="info">
+          De nombreux objets du quotidien émettent ou détectent des
+          ondes électromagnétiques dans des domaines spécifiques : wifi
+          et téléphonie (micro-ondes, donc ondes hertziennes), télécommande (IR), badge
+          RFID, four à micro-ondes, radiographie médicale (X)...
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Recenser au moins cinq objets ou dispositifs de la vie courante utilisant des ondes électromagnétiques.</li>
+          <li>Pour chacun, identifier le domaine spectral utilisé et le rôle (émission, détection ou les deux).</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp01-sources-detecteurs.svg" alt="Schéma : des sources (routeur wifi, télécommande IR, antenne relais, lampe) émettent une onde électromagnétique dans un domaine du spectre, captée par des détecteurs (smartphone, œil ou caméra, récepteur IR du téléviseur, lecteur RFID) ; certains objets sont à la fois émetteurs et détecteurs" width="680" height="250" loading="lazy">
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>Objet ou dispositif</th>
+                <th>Domaine spectral utilisé</th>
+                <th>Rôle (émetteur / détecteur)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-sources-vie-courante">
+            </tbody>
+          </table>
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="source-objet">Objet ou dispositif</label>
+            <input id="source-objet" type="text" placeholder="Ex : badge RFID">
+          </div>
+
+          <div class="form-group">
+            <label for="source-domaine">Domaine spectral utilisé</label>
+            <select id="source-domaine">
+              <option value="">-- Choisir --</option>
+              <option value="gamma">Gamma</option>
+              <option value="x">X</option>
+              <option value="uv">UV</option>
+              <option value="visible">Visible</option>
+              <option value="ir">Infrarouge (IR)</option>
+              <option value="micro-ondes">Micro-ondes (1 mm à 1 m)</option>
+              <option value="hertziennes">Ondes hertziennes (radio, λ supérieure à 1 m)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="source-role">Rôle</label>
+            <select id="source-role">
+              <option value="">-- Choisir --</option>
+              <option value="emetteur">Émetteur</option>
+              <option value="detecteur">Détecteur</option>
+              <option value="les-deux">Émetteur et détecteur</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="source-ajouter" type="button" class="btn btn-primaire">
+              + Ajouter
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Signaux et environnement</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Éteindre les appareils de test (routeur, émetteur IR) en dehors des phases de mesure.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">Ondes électromagnétiques et efficacité énergétique</h3>
+
+    <p>
+      Le choix d'un domaine spectral adapté (par exemple des LED plutôt que des lampes à incandescence pour l'éclairage visible) permet de réduire la consommation énergétique des dispositifs d'émission et de détection utilisés en milieu professionnel.
+    </p>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation
+      sélectionné. Répondre aux questions de l'onglet que vous avez réalisé :
+      les quatre premières portent sur l'objet du TP de l'onglet, la cinquième
+      répond à sa problématique.
+    </p>
+
+    <div class="questions-bloc" data-tp="onde-electromagnetique" data-onglet="relation-lambda-c-f" data-onglet-nom="Relation λ = c/f">
+
+    <h4>Questions de l'onglet « Relation λ = c/f »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire la relation entre longueur d'onde dans le vide, célérité et fréquence d'une onde électromagnétique, puis préciser la valeur de c et l'unité de chaque grandeur.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-relation-lambda-c-f-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Calculer la longueur d'onde d'un routeur wifi fonctionnant à 2,4 GHz, en détaillant la conversion de la fréquence en hertz et le calcul, puis donner le résultat avec son unité.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-relation-lambda-c-f-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer les longueurs d'onde obtenues pour le wifi et pour la téléphonie mobile, puis indiquer comment varie la longueur d'onde lorsque la fréquence augmente.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-relation-lambda-c-f-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Un élève obtient λ = 125 m pour un routeur wifi à 2,4 GHz. Vérifier la cohérence de ce résultat par un ordre de grandeur, puis corriger l'erreur éventuelle.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-relation-lambda-c-f-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Relation λ = c/f » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="relation-lambda-c-f"></p>
+        <div class="zone-eleve">
+          <textarea id="question-relation-lambda-c-f-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="onde-electromagnetique" data-onglet="domaine-spectral" data-onglet-nom="Domaine spectral" hidden>
+
+    <h4>Questions de l'onglet « Domaine spectral »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Citer, par longueur d'onde croissante, les sept domaines du spectre électromagnétique et donner le domaine de longueurs d'onde perceptible par l'œil humain.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-domaine-spectral-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Décrire la méthode utilisée pour identifier le domaine spectral d'un rayonnement à partir de sa longueur d'onde, puis l'appliquer à λ = 5×10⁻⁷ m.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-domaine-spectral-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer les positions sur la frise des rayonnements testés (rayons X, UV, IR, wifi) et indiquer ce que leur classement par longueur d'onde dit de leurs fréquences.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-domaine-spectral-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Une télécommande émet à λ = 940 nm. Vérifier à l'aide de la frise que ce rayonnement est invisible pour l'œil humain, en justifiant par les bornes du visible.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-domaine-spectral-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Domaine spectral » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="domaine-spectral"></p>
+        <div class="zone-eleve">
+          <textarea id="question-domaine-spectral-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="onde-electromagnetique" data-onglet="sources-vie-courante" data-onglet-nom="Sources de la vie courante" hidden>
+
+    <h4>Questions de l'onglet « Sources de la vie courante »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Définir une source et un détecteur d'ondes électromagnétiques, avec un exemple de chaque.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-sources-vie-courante-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Pour l'un des objets recensés dans le tableau, déterminer la longueur d'onde utilisée à partir de sa fréquence (λ = c/f) et en déduire son domaine spectral.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-sources-vie-courante-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Analyser le tableau : indiquer quels domaines du spectre sont les plus utilisés dans la vie courante, lesquels le sont peu ou pas, et proposer une explication.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-sources-vie-courante-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Relire le tableau et vérifier que le domaine spectral indiqué est cohérent avec chaque objet (par exemple, une télécommande n'utilise pas de rayons X) ; corriger toute ligne erronée en justifiant.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-sources-vie-courante-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Sources de la vie courante » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="sources-vie-courante"></p>
+        <div class="zone-eleve">
+          <textarea id="question-sources-vie-courante-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Connaître la relation λ = c/f et les domaines du spectre.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Calculer une longueur d'onde et identifier un domaine spectral.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Comparer les longueurs d'onde de différents rayonnements.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier la cohérence des résultats obtenus.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Présenter les résultats avec un vocabulaire scientifique.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div class="espace-haut-md" id="radar-resultat"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, imprimer votre compte-rendu en PDF.
+      L'envoyer à l'enseignant en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les valeurs saisies et les résultats des manipulations ;</li>
+        <li>les réponses aux questions de l'onglet sélectionné ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-accueil>
+    🏠 Accueil
+  </button>
+
+  <button class="btn btn-primaire" data-aller-tp="tp02-transmettre-information">
+    TP S02 →
+  </button>
+
+</div>
+
+</main>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

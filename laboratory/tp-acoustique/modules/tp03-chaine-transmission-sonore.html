@@ -1,0 +1,876 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<!-- ====================================================== -->
+<!-- EN-TÊTE                                                 -->
+<!-- ====================================================== -->
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Chaîne de transmission sonore</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">2nde</span>
+        <span class="tag">Acoustique</span>
+        <span class="tag">Capteurs piézoélectriques</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP A03</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<!-- ====================================================== -->
+<!-- CAPACITES                                               -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <ul>
+
+      <li><strong>2nde</strong> — Identifier les éléments d'une chaîne de transmission d'information par un canal sonore (émetteur, milieu de propagation, récepteur).</li>
+
+      <li><strong>2nde</strong> — Savoir qu'un émetteur piézoélectrique convertit un signal électrique en onde sonore et qu'un récepteur piézoélectrique convertit une onde sonore en signal électrique.</li>
+
+      <li><strong>2nde</strong> — Mesurer la tension délivrée par un récepteur piézoélectrique et exploiter son évolution avec la distance.</li>
+
+      <li>
+        <em>Domaine transversal — Sécurité :</em>
+        utiliser les protections adaptées à l'environnement sonore de travail.
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- CONTEXTE PROFESSIONNEL                                  -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- SECURITE                                                -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="securite">
+
+  <div class="section-titre">
+    <div class="picto-section">⚠️</div>
+    <h2>Sécurité</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Ce TP ne met pas en œuvre de produit chimique. Le risque principal
+      reste le risque auditif lié au réglage du GBF relié à l'émetteur
+      piézoélectrique, et le risque de détérioration des capteurs en cas
+      de tension excessive.
+    </div>
+
+    <ul class="liste-aeree">
+      <li><strong>Réglage progressif :</strong> toujours démarrer le GBF à tension minimale puis augmenter progressivement jusqu'à la valeur nécessaire à la mesure.</li>
+      <li><strong>Capteurs piézoélectriques :</strong> composants fragiles ; ne pas les plier, ne pas dépasser la tension maximale indiquée et les manipuler par leur support.</li>
+      <li><strong>Câblage :</strong> couper le GBF avant de modifier le montage ; vérifier la borne COM du voltmètre avant de le brancher.</li>
+    </ul>
+
+    <div class="epi-bloc">
+      <p><strong>Équipements de protection recommandés :</strong> casque ou bouchons anti-bruit si l'émetteur est audible à forte tension.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- MATERIEL                                                -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+    <div class="picto-section">🧪</div>
+    <h2>Matériel nécessaire</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- MANIPULATIONS                                           -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">⚗️</div>
+    <h2>Manipulations</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="tp03-message-filiere" class="info" hidden></div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="emetteur-piezo">Émetteur piézoélectrique</button>
+        <button class="tab-btn" data-tab="recepteur-piezo">Récepteur piézoélectrique</button>
+        <button class="tab-btn" data-tab="schema-chaine">Schéma de la chaîne</button>
+      </div>
+
+      <!-- ============================ -->
+      <!-- EMETTEUR PIEZOELECTRIQUE     -->
+      <!-- ============================ -->
+
+      <div class="tab-panel actif" id="emetteur-piezo">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="emetteur-piezo"></p>
+        </div>
+
+        <h3>De la tension électrique à l'onde sonore</h3>
+
+        <div class="info">
+          Un émetteur piézoélectrique se déforme lorsqu'on lui applique
+          une tension variable : cette vibration mécanique produit une
+          onde sonore. Plus la tension appliquée est élevée, plus la
+          vibration (et donc le son émis) est intense.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Relier l'émetteur piézoélectrique au GBF, réglé à tension minimale (voir le schéma du montage).</li>
+          <li>Augmenter progressivement la tension appliquée et observer, à chaque palier, l'effet sur le son émis (écoute, vibration perçue au toucher).</li>
+          <li>Saisir pour chaque palier la tension appliquée et l'observation : le tableau se complète.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp03-emetteur-piezo.svg" alt="Mode opératoire — GBF relié à un émetteur piézoélectrique" width="600" height="270" loading="lazy" style="aspect-ratio: 600 / 270;" decoding="async">
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>Tension appliquée (V)</th>
+                <th>Observation</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-emetteur-piezo">
+            </tbody>
+          </table>
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="emetteur-tension">Tension appliquée (V)</label>
+            <input id="emetteur-tension" type="number" step="0.1" min="0">
+          </div>
+
+          <div class="form-group">
+            <label for="emetteur-observation">Observation</label>
+            <input id="emetteur-observation" type="text" placeholder="Ex : son faible, vibration légère">
+          </div>
+
+          <div class="form-group">
+            <label for="emetteur-ajouter">&nbsp;</label>
+            <button id="emetteur-ajouter" type="button" class="btn btn-primaire">
+              + Ajouter la mesure
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- RECEPTEUR PIEZOELECTRIQUE    -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="recepteur-piezo">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="recepteur-piezo"></p>
+        </div>
+
+        <h3>De l'onde sonore à la tension électrique</h3>
+
+        <div class="info">
+          Un récepteur piézoélectrique soumis à une onde sonore se
+          déforme et délivre une tension : c'est le principe inverse de
+          l'émetteur. L'onde s'atténuant en se propageant, la tension
+          reçue diminue lorsque la distance à l'émetteur augmente.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Placer le récepteur face à l'émetteur, alimenté à tension constante par le GBF.</li>
+          <li>Relier le récepteur à un voltmètre (borne COM côté récepteur) et mesurer la tension reçue pour une première distance.</li>
+          <li>Éloigner le récepteur de l'émetteur par pas réguliers et relever à chaque distance la tension reçue.</li>
+          <li>Saisir les couples (distance, tension) : le tableau se reclasse et le graphique se trace à partir de deux points.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp03-recepteur-piezo.svg" alt="Mode opératoire — récepteur piézoélectrique relié à un voltmètre" width="660" height="260" loading="lazy" style="aspect-ratio: 660 / 260;" decoding="async">
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>Distance (cm)</th>
+                <th>Tension reçue (mV)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-recepteur-piezo">
+            </tbody>
+          </table>
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="recepteur-distance">Distance émetteur–récepteur (cm)</label>
+            <input id="recepteur-distance" type="number" step="1" min="0">
+          </div>
+
+          <div class="form-group">
+            <label for="recepteur-tension">Tension reçue (mV)</label>
+            <input id="recepteur-tension" type="number" step="1" min="0">
+          </div>
+
+          <div class="form-group">
+            <label for="recepteur-ajouter">&nbsp;</label>
+            <button id="recepteur-ajouter" type="button" class="btn btn-primaire">
+              + Ajouter la mesure
+            </button>
+          </div>
+
+        </div>
+
+        <div id="graphique-recepteur-piezo" class="graphique-conteneur">
+          <p class="info">Ajouter au moins 2 points pour afficher le graphique.</p>
+        </div>
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- SCHEMA DE LA CHAINE          -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="schema-chaine">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="schema-chaine"></p>
+        </div>
+
+        <h3>Compléter le schéma d'une chaîne de transmission</h3>
+
+        <div class="info">
+          Une chaîne de transmission par canal sonore comporte un
+          élément qui produit le son, un milieu qui le transporte et un
+          élément qui le reçoit. Associer à chaque rôle l'élément
+          correspondant, sans utiliser deux fois le même.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Observer le schéma de la chaîne de transmission ci-dessous, puis relire les résultats des deux onglets précédents.</li>
+          <li>Choisir, pour chacun des trois rôles, l'élément qui convient.</li>
+          <li>Cliquer sur « Vérifier le schéma » et corriger au besoin.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp03-schema-chaine.svg" alt="Schéma de la chaîne de transmission sonore : émetteur piézoélectrique, milieu de propagation, récepteur piézoélectrique" width="640" height="250" loading="lazy" style="aspect-ratio: 640 / 250;" decoding="async">
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="chaine-emetteur">1. Élément qui produit le son</label>
+            <select id="chaine-emetteur">
+              <option value="">-- Choisir --</option>
+              <option value="emetteur">Émetteur piézoélectrique</option>
+              <option value="milieu">Milieu de propagation (air)</option>
+              <option value="recepteur">Récepteur piézoélectrique</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="chaine-milieu">2. Élément qui transporte le son</label>
+            <select id="chaine-milieu">
+              <option value="">-- Choisir --</option>
+              <option value="emetteur">Émetteur piézoélectrique</option>
+              <option value="milieu">Milieu de propagation (air)</option>
+              <option value="recepteur">Récepteur piézoélectrique</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="chaine-recepteur">3. Élément qui reçoit le son</label>
+            <select id="chaine-recepteur">
+              <option value="">-- Choisir --</option>
+              <option value="emetteur">Émetteur piézoélectrique</option>
+              <option value="milieu">Milieu de propagation (air)</option>
+              <option value="recepteur">Récepteur piézoélectrique</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="chaine-verifier">&nbsp;</label>
+            <button id="chaine-verifier" type="button" class="btn btn-primaire">
+              Vérifier le schéma
+            </button>
+          </div>
+
+        </div>
+
+        <div id="chaine-resultat" class="resultat-calcul" role="status"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- ACOUSTIQUE ET ENVIRONNEMENT                             -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Acoustique et environnement</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Ne pas laisser le GBF ou l'émetteur sous tension en dehors des phases de mesure.</li>
+      <li>Ranger les capteurs piézoélectriques dans leur boîte après usage pour éviter de les endommager.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">Les capteurs à ultrasons, un enjeu de sobriété et de sécurité</h3>
+
+    <p>
+      Les capteurs piézoélectriques équipent de nombreux appareils
+      (détecteurs de présence, mesure de distance, contrôle qualité) :
+      ils fonctionnent avec de faibles puissances électriques et
+      permettent d'automatiser des contrôles sans contact, ce qui limite
+      les gestes à risque pour les opérateurs.
+    </p>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- TRACE ECRITE - COMPTE RENDU                            -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation sélectionné. Répondre aux questions de l'onglet que vous avez réalisé : les quatre premières portent sur l'objet du TP de l'onglet, la cinquième répond à sa problématique.
+    </p>
+
+    <div class="questions-bloc" data-tp="chaine-transmission-sonore" data-onglet="emetteur-piezo" data-onglet-nom="Émetteur piézoélectrique">
+
+    <h4>Questions de l'onglet « Émetteur piézoélectrique »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Expliquer le rôle d'un émetteur piézoélectrique : quelle grandeur reçoit-il et quelle grandeur produit-il ?
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-emetteur-piezo-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Relever pour au moins trois valeurs de tension appliquée l'observation correspondante (son émis, vibration).
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-emetteur-piezo-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Analyser l'effet de l'augmentation de la tension appliquée sur le son émis et en déduire la conversion d'énergie réalisée par l'émetteur.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-emetteur-piezo-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Rédiger le protocole permettant de mettre en évidence le fonctionnement d'un émetteur piézoélectrique.
+          </strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-emetteur-piezo-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Émetteur piézoélectrique » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="emetteur-piezo"></p>
+        <div class="zone-eleve">
+          <textarea id="question-emetteur-piezo-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="chaine-transmission-sonore" data-onglet="recepteur-piezo" data-onglet-nom="Récepteur piézoélectrique" hidden>
+
+    <h4>Questions de l'onglet « Récepteur piézoélectrique »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Expliquer le rôle d'un récepteur piézoélectrique : quelle grandeur reçoit-il et quelle grandeur délivre-t-il ?
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-recepteur-piezo-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Relever la tension reçue pour au moins cinq distances émetteur–récepteur et compléter le tableau.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-recepteur-piezo-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            À partir du graphique, décrire l'évolution de la tension reçue avec la distance et justifier cette évolution par l'atténuation de l'onde sonore.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-recepteur-piezo-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Proposer une application d'un capteur à ultrasons en lien avec le contexte professionnel de votre filière.
+          </strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-recepteur-piezo-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Récepteur piézoélectrique » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="recepteur-piezo"></p>
+        <div class="zone-eleve">
+          <textarea id="question-recepteur-piezo-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="chaine-transmission-sonore" data-onglet="schema-chaine" data-onglet-nom="Schéma de la chaîne" hidden>
+
+    <h4>Questions de l'onglet « Schéma de la chaîne »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Citer les trois éléments d'une chaîne de transmission par canal sonore et indiquer le rôle de chacun.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-schema-chaine-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Compléter le schéma de la chaîne en associant à chaque rôle l'élément correspondant, puis le faire vérifier.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-schema-chaine-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Identifier, pour chaque élément de la chaîne, la nature du signal à son entrée et à sa sortie (électrique ou sonore).
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-schema-chaine-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Schématiser une chaîne de transmission de l'information adaptée à une situation de votre contexte professionnel.
+          </strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-schema-chaine-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Schéma de la chaîne » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="schema-chaine"></p>
+        <div class="zone-eleve">
+          <textarea id="question-schema-chaine-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- AUTO-ÉVALUATION                                         -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Identifier les éléments d'une chaîne de transmission sonore.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Relier la tension reçue à la distance par l'atténuation de l'onde.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Réaliser un montage émetteur–récepteur et relever des tensions.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier la cohérence des résultats obtenus.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Présenter les résultats avec un vocabulaire scientifique.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+
+      <div class="espace-haut-md" id="radar-resultat"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- IMPRESSION COMPTE RENDU                                 -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, imprimer votre compte-rendu en PDF.
+      L'envoyer à l'enseignant en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les tableaux de mesures (émetteur, récepteur), le graphique tension–distance et le schéma de la chaîne ;</li>
+        <li>les réponses aux questions ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- NAVIGATION                                              -->
+<!-- ====================================================== -->
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-tp="tp02-isolation-phonique">
+    ← TP02
+  </button>
+
+  <button class="btn btn-primaire" data-aller-tp="tp04-propagation-du-son">
+    TP04 →
+  </button>
+
+</div>
+
+</main>
+
+<!-- ====================================================== -->
+<!-- CONTENEUR IMPRESSION COMPTE RENDU                       -->
+<!-- ====================================================== -->
+
+<div id="cr-print-container" hidden></div>
+
+</section>

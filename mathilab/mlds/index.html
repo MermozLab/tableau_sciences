@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLDS Maths — Ateliers cuisine — MathiLab</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/historique.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+<body>
+
+<header class="entete-mlds">
+  <h1><i class="fa-solid fa-utensils"></i> MLDS Maths — Ateliers cuisine</h1>
+  <p>Des maths avec des recettes au micro-ondes. Pas de note : on essaie, on lit l'explication, on recommence.</p>
+  <a href="../index.html" class="lien-retour"><i class="fa-solid fa-arrow-left"></i> Retour à MathiLab</a>
+</header>
+
+<main id="content" class="contenu-mlds">
+
+  <div id="panneau-eleve"></div>
+
+  <section id="vue-liste">
+    <div id="ateliers-groupes"></div>
+
+    <h2 class="titre-section"><i class="fa-solid fa-compass"></i> Pour aller plus loin</h2>
+    <div class="liens-outils">
+      <a class="carte-lien" href="defi-collectif.html">
+        <i class="fa-solid fa-people-group"></i>
+        <span><strong>Le défi du plan de travail</strong><br>À faire en groupe, avec une grille à manipuler.</span>
+      </a>
+      <a class="carte-lien" href="fiche-outil.html" target="_blank" rel="noopener">
+        <i class="fa-solid fa-print"></i>
+        <span><strong>Fiche-outil à imprimer</strong><br>Les méthodes des 4 ateliers sur une page.</span>
+      </a>
+      <a class="carte-lien" href="fiche-defi.html" target="_blank" rel="noopener">
+        <i class="fa-solid fa-pencil"></i>
+        <span><strong>Fiche du défi à imprimer</strong><br>Grilles à dessiner, tableau des essais.</span>
+      </a>
+      <a class="carte-lien" href="parcours.html">
+        <i class="fa-solid fa-route"></i>
+        <span><strong>Mon parcours individuel</strong><br>Positionnement, plan de travail et suivi.</span>
+      </a>
+      <a class="carte-lien" href="sources.html">
+        <i class="fa-solid fa-book-open"></i>
+        <span><strong>Sources et références</strong><br>D'où viennent les exercices.</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="vue-historique" class="carte" hidden>
+    <button type="button" id="btn-retour-liste-histo" class="btn-simple"><i class="fa-solid fa-arrow-left"></i> Tous les ateliers</button>
+    <div id="historique-contenu" aria-live="polite"></div>
+  </section>
+
+  <section id="vue-atelier" class="carte" hidden>
+    <button type="button" id="btn-retour-liste" class="btn-simple"><i class="fa-solid fa-arrow-left"></i> Tous les ateliers</button>
+    <div id="atelier-contenu" aria-live="polite"></div>
+  </section>
+
+</main>
+
+<footer class="pied-mlds">
+  <p>Ateliers inspirés des fiches Eduscol « Accompagnement renforcé » (2de pro, déc. 2022) et des guides « La résolution de problèmes mathématiques ». <a href="sources.html">Voir toutes les sources</a>.</p>
+</footer>
+
+<script src="js/supabase-config.js"></script>
+<script src="js/historique.js"></script>
+<script src="js/sources.js"></script>
+<script src="js/ateliers.js"></script>
+<script src="js/ateliers-fiches.js"></script>
+<script src="js/ateliers-app.js"></script>
+</body>
+</html>

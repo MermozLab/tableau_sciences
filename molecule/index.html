@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Molécules 3D</title>
+  <link rel="stylesheet" href="style.css?v=3">
+  <!-- 3Dmol.js est chargé par script.js : copie locale (lib/) d'abord, puis CDN en secours. -->
+</head>
+<body>
+
+<h1>Molécule 3D</h1>
+
+<div class="search-box">
+  <input type="text" id="search" placeholder="Ex : glucose, ethanol, caffeine">
+  <button onclick="searchMolecule()">Rechercher</button>
+</div>
+
+<div id="info">
+  <p><strong>Molécule :</strong> <span id="nom">-</span></p>
+  <p><strong>Formule :</strong> <span id="formule">-</span></p>
+  <p><strong>Masse :</strong> <span id="masse">-</span> g/mol</p>
+</div>
+
+<p id="message" role="status" hidden></p>
+
+<div id="viewer-container">
+  <div id="viewer"></div>
+</div>
+
+<script src="script.js?v=3"></script>
+
+</body>
+</html>

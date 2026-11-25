@@ -1,0 +1,1339 @@
+/* =========================================================
+   PYLAB
+   INTERFACE UTILISATEUR + MOTEUR PYTHON (PYODIDE)
+   PYODIDE FULL (via CDN jsDelivr) + NUMPY + MATPLOTLIB
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* =================================================
+       ÉLÉMENTS HTML
+    ================================================= */
+
+    const homeButton = document.getElementById("homeButton");
+    const pythonButton = document.getElementById("pythonButton");
+    const startButton = document.getElementById("startButton");
+    const homePage = document.getElementById("home-message");
+    const pythonPage = document.getElementById("python-page");
+    const clearButton = document.getElementById("clear");
+    const menuClear = document.getElementById("menuClear");
+    const editor = document.getElementById("code");
+    const output = document.getElementById("output");
+    const examplesButton = document.getElementById("examplesButton");
+    const examplesMenu = document.getElementById("examplesMenu");
+    const runButton = document.getElementById("run");
+    const exportButton = document.getElementById("export");
+    const importButton = document.getElementById("import");
+    const importFile = document.getElementById("importFile");
+    const printPdfButton = document.getElementById("printPdf");
+    const status = document.getElementById("status");
+    const zoomOpenButton = document.getElementById("zoomOpen");
+    const zoomCloseButton = document.getElementById("zoomClose");
+    const zoomModalClose = document.getElementById("zoomModalClose");
+    const zoomModal = document.getElementById("zoomModal");
+    const zoomContent = document.getElementById("zoomContent");
+    const consoleZoomOpenButton = document.getElementById("consoleZoomOpen");
+    const consoleZoomCloseButton = document.getElementById("consoleZoomClose");
+    const consoleZoomModalClose = document.getElementById("consoleZoomModalClose");
+    const consoleZoomModal = document.getElementById("consoleZoomModal");
+    const consoleZoomContent = document.getElementById("consoleZoomContent");
+
+    /* =================================================
+       VARIABLES PYODIDE
+    ================================================= */
+
+    let pyodideReady = null;
+    let pyodidePromise = null;
+
+    /* =================================================
+       AFFICHER PYLAB
+    ================================================= */
+
+    function showPython() {
+        if (homePage) homePage.classList.remove("active-page");
+        if (pythonPage) pythonPage.classList.add("active-page");
+        if (homeButton) homeButton.classList.remove("active");
+        if (pythonButton) pythonButton.classList.add("active");
+    }
+
+    /* =================================================
+       AFFICHER ACCUEIL
+    ================================================= */
+
+    function showHome() {
+        if (pythonPage) pythonPage.classList.remove("active-page");
+        if (homePage) homePage.classList.add("active-page");
+        if (pythonButton) pythonButton.classList.remove("active");
+        if (homeButton) homeButton.classList.add("active");
+    }
+
+    /* =================================================
+       BOUTONS DE NAVIGATION
+    ================================================= */
+
+    if (homeButton) homeButton.addEventListener("click", showHome);
+    if (pythonButton) pythonButton.addEventListener("click", showPython);
+    if (startButton) startButton.addEventListener("click", showPython);
+
+    /* =================================================
+       CODE PRÉ-REMPLI DEPUIS UNE AUTRE PAGE
+       ?code=<base64 de l'UTF-8>
+    ================================================= */
+
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const codeParam = params.get("code");
+
+        if (codeParam && editor) {
+            const decode = s => {
+                s = s.replace(/ /g, "+").replace(/-/g, "+").replace(/_/g, "/");
+                while (s.length % 4) s += "=";
+                return decodeURIComponent(escape(atob(s)));
+            };
+            editor.value = decode(codeParam);
+            showPython();
+        }
+    } catch (e) {
+        console.warn("Paramètre ?code= illisible :", e);
+    }
+
+    /* =================================================
+       STATUT DE CHARGEMENT
+    ================================================= */
+
+    function setStatus(text, state) {
+        if (!status) return;
+        status.textContent = text;
+        status.className = state;
+    }
+
+    /* =================================================
+       EFFACER
+    ================================================= */
+
+    function clearProgram() {
+        if (editor) {
+            editor.value = "";
+            editor.focus();
+        }
+        if (output) {
+            output.textContent = "Console effacée.";
+        }
+    }
+
+    if (clearButton) {
+        clearButton.addEventListener("click", clearProgram);
+    }
+
+    if (menuClear) {
+        menuClear.addEventListener("click", () => {
+            showPython();
+            clearProgram();
+        });
+    }
+
+    /* =================================================
+       SOUS-MENU EXEMPLES
+    ================================================= */
+
+    if (examplesButton && examplesMenu) {
+        examplesButton.addEventListener("click", event => {
+            event.stopPropagation();
+            examplesMenu.classList.toggle("show");
+
+            // La liste est relue à chaque ouverture : les .py ajoutés
+            // dans le dossier apparaissent sans recharger la page.
+            if (examplesMenu.classList.contains("show")) {
+                refreshLibrary();
+            }
+        });
+
+        document.addEventListener("click", () => {
+            examplesMenu.classList.remove("show");
+        });
+
+        examplesMenu.addEventListener("click", event => {
+            event.stopPropagation();
+        });
+    }
+
+    /* =================================================
+       RACCOURCI : CTRL + ENTRÉE
+    ================================================= */
+
+    if (editor) {
+        editor.addEventListener("keydown", event => {
+            if (event.ctrlKey && event.key === "Enter") {
+                event.preventDefault();
+                if (runButton && !runButton.disabled) {
+                    runButton.click();
+                }
+            }
+        });
+    }
+
+    /* =================================================
+       INITIALISATION DE PYODIDE
+    ================================================= */
+
+    async function initPyodide() {
+        if (pyodidePromise) return pyodidePromise;
+
+        pyodidePromise = (async () => {
+            try {
+                setStatus("Chargement de Python...", "status-loading");
+
+                if (output) {
+                    output.textContent = "Chargement de Pyodide...";
+                }
+
+                console.log("PyLab : chargement de Pyodide...");
+
+                const instance = await loadPyodide({
+                    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/"
+                });
+
+                console.log("PyLab : Pyodide chargé.");
+
+                setStatus("Chargement de NumPy et Matplotlib...", "status-loading");
+
+                if (output) {
+                    output.textContent =
+                        "Python est chargé.\n\nChargement de NumPy et Matplotlib...";
+                }
+
+                console.log("PyLab : chargement de NumPy et Matplotlib...");
+
+                await instance.loadPackage(["numpy", "matplotlib"]);
+
+                console.log("PyLab : NumPy et Matplotlib chargés.");
+
+                await instance.runPythonAsync(`
+import sys
+import numpy
+import numpy as np
+import matplotlib
+import math
+from math import log10
+import random
+import warnings
+
+warnings.filterwarnings("ignore", message=".*non-interactive.*")
+warnings.filterwarnings("ignore", message=".*non-GUI backend.*")
+warnings.filterwarnings("ignore", message=".*cannot show the figure.*")
+
+matplotlib.use("Agg")
+
+import matplotlib.pyplot as plt
+
+# Les figures sont récupérées et affichées par PyLab.
+plt.show = lambda *args, **kwargs: None
+
+
+# ========================================================
+# BOÎTE À MOUSTACHES (programme de BAC Pro)
+# Fonction disponible directement pour les élèves.
+# Utilisation : boite_moustaches([12, 15, 18, 20, 25])
+#
+# Définitions utilisées :
+#   - Min et Max : plus petite et plus grande valeur
+#   - Médiane : valeur centrale (moyenne des deux valeurs
+#     centrales si l'effectif est pair)
+#   - Q1 : plus petite valeur de la série telle qu'au moins
+#     25 % des valeurs lui soient inférieures ou égales
+#     (rang = n/4 arrondi à l'entier supérieur)
+#   - Q3 : plus petite valeur de la série telle qu'au moins
+#     75 % des valeurs lui soient inférieures ou égales
+#     (rang = 3n/4 arrondi à l'entier supérieur)
+#   - Les moustaches vont du minimum au maximum.
+# ========================================================
+
+def boite_moustaches(data):
+    """Trace une boîte à moustaches horizontale (Min, Q1, Médiane, Q3, Max)."""
+
+    valeurs = numpy.asarray(data, dtype=float).ravel()
+    valeurs = valeurs[numpy.isfinite(valeurs)]
+
+    if valeurs.size == 0:
+        raise ValueError(
+            "La liste doit contenir au moins une valeur numérique."
+        )
+
+    tri = numpy.sort(valeurs)
+    n = len(tri)
+
+    minimum = float(tri[0])
+    q1 = float(tri[int(math.ceil(n / 4)) - 1])
+    mediane = float(numpy.median(tri))
+    q3 = float(tri[int(math.ceil(3 * n / 4)) - 1])
+    maximum = float(tri[-1])
+
+    fig, ax = plt.subplots(figsize=(8, 3))
+
+    stats = [{
+        "whislo": minimum,
+        "q1": q1,
+        "med": mediane,
+        "q3": q3,
+        "whishi": maximum,
+        "fliers": []
+    }]
+
+    ax.bxp(
+        stats,
+        vert=False,
+        patch_artist=True,
+        boxprops={
+            "facecolor": "lightblue",
+            "edgecolor": "#1f3c63"
+        },
+        medianprops={
+            "color": "#d9480f",
+            "linewidth": 2
+        },
+        whiskerprops={"color": "#1f3c63"},
+        capprops={"color": "#1f3c63"}
+    )
+
+    ax.set_title("Boîte à moustaches")
+    ax.set_xlabel("Valeurs")
+    ax.set_yticks([])
+    ax.set_ylim(0.4, 1.6)
+    ax.grid(axis="x", alpha=0.3)
+
+    # Étiquettes au-dessus : Min, Médiane, Max
+    for valeur, nom in [(minimum, "Min"), (mediane, "Médiane"), (maximum, "Max")]:
+        ax.annotate(
+            f"{nom}={valeur:g}",
+            (valeur, 1.25),
+            xytext=(0, 6),
+            textcoords="offset points",
+            ha="center",
+            va="bottom",
+            fontsize=8
+        )
+
+    # Étiquettes en dessous : Q1 et Q3
+    for valeur, nom in [(q1, "Q1"), (q3, "Q3")]:
+        ax.annotate(
+            f"{nom}={valeur:g}",
+            (valeur, 0.75),
+            xytext=(0, -6),
+            textcoords="offset points",
+            ha="center",
+            va="top",
+            fontsize=8
+        )
+
+    fig.tight_layout()
+    return fig
+
+
+# ========================================================
+# ARBRE PONDÉRÉ (probabilités conditionnelles)
+# Fonction disponible directement pour les élèves.
+# Utilisation : arbre(0.4, 0.9, 0.5)
+#   - 1er nombre : P(A)
+#   - 2e nombre  : P(B sachant A)
+#   - 3e nombre  : P(B sachant non A)   (facultatif)
+# Les branches complémentaires sont calculées automatiquement.
+# Si le 3e nombre est omis, les branches correspondantes
+# affichent « … » (comme sur l'énoncé).
+# ========================================================
+
+def arbre(pA, pB_A, pB_nA=None):
+    """Trace l'arbre pondéré : Ω -> A / non A -> B / non B."""
+
+    for p in (pA, pB_A, pB_nA):
+        if p is not None and not (0 <= p <= 1):
+            raise ValueError(
+                "Les probabilités doivent être comprises entre 0 et 1."
+            )
+
+    def f(x):
+        return "…" if x is None else f"{round(x, 6):g}"
+
+    def comp(x):
+        return None if x is None else 1 - x
+
+    nA = r"$\\overline{A}$"
+    nB = r"$\\overline{B}$"
+
+    pos = {
+        "O": (0.1, 0.5),
+        "A": (1.2, 0.75), "nA": (1.2, 0.25),
+        "AB": (2.3, 0.88), "AnB": (2.3, 0.62),
+        "nAB": (2.3, 0.38), "nAnB": (2.3, 0.12)
+    }
+    noms = {
+        "O": "Ω", "A": "A", "nA": nA,
+        "AB": "B", "AnB": nB, "nAB": "B", "nAnB": nB
+    }
+    branches = [
+        ("O", "A", pA), ("O", "nA", comp(pA)),
+        ("A", "AB", pB_A), ("A", "AnB", comp(pB_A)),
+        ("nA", "nAB", pB_nA), ("nA", "nAnB", comp(pB_nA))
+    ]
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    for debut, fin, p in branches:
+        (x1, y1), (x2, y2) = pos[debut], pos[fin]
+        ax.plot([x1, x2], [y1, y2], color="#1f3c63", linewidth=1.5, zorder=1)
+        ax.text(
+            (x1 + x2) / 2, (y1 + y2) / 2, f(p),
+            ha="center", va="center", fontsize=11, zorder=2,
+            bbox=dict(fc="white", ec="none", pad=1.5)
+        )
+
+    for cle, (x, y) in pos.items():
+        ax.text(
+            x, y, noms[cle],
+            ha="center", va="center", fontsize=14, zorder=3,
+            bbox=dict(boxstyle="round,pad=0.3", fc="lightblue", ec="#1f3c63")
+        )
+
+    ax.set_xlim(-0.1, 2.6)
+    ax.set_ylim(0, 1)
+    ax.axis("off")
+    ax.set_title("Arbre pondéré")
+    fig.tight_layout()
+    return fig
+
+
+print("Python", sys.version.split()[0])
+print("numPy", numpy.__version__)
+print("matplotlib", matplotlib.__version__)
+print("math")
+print("random")
+`);
+
+                pyodideReady = instance;
+
+                setStatus("Python et Imports prêts", "status-ready");
+
+                if (output) {
+                    output.textContent =
+                        "PyLab est prêt.\n\n" +
+                        "✓ Python chargé\n" +
+                        "✓ NumPy chargé\n" +
+                        "✓ Matplotlib chargé\n" +
+                        "✓ random chargé\n" +
+                        "✓ math chargé\n\n" +
+                        "Écris ton programme puis clique sur Exécuter.";
+                }
+
+                if (runButton) {
+                    runButton.disabled = false;
+                }
+
+                console.log("PyLab : Python, NumPy, Matplotlib et Math sont prêts.");
+
+                return instance;
+
+            } catch (error) {
+                console.error("Erreur de chargement PyLab :", error);
+
+                pyodidePromise = null;
+
+                setStatus("Erreur de chargement", "status-error");
+
+                if (output) {
+                    output.textContent =
+                        "Impossible de démarrer PyLab.\n\n" +
+                        "Détail :\n" +
+                        error;
+                }
+
+                if (runButton) {
+                    runButton.disabled = true;
+                }
+
+                throw error;
+            }
+        })();
+
+        return pyodidePromise;
+    }
+
+    /* =================================================
+       ZOOM DE L'ÉDITEUR
+    ================================================= */
+
+    function openZoom() {
+        if (!zoomModal || !zoomContent || !editor) return;
+
+        zoomContent.value = editor.value;
+        zoomModal.classList.add("show");
+        zoomModal.setAttribute("aria-hidden", "false");
+        zoomContent.scrollTop = 0;
+        zoomContent.focus();
+        zoomContent.setSelectionRange(
+            zoomContent.value.length,
+            zoomContent.value.length
+        );
+    }
+
+    function closeZoom() {
+        if (!zoomModal || !zoomModal.classList.contains("show")) return;
+
+        if (editor && zoomContent) editor.value = zoomContent.value;
+
+        zoomModal.classList.remove("show");
+        zoomModal.setAttribute("aria-hidden", "true");
+
+        if (zoomOpenButton) zoomOpenButton.focus();
+    }
+
+    if (zoomContent && editor) {
+        zoomContent.addEventListener("input", () => {
+            editor.value = zoomContent.value;
+        });
+    }
+
+    if (zoomOpenButton) zoomOpenButton.addEventListener("click", openZoom);
+    if (zoomCloseButton) zoomCloseButton.addEventListener("click", closeZoom);
+    if (zoomModalClose) zoomModalClose.addEventListener("click", closeZoom);
+
+    if (zoomModal) {
+        zoomModal.addEventListener("click", event => {
+            if (event.target === zoomModal) closeZoom();
+        });
+    }
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") closeZoom();
+    });
+
+    /* =================================================
+       ZOOM DE LA CONSOLE
+    ================================================= */
+
+    function openConsoleZoom() {
+        if (!consoleZoomModal || !consoleZoomContent || !output) return;
+
+        consoleZoomContent.replaceChildren(
+            ...Array.from(output.childNodes).map(node => node.cloneNode(true))
+        );
+
+        consoleZoomModal.classList.add("show");
+        consoleZoomModal.setAttribute("aria-hidden", "false");
+        consoleZoomContent.scrollTop = 0;
+        consoleZoomContent.focus();
+    }
+
+    function closeConsoleZoom() {
+        if (!consoleZoomModal || !consoleZoomModal.classList.contains("show")) return;
+
+        consoleZoomModal.classList.remove("show");
+        consoleZoomModal.setAttribute("aria-hidden", "true");
+
+        if (consoleZoomOpenButton) consoleZoomOpenButton.focus();
+    }
+
+    if (consoleZoomOpenButton) {
+        consoleZoomOpenButton.addEventListener("click", openConsoleZoom);
+    }
+
+    if (consoleZoomCloseButton) {
+        consoleZoomCloseButton.addEventListener("click", closeConsoleZoom);
+    }
+
+    if (consoleZoomModalClose) {
+        consoleZoomModalClose.addEventListener("click", closeConsoleZoom);
+    }
+
+    if (consoleZoomModal) {
+        consoleZoomModal.addEventListener("click", event => {
+            if (event.target === consoleZoomModal) closeConsoleZoom();
+        });
+    }
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") closeConsoleZoom();
+    });
+
+    /* =================================================
+       EXÉCUTER LE PROGRAMME
+    ================================================= */
+
+    async function runProgram() {
+        if (!pyodideReady || !editor || !output) return;
+
+        runButton.disabled = true;
+        output.textContent = "";
+
+        pyodideReady.setStdout({
+            batched: text => {
+                output.textContent += text + "\n";
+            }
+        });
+
+        pyodideReady.setStderr({
+            batched: text => {
+                output.textContent += text + "\n";
+            }
+        });
+
+        let imagesCount = 0;
+
+        try {
+            await pyodideReady.runPythonAsync(editor.value);
+
+            const figuresJson = await pyodideReady.runPythonAsync(`
+import io, base64, json
+
+_images = []
+try:
+    import matplotlib.pyplot as plt
+    for _num in plt.get_fignums():
+        _fig = plt.figure(_num)
+        _buf = io.BytesIO()
+        _fig.savefig(_buf, format="png", bbox_inches="tight")
+        _buf.seek(0)
+        _images.append(base64.b64encode(_buf.read()).decode("ascii"))
+    plt.close("all")
+except ImportError:
+    pass
+
+json.dumps(_images)
+`);
+
+            const images = JSON.parse(figuresJson);
+            imagesCount = images.length;
+
+            images.forEach(b64 => {
+                const img = document.createElement("img");
+                img.src = "data:image/png;base64," + b64;
+                img.alt = "Graphique généré par le programme Python";
+                img.className = "plot-image";
+                output.appendChild(img);
+            });
+
+            if (!output.textContent.trim() && imagesCount === 0) {
+                output.textContent = "Programme exécuté (aucune sortie texte).";
+            }
+
+        } catch (error) {
+            output.textContent += "\n" + error;
+
+        } finally {
+            runButton.disabled = false;
+        }
+    }
+
+    /* =================================================
+       BOUTON EXÉCUTER
+    ================================================= */
+
+    if (runButton) {
+        runButton.addEventListener("click", runProgram);
+    }
+
+    /* =================================================
+       EXPORTER LE SCRIPT PYTHON
+    ================================================= */
+
+    function exportPythonScript() {
+        if (!editor) return;
+
+        const pythonCode = editor.value;
+
+        if (!pythonCode.trim()) {
+            if (output) {
+                output.textContent =
+                    "Impossible d'exporter le script.\n\n" +
+                    "L'éditeur Python est vide.";
+            }
+
+            editor.focus();
+            return;
+        }
+
+        const pythonFile = new Blob(
+            [pythonCode],
+            { type: "text/x-python;charset=utf-8" }
+        );
+
+        const fileURL = URL.createObjectURL(pythonFile);
+        const downloadLink = document.createElement("a");
+
+        downloadLink.href = fileURL;
+        downloadLink.download = "programme.py";
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        setTimeout(() => {
+            URL.revokeObjectURL(fileURL);
+        }, 100);
+
+        if (output) {
+            output.textContent =
+                "✓ Script Python exporté avec succès.\n\n" +
+                "Fichier : programme.py";
+        }
+    }
+
+    /* =================================================
+       BOUTON EXPORTER LE SCRIPT
+    ================================================= */
+
+    if (exportButton) {
+        exportButton.addEventListener("click", exportPythonScript);
+    }
+
+    /* =================================================
+       IMPORTER UN SCRIPT PYTHON
+    ================================================= */
+
+    const IMPORT_TAILLE_MAX = 512 * 1024;
+
+    function decoderTexte(buffer) {
+        let texte;
+
+        try {
+            texte = new TextDecoder("utf-8", { fatal: true }).decode(buffer);
+        } catch (e) {
+            texte = new TextDecoder("windows-1252").decode(buffer);
+        }
+
+        return texte.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n");
+    }
+
+    async function importPythonScript(file) {
+        if (!file || !editor) return;
+
+        if (file.size > IMPORT_TAILLE_MAX) {
+            if (output) {
+                output.textContent =
+                    "Impossible d'importer le script.\n\n" +
+                    "Le fichier est trop volumineux (" +
+                    Math.round(file.size / 1024) +
+                    " Ko, maximum 512 Ko).";
+            }
+            return;
+        }
+
+        try {
+            const code = decoderTexte(await file.arrayBuffer());
+
+            if (!code.trim()) {
+                if (output) {
+                    output.textContent =
+                        "Impossible d'importer le script.\n\n" +
+                        "Le fichier « " + file.name + " » est vide.";
+                }
+                return;
+            }
+
+            editor.value = code;
+            editor.scrollTop = 0;
+            editor.focus();
+
+            if (output) {
+                output.textContent =
+                    "✓ Script Python importé avec succès.\n\n" +
+                    "Fichier : " + file.name + "\n\n" +
+                    "Clique sur Exécuter pour le lancer.";
+            }
+
+        } catch (e) {
+            console.warn("Import du script impossible :", e);
+
+            if (output) {
+                output.textContent =
+                    "Impossible d'importer le script.\n\n" +
+                    "Le fichier n'a pas pu être lu.";
+            }
+        }
+    }
+
+    if (importButton && importFile) {
+        importButton.addEventListener("click", () => importFile.click());
+
+        importFile.addEventListener("change", async () => {
+            await importPythonScript(
+                importFile.files && importFile.files[0]
+            );
+
+            importFile.value = "";
+        });
+    }
+
+    /* =================================================
+       IMPRIMER EN PDF (éditeur + console)
+       Génère un document A4 avec le contenu de l'éditeur
+       Python et le résultat de la console (texte + graphiques
+       Matplotlib), sur le modèle d'en-tête et de pied de page
+       de js/compte-rendu.js (racine du site, marque PyLab).
+
+       Le module est chargé à la demande (import dynamique) :
+       si son chemin est incorrect, seul ce bouton est touché,
+       le reste de PyLab continue de fonctionner.
+       Chemin relatif à CE fichier (app.js, dans /pyodide/) : ../js/ = racine /js. À adapter si
+       PyLab n'est pas dans un sous-dossier de sciences/.
+    ================================================= */
+
+    // Chemins essayés dans l'ordre (relatifs à app.js) : le premier qui répond
+    // est mémorisé. Ajouter ici un chemin si compte-rendu.js est ailleurs.
+    const COMPTE_RENDU_CANDIDATS = [
+        "../js/compte-rendu.js",
+        "./js/compte-rendu.js",
+        "../../js/compte-rendu.js",
+        "/js/compte-rendu.js",
+        "./compte-rendu.js",
+        "../laboratory/js/compte-rendu.js"
+    ];
+
+    let compteRenduModule = null;
+
+    async function chargerCompteRendu() {
+        if (compteRenduModule) return compteRenduModule;
+
+        // Base = URL réelle d'app.js (et non celle de la page)
+        const scriptEl = Array.from(document.scripts)
+            .find(s => /(^|\/)app\.js(\?|#|$)/.test(s.getAttribute("src") || ""));
+        const base = scriptEl ? scriptEl.src : document.baseURI;
+
+        const essais = [];
+        for (const chemin of COMPTE_RENDU_CANDIDATS) {
+            const url = new URL(chemin, base).href;
+            try {
+                const mod = await import(url);
+                if (typeof mod.genererCompteRendu !== "function") {
+                    essais.push(url + " (chargé, mais sans export genererCompteRendu)");
+                    continue;
+                }
+                compteRenduModule = mod;
+                return mod;
+            } catch (e) {
+                essais.push(url + " → " + (e && e.message ? e.message : e));
+            }
+        }
+        throw new Error("module compte-rendu.js introuvable. Chemins essayés :\n" + essais.join("\n"));
+    }
+
+    // Rubrique « Identification » (#nom-eleve, #prenom-eleve, #classe-eleve,
+    // #date-eleve) : lue par compte-rendu.js et reportée dans l'en-tête du PDF.
+    const identityPanel = document.getElementById("trace-ecrite");
+    const dateEleve = document.getElementById("date-eleve");
+
+    // Date du jour par défaut (date locale, pas UTC)
+    if (dateEleve && !dateEleve.value) {
+        const d = new Date();
+        dateEleve.value =
+            d.getFullYear() + "-" +
+            String(d.getMonth() + 1).padStart(2, "0") + "-" +
+            String(d.getDate()).padStart(2, "0");
+    }
+
+    async function printPdf() {
+        if (!editor || !output) return;
+
+        // Nom et prénom sont obligatoires : si la rubrique est repliée et
+        // incomplète, on la rouvre pour que le champ vide soit signalé.
+        if (identityPanel && ["nom-eleve", "prenom-eleve"].some(
+            id => !(document.getElementById(id)?.value || "").trim()
+        )) {
+            identityPanel.open = true;
+        }
+
+        // La fenêtre de zoom de l'éditeur n'est pas synchronisée à la
+        // fermeture : on récupère le code à jour avant l'impression.
+        if (zoomModal && zoomModal.classList.contains("show") && zoomContent) {
+            editor.value = zoomContent.value;
+        }
+
+        printButtons.forEach(b => { b.disabled = true; });
+        console.log("PyLab : génération du PDF…");
+
+        try {
+            const { genererCompteRendu } = await chargerCompteRendu();
+
+            const code = editor.value.replace(/\s+$/, "");
+            const resultat = output.textContent.replace(/\s+$/, "");
+
+            const sections = [
+                {
+                    titre: "Éditeur Python — programme.py",
+                    texte: code || "(éditeur vide)",
+                    code: true
+                },
+                {
+                    titre: "Résultat — Console Python",
+                    texte: resultat || "(console vide)",
+                    code: true
+                }
+            ];
+
+            // Graphiques Matplotlib affichés dans la console
+            const graphiques = output.querySelectorAll("img.plot-image");
+
+            graphiques.forEach((img, i) => {
+                sections.push({
+                    titre: graphiques.length > 1 ? "Graphique " + (i + 1) : "Graphique",
+                    canvas: img,
+                    echelle: 0.8
+                });
+            });
+
+            await genererCompteRendu({
+                marque: "pylab",
+                titre: "Programme Python",
+                domaine: "Python",
+                tp: "Programme",
+                sections
+            });
+
+        } catch (e) {
+            console.error("Impression PDF impossible :", e);
+
+            // Message visible dans la console de PyLab (l'alert seule peut
+            // être bloquée par le navigateur et le bouton semble alors « muet »).
+            if (output) {
+                const err = document.createElement("div");
+                err.className = "pdf-error";
+                err.style.cssText = "color:#c62828;font-weight:bold;white-space:pre-wrap;margin-top:8px;";
+                err.textContent = "Impossible de générer le PDF : " + e.message;
+                output.appendChild(err);
+            }
+            try { window.alert("Impossible de générer le PDF : " + e.message); } catch (_) {}
+
+        } finally {
+            printButtons.forEach(b => { b.disabled = false; });
+        }
+    }
+
+    // « Imprimer en PDF » (barre de l'éditeur) et « Valider l'impression »
+    // (rubrique Trace écrite) déclenchent la même impression.
+    const validerImpressionButton = document.getElementById("validerImpression");
+    const printButtons = [printPdfButton, validerImpressionButton].filter(Boolean);
+
+    printButtons.forEach(b => b.addEventListener("click", printPdf));
+
+    /* =================================================
+       BIBLIOTHÈQUE DE PROGRAMMES (.py) — LISTE DYNAMIQUE
+       Les fichiers .py sont placés dans le dossier
+       « programmes/ ». La liste est trouvée de deux façons :
+         1) programmes/index.json (liste des noms de fichiers),
+            généré par programmes/generer_index.py ;
+         2) à défaut, la page de listing du dossier fournie
+            par le serveur (Apache / nginx autoindex,
+            python -m http.server, etc.).
+    ================================================= */
+
+    const LIBRARY_DIR = "programmes/";
+    const libraryList = document.getElementById("libraryList");
+    const libraryTitle = document.getElementById("libraryTitle");
+
+    function nomAffiche(fichier) {
+        return fichier
+            .replace(/\.py$/i, "")
+            .replace(/[_-]+/g, " ")
+            .trim();
+    }
+
+    // Variante 1 : fichier index.json
+    async function listeDepuisManifeste() {
+        const reponse = await fetch(LIBRARY_DIR + "index.json", { cache: "no-store" });
+        if (!reponse.ok) throw new Error("index.json absent");
+
+        const donnees = await reponse.json();
+        const tableau = Array.isArray(donnees) ? donnees : donnees.fichiers;
+
+        if (!Array.isArray(tableau)) throw new Error("index.json invalide");
+
+        return tableau.map(String);
+    }
+
+    // Variante 2 : listing HTML du dossier
+    async function listeDepuisDossier() {
+        const reponse = await fetch(LIBRARY_DIR, { cache: "no-store" });
+        if (!reponse.ok) throw new Error("dossier illisible");
+
+        const doc = new DOMParser().parseFromString(await reponse.text(), "text/html");
+        const noms = new Set();
+
+        doc.querySelectorAll("a[href]").forEach(a => {
+            const href = a.getAttribute("href").split(/[?#]/)[0];
+            if (!/\.py$/i.test(href)) return;
+
+            const dernier = href.split("/").pop();
+            try {
+                noms.add(decodeURIComponent(dernier));
+            } catch (e) {
+                noms.add(dernier);
+            }
+        });
+
+        return [...noms];
+    }
+
+    async function listerProgrammes() {
+        let fichiers;
+
+        try {
+            fichiers = await listeDepuisManifeste();
+        } catch (e) {
+            fichiers = await listeDepuisDossier();
+        }
+
+        return fichiers
+            .filter(nom => /\.py$/i.test(nom) && !nom.startsWith("_") && !nom.includes("/"))
+            .sort((a, b) => a.localeCompare(b, "fr", { numeric: true, sensitivity: "base" }));
+    }
+
+    async function chargerProgramme(fichier) {
+        try {
+            const reponse = await fetch(
+                LIBRARY_DIR + encodeURIComponent(fichier),
+                { cache: "no-store" }
+            );
+            if (!reponse.ok) throw new Error("HTTP " + reponse.status);
+
+            const code = decoderTexte(await reponse.arrayBuffer());
+
+            if (editor) {
+                editor.value = code;
+                editor.scrollTop = 0;
+            }
+
+            showPython();
+
+            if (output) {
+                output.textContent =
+                    "✓ Programme chargé depuis la bibliothèque.\n\n" +
+                    "Fichier : " + fichier + "\n\n" +
+                    "Clique sur Exécuter pour le lancer.";
+            }
+
+            if (editor) editor.focus();
+
+        } catch (e) {
+            console.warn("Chargement du programme impossible :", e);
+
+            showPython();
+
+            if (output) {
+                output.textContent =
+                    "Impossible de charger « " + fichier + " ».\n\n" +
+                    "Vérifie que le fichier est bien dans le dossier « programmes/ ».";
+            }
+        }
+    }
+
+    function afficherInfoBibliotheque(texte) {
+        if (!libraryList || !libraryTitle) return;
+
+        const info = document.createElement("div");
+        info.className = "submenu-info";
+        info.textContent = texte;
+
+        libraryList.replaceChildren(info);
+        libraryTitle.hidden = false;
+    }
+
+    async function refreshLibrary() {
+        if (!libraryList || !libraryTitle) return;
+
+        try {
+            const fichiers = await listerProgrammes();
+
+            if (fichiers.length === 0) {
+                afficherInfoBibliotheque("Aucun fichier .py dans « programmes/ ».");
+                return;
+            }
+
+            libraryList.replaceChildren(...fichiers.map(fichier => {
+                const bouton = document.createElement("button");
+                bouton.type = "button";
+                bouton.className = "library-item";
+                bouton.title = fichier;
+                bouton.innerHTML = '<i class="fab fa-python"></i><span></span>';
+                bouton.querySelector("span").textContent = nomAffiche(fichier);
+
+                bouton.addEventListener("click", () => {
+                    examplesMenu.classList.remove("show");
+                    chargerProgramme(fichier);
+                });
+
+                return bouton;
+            }));
+
+            libraryTitle.hidden = false;
+
+        } catch (e) {
+            console.warn("Bibliothèque illisible :", e);
+            afficherInfoBibliotheque(
+                "Liste indisponible : lance generer_index.py ou utilise un serveur web."
+            );
+        }
+    }
+
+    /* =================================================
+       DICTÉE VOCALE (TRANSCRIPTION DE LA VOIX)
+       Utilise l'API Web Speech du navigateur (Chrome, Edge,
+       Safari). La voix est transcrite en français et insérée
+       à la position du curseur dans l'éditeur (ou dans la
+       fenêtre de zoom si elle est ouverte).
+
+       Commandes vocales utiles pour le code :
+         « à la ligne »            -> retour à la ligne
+         « tabulation »            -> indentation (4 espaces)
+         « ouvre / ferme la parenthèse », « ... le crochet »
+         « deux points », « virgule », « guillemets »
+         « égal égal » -> ==   « égal » -> =
+    ================================================= */
+
+    const SpeechRecognitionAPI =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const micButtons = document.querySelectorAll("[data-mic]");
+    const micStatus = document.getElementById("micStatus");
+
+    // Les navigateurs mettent souvent une majuscule en début de phrase,
+    // mais Python distingue majuscules et minuscules (print ≠ Print).
+    const MINUSCULE_AUTO = true;
+
+    let recognition = null;
+    let micWanted = false;      // l'utilisateur veut écouter
+
+    // \b ne fonctionne pas avec les lettres accentuées (« à », « égal »),
+    // on utilise donc des limites de mot Unicode.
+    const DEB = "(?<![\\p{L}\\p{N}])";
+    const FIN = "(?![\\p{L}\\p{N}])";
+    const cmd = (motif, remplacement) =>
+        [new RegExp(DEB + "(?:" + motif + ")" + FIN, "giu"), remplacement];
+
+    const COMMANDES_VOCALES = [
+        cmd("à la ligne|nouvelle ligne|retour à la ligne", "\n"),
+        cmd("tabulation|indentation", "\u0001"),
+        cmd("(?:ouvre|ouvrir|ouvrez) la parenthèse", "("),
+        cmd("(?:ferme|fermer|fermez) la parenthèse", ")"),
+        cmd("(?:ouvre|ouvrir|ouvrez) le crochet", "["),
+        cmd("(?:ferme|fermer|fermez) le crochet", "]"),
+        cmd("deux[- ]points", ":"),
+        cmd("virgule", ","),
+        cmd("guillemets?", "\""),
+        cmd("égal égal", " == "),
+        cmd("égale?", " = ")
+    ];
+
+    function setMicStatus(text, isError) {
+        if (!micStatus) return;
+        micStatus.textContent = text || "";
+        micStatus.classList.toggle("mic-error", Boolean(isError));
+        micStatus.title = text || "";
+    }
+
+    function setMicState(listening) {
+        micButtons.forEach(btn => {
+            btn.classList.toggle("listening", listening);
+            btn.setAttribute("aria-pressed", String(listening));
+
+            const label = btn.querySelector(".mic-label");
+            if (label) label.textContent = listening ? "Arrêter" : "Dicter";
+
+            btn.title = listening
+                ? "Arrêter la dictée"
+                : "Dicter le code à la voix";
+
+            const icon = btn.querySelector("i");
+            if (icon) {
+                icon.className = listening
+                    ? "fas fa-microphone-slash"
+                    : "fas fa-microphone";
+            }
+        });
+    }
+
+    function getMicTarget() {
+        return zoomModal && zoomModal.classList.contains("show")
+            ? zoomContent
+            : editor;
+    }
+
+    // Transforme la phrase reconnue en texte prêt à être inséré
+    function preparerTexte(brut) {
+        let t = brut.trim();
+
+        COMMANDES_VOCALES.forEach(([regex, remplacement]) => {
+            t = t.replace(regex, remplacement);
+        });
+
+        // Nettoyage des espaces autour de la ponctuation
+        t = t
+            .replace(/[ \t]+([,:)\]])/g, "$1")
+            .replace(/([(\[])[ \t]+/g, "$1")
+            .replace(/[ \t]+\(/g, "(")
+            .replace(/[ \t]*\n[ \t]*/g, "\n")
+            .replace(/[ \t]{2,}(?=\S)/g, " ")
+            // « guillemets bonjour guillemets » -> "bonjour"
+            .replace(/"[ \t]*([^"\n]*?)[ \t]*"/g, "\"$1\"")
+            // les tabulations sont remises en dernier (espaces conservés)
+            .replace(/\u0001[ \t]*/g, "    ");
+
+        if (MINUSCULE_AUTO) {
+            t = t.replace(/^(\s*)(\p{Lu})/u, (m, esp, lettre) => esp + lettre.toLowerCase());
+        }
+
+        return t;
+    }
+
+    function insererDansCible(texte) {
+        const cible = getMicTarget();
+        if (!cible || !texte) return;
+
+        const debut = cible.selectionStart;
+        const fin = cible.selectionEnd;
+        const avant = cible.value.slice(0, debut);
+        const dernier = avant.slice(-1);
+
+        // Espace de séparation entre deux phrases dictées
+        const besoinEspace =
+            dernier !== "" &&
+            !/[\s(\[]/.test(dernier) &&
+            !/^[\s,:)\]]/.test(texte);
+
+        const aInserer = (besoinEspace ? " " : "") + texte;
+
+        cible.setRangeText(aInserer, debut, fin, "end");
+
+        // Synchronise l'éditeur et la fenêtre de zoom
+        cible.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    function messageErreurMicro(code) {
+        switch (code) {
+            case "not-allowed":
+            case "service-not-allowed":
+                return "Micro refusé : autorise l'accès au micro dans le navigateur.";
+            case "audio-capture":
+                return "Aucun micro détecté.";
+            case "network":
+                return "Dictée indisponible : connexion Internet requise.";
+            case "language-not-supported":
+                return "Langue non prise en charge par ce navigateur.";
+            default:
+                return "Erreur de dictée (" + code + ").";
+        }
+    }
+
+    function startDictation() {
+        if (!SpeechRecognitionAPI || micWanted) return;
+
+        recognition = new SpeechRecognitionAPI();
+        recognition.lang = "fr-FR";
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+
+        recognition.onresult = event => {
+            let provisoire = "";
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const resultat = event.results[i];
+                const transcription = resultat[0].transcript;
+
+                if (resultat.isFinal) {
+                    insererDansCible(preparerTexte(transcription));
+                } else {
+                    provisoire += transcription;
+                }
+            }
+
+            setMicStatus(
+                provisoire ? "… " + provisoire.trim() : "Je t'écoute…",
+                false
+            );
+        };
+
+        recognition.onerror = event => {
+            // « no-speech » et « aborted » sont normaux : on continue
+            if (event.error === "no-speech" || event.error === "aborted") return;
+
+            micWanted = false;
+            setMicStatus(messageErreurMicro(event.error), true);
+        };
+
+        recognition.onend = () => {
+            // Le navigateur coupe l'écoute après un silence : on relance
+            if (micWanted) {
+                try {
+                    recognition.start();
+                    return;
+                } catch (e) {
+                    micWanted = false;
+                }
+            }
+
+            setMicState(false);
+
+            if (micStatus && !micStatus.classList.contains("mic-error")) {
+                setMicStatus("");
+            }
+        };
+
+        try {
+            micWanted = true;
+            setMicStatus("Je t'écoute…", false);
+            recognition.start();
+            setMicState(true);
+        } catch (e) {
+            micWanted = false;
+            setMicState(false);
+            setMicStatus("Impossible de démarrer la dictée.", true);
+        }
+    }
+
+    function stopDictation() {
+        micWanted = false;
+
+        if (recognition) {
+            try { recognition.stop(); } catch (e) { /* déjà arrêtée */ }
+        }
+
+        setMicState(false);
+
+        if (micStatus && !micStatus.classList.contains("mic-error")) {
+            setMicStatus("");
+        }
+    }
+
+    if (micButtons.length) {
+        if (!SpeechRecognitionAPI) {
+            micButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.title =
+                    "Dictée vocale non disponible : utilise Chrome, Edge ou Safari.";
+            });
+            setMicStatus("Dictée non disponible sur ce navigateur.", true);
+        } else {
+            micButtons.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    if (micWanted) {
+                        stopDictation();
+                    } else {
+                        setMicStatus("");
+                        startDictation();
+                    }
+                });
+            });
+
+            // Coupe le micro quand on quitte PyLab ou l'onglet
+            if (homeButton) homeButton.addEventListener("click", stopDictation);
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) stopDictation();
+            });
+        }
+    }
+
+    /* =================================================
+       DÉMARRAGE AUTOMATIQUE
+    ================================================= */
+
+    initPyodide();
+
+});

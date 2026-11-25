@@ -1,0 +1,872 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<!-- ====================================================== -->
+<!-- EN-TÊTE                                                 -->
+<!-- ====================================================== -->
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Lentilles convergentes et divergentes</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">1ère</span>
+        <span class="tag">Optique</span>
+        <span class="tag">Distance focale, conjugaison, grandissement</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP O06</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<!-- ====================================================== -->
+<!-- CAPACITES                                               -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <ul>
+
+      <li><strong>1ère</strong> — Différencier lentille convergente et lentille divergente.</li>
+
+      <li><strong>1ère</strong> — Déterminer expérimentalement le foyer image et la distance focale d'une lentille convergente.</li>
+
+      <li><strong>1ère</strong> — Réaliser un montage permettant d'obtenir l'image nette d'un objet sur un écran à l'aide d'une lentille convergente.</li>
+
+      <li><strong>1ère</strong> — Déterminer par une méthode graphique ou à l'aide d'un logiciel la position, la grandeur et le sens de l'image d'un objet-plan réel obtenue à travers une lentille mince convergente.</li>
+
+      <li><strong>1ère</strong> — Exploiter les relations de conjugaison et de grandissement.</li>
+
+      <li><strong>1ère</strong> — Connaître les caractéristiques d'une lentille mince (axe optique, centre optique, foyers principaux objet et image, distance focale), la différence entre image réelle et image virtuelle, et la position des foyers pour une lentille convergente ou divergente.</li>
+
+    </ul>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- CONTEXTE PROFESSIONNEL                                  -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- SECURITE                                                -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="securite">
+
+  <div class="section-titre">
+    <div class="picto-section">⚠️</div>
+    <h2>Sécurité</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Ce TP ne met pas en œuvre de produit chimique ni de source
+      dangereuse.
+    </div>
+
+    <ul class="liste-aeree">
+      <li><strong>Convergence des rayons :</strong> ne jamais placer l'œil au point de convergence d'une lentille convergente exposée à une source lumineuse intense (risque de concentration de la lumière, comme une loupe).</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- MATERIEL                                                -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+    <div class="picto-section">🧪</div>
+    <h2>Matériel nécessaire</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- MANIPULATIONS                                           -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">⚗️</div>
+    <h2>Manipulations</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="tp06-message-filiere" class="info" hidden></div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="differencier-lentilles">Convergente ou divergente ?</button>
+        <button class="tab-btn" data-tab="distance-focale">Distance focale expérimentale</button>
+        <button class="tab-btn" data-tab="conjugaison-grandissement">Conjugaison et grandissement</button>
+      </div>
+
+      <!-- ============================ -->
+      <!-- DIFFERENCIER LENTILLES       -->
+      <!-- ============================ -->
+
+      <div class="tab-panel actif" id="differencier-lentilles">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="differencier-lentilles"></p>
+        </div>
+
+
+        <h3>Différencier lentille convergente et lentille divergente</h3>
+
+        <div class="info">
+          Une lentille convergente est plus épaisse en son centre qu'à
+          ses bords ; elle fait converger un faisceau de rayons
+          parallèles vers un point unique, le foyer image F'. Une
+          lentille divergente est plus mince en son centre qu'à ses
+          bords ; elle fait diverger un faisceau parallèle, comme s'il
+          semblait provenir d'un point F' situé du même côté que la
+          source.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Observer la forme de chaque lentille disponible (épaisseur au centre et aux bords).</li>
+          <li>Placer chaque lentille sur le trajet d'un faisceau de rayons parallèles (lumière du soleil ou source éloignée) et observer l'effet sur le faisceau.</li>
+          <li>En déduire la nature de chaque lentille testée.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp06-differencier-lentilles.svg" alt="Schéma comparant deux lentilles : à gauche, une lentille convergente, plus épaisse au centre, fait converger un faisceau de rayons parallèles vers le foyer image F' situé après la lentille ; à droite, une lentille divergente, plus mince au centre, écarte les rayons qui semblent provenir d'un point situé avant la lentille" width="640" height="290" loading="lazy">
+          <p class="mode-legende">Convergente : bords minces, le faisceau converge. Divergente : bords épais, le faisceau s'écarte.</p>
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="lentille-forme">Forme observée au toucher / à l'œil</label>
+            <select id="lentille-forme">
+              <option value="">-- Choisir --</option>
+              <option value="epaisse-centre">Plus épaisse au centre qu'aux bords</option>
+              <option value="mince-centre">Plus mince au centre qu'aux bords</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="lentille-faisceau">Effet sur un faisceau parallèle</label>
+            <select id="lentille-faisceau">
+              <option value="">-- Choisir --</option>
+              <option value="converge">Converge vers un point après la lentille</option>
+              <option value="diverge">Semble provenir d'un point avant la lentille</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="lentille-nature-out">Nature de la lentille</label>
+            <div class="input-unite">
+              <output id="lentille-nature-out">—</output>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <!-- ============================ -->
+      <!-- DISTANCE FOCALE              -->
+      <!-- ============================ -->
+
+      <div class="tab-panel" id="distance-focale">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="distance-focale"></p>
+        </div>
+
+
+        <h3>Déterminer expérimentalement la distance focale</h3>
+
+        <div class="info">
+          Pour un objet très éloigné (rayons quasiment parallèles), une
+          lentille convergente forme une image nette dans le plan focal
+          image : la distance lentille-écran mesurée est alors une
+          bonne approximation de la distance focale f'.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Viser, avec la lentille convergente, un objet très éloigné (fenêtre, objet au fond de la salle).</li>
+          <li>Déplacer l'écran jusqu'à obtenir une image nette de cet objet.</li>
+          <li>Mesurer la distance entre la lentille et l'écran, et la saisir ci-dessus.</li>
+          <li>Recommencer la mesure au moins trois fois pour affiner le résultat.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp06-distance-focale.svg" alt="Schéma de la mesure de la distance focale : un objet très éloigné envoie des rayons parallèles sur une lentille convergente ; un écran déplacé derrière la lentille donne une image nette lorsqu'il est placé au foyer image F' ; la distance entre le centre optique de la lentille et l'écran est la distance focale f'" width="640" height="270" loading="lazy">
+          <p class="mode-legende">Pour un objet très éloigné, l'image nette se forme au foyer image : f' = distance lentille–écran.</p>
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="focale-distance-mesuree">Distance lentille-écran pour une image nette (cm)</label>
+            <input id="focale-distance-mesuree" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="focale-ajouter" type="button" class="btn btn-primaire">
+              + Ajouter la mesure
+            </button>
+          </div>
+
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>Essai</th>
+                <th>Distance lentille-écran (cm)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-distance-focale"></tbody>
+          </table>
+        </div>
+
+        <div id="focale-moyenne" class="info espace-haut-md">
+          Ajouter au moins une mesure pour afficher la distance focale moyenne.
+        </div>
+
+
+      </div>
+
+      <!-- ==================================== -->
+      <!-- CONJUGAISON ET GRANDISSEMENT          -->
+      <!-- ==================================== -->
+
+      <div class="tab-panel" id="conjugaison-grandissement">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="conjugaison-grandissement"></p>
+        </div>
+
+
+        <h3>Relations de conjugaison et de grandissement</h3>
+
+        <div class="info">
+          Avec la convention algébrique usuelle (origine au centre
+          optique O, objet réel à gauche donc OA &lt; 0), la relation
+          de conjugaison et le grandissement d'une lentille mince
+          s'écrivent :
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Placer un objet à une distance OA connue de la lentille convergente utilisée.</li>
+          <li>Déplacer l'écran jusqu'à obtenir une image nette et mesurer la distance OA' correspondante.</li>
+          <li>Comparer la valeur mesurée à la valeur calculée à l'aide de la relation de conjugaison.</li>
+          <li>Mesurer la taille de l'image et la comparer à la taille de l'objet pour vérifier le grandissement.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp06-conjugaison-grandissement.svg" alt="Schéma de la formation d'une image par une lentille convergente : un objet AB est placé avant la lentille, à une distance OA négative du centre optique O ; deux rayons sont tracés, l'un parallèle à l'axe qui ressort par le foyer image F', l'autre passant par O sans déviation ; ils se coupent en B' et donnent une image A'B' réelle et renversée à une distance OA' positive après la lentille" width="680" height="320" loading="lazy">
+          <p class="mode-legende">Construction de l'image A'B' : OA < 0, OA' > 0, image réelle et renversée (γ < 0).</p>
+        </div>
+
+        <div class="formule">
+          1/OA' − 1/OA = 1/f'&nbsp;&nbsp;&nbsp;&nbsp;γ = OA'/OA = A'B'/AB
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="conjugaison-oa">Position de l'objet OA (cm, négatif)</label>
+            <input id="conjugaison-oa" type="number" step="0.1" placeholder="Ex : -30">
+          </div>
+
+          <div class="form-group">
+            <label for="conjugaison-f">Distance focale f' (cm, positive si convergente)</label>
+            <input id="conjugaison-f" type="number" step="0.1" placeholder="Ex : 10">
+          </div>
+
+          <div class="form-group">
+            <label for="conjugaison-oa-prime-out">Position de l'image OA' calculée</label>
+            <div class="input-unite">
+              <output id="conjugaison-oa-prime-out">—</output>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="conjugaison-grandissement-out">Grandissement γ calculé</label>
+            <div class="input-unite">
+              <output id="conjugaison-grandissement-out">—</output>
+            </div>
+          </div>
+
+        </div>
+
+        <div id="conjugaison-nature" class="info espace-haut-md">
+          Compléter OA et f' pour afficher la nature de l'image.
+        </div>
+
+        <h4 class="espace-haut-lg">Vérification expérimentale</h4>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="conjugaison-oa-prime-mesure">OA' mesuré sur le montage (cm)</label>
+            <input id="conjugaison-oa-prime-mesure" type="number" step="0.1">
+          </div>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- OPTIQUE ET ENVIRONNEMENT                                -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Optique et environnement</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Ranger les lentilles à l'abri des rayures et des chocs, sans les manipuler par les faces optiques.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">Les lentilles, un principe industriel</h3>
+
+    <p>
+      La maîtrise de la distance focale et du grandissement est
+      essentielle dans de nombreux dispositifs professionnels :
+      objectifs d'appareils photo, loupes de contrôle qualité,
+      systèmes de projection, viseurs de machines-outils.
+    </p>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- TRACE ECRITE - COMPTE RENDU                            -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation
+      sélectionné. Répondre aux questions de l'onglet que vous avez réalisé :
+      les quatre premières portent sur l'objet du TP de l'onglet, la cinquième
+      répond à sa problématique.
+    </p>
+
+    <div class="questions-bloc" data-tp="lentilles" data-onglet="differencier-lentilles" data-onglet-nom="Convergente ou divergente ?">
+
+    <h4>Questions de l'onglet « Convergente ou divergente ? »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Décrire la forme d'une lentille convergente et d'une lentille divergente (épaisseur au centre et aux bords).
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-differencier-lentilles-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Décrire la manipulation réalisée pour tester l'effet d'une lentille sur un faisceau de rayons parallèles.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-differencier-lentilles-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Expliquer comment la forme de la lentille et l'effet sur le faisceau permettent de déterminer sa nature.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-differencier-lentilles-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vos deux observations conduisent-elles à la même conclusion ? Que faire si elles sont incohérentes ?
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-differencier-lentilles-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="differencier-lentilles"></p>
+        <div class="zone-eleve">
+          <textarea id="question-differencier-lentilles-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="lentilles" data-onglet="distance-focale" data-onglet-nom="Distance focale expérimentale" hidden>
+
+    <h4>Questions de l'onglet « Distance focale expérimentale »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Définir le foyer image et la distance focale image f' d'une lentille convergente.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-distance-focale-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Décrire la méthode utilisée pour mesurer la distance focale avec un objet très éloigné.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-distance-focale-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Analyser vos mesures : comparer les valeurs obtenues et calculer leur moyenne.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-distance-focale-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Estimer la dispersion de vos mesures et proposer deux causes d'erreur possibles.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-distance-focale-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="distance-focale"></p>
+        <div class="zone-eleve">
+          <textarea id="question-distance-focale-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="lentilles" data-onglet="conjugaison-grandissement" data-onglet-nom="Conjugaison et grandissement" hidden>
+
+    <h4>Questions de l'onglet « Conjugaison et grandissement »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Écrire les relations de conjugaison et de grandissement avec la convention algébrique utilisée.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-conjugaison-grandissement-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Calculer OA' et γ pour la position d'objet et la distance focale que vous avez choisies (détailler le calcul).
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-conjugaison-grandissement-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Indiquer la nature de l'image obtenue (réelle ou virtuelle, droite ou renversée, agrandie ou réduite) et justifier avec les signes de OA' et de γ.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-conjugaison-grandissement-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer OA' calculé et OA' mesuré sur le montage et conclure sur la validité de la relation de conjugaison.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-conjugaison-grandissement-4" rows="5" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="conjugaison-grandissement"></p>
+        <div class="zone-eleve">
+          <textarea id="question-conjugaison-grandissement-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- AUTO-ÉVALUATION                                         -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Différencier lentille convergente et lentille divergente.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Réaliser un montage donnant une image nette et déterminer une distance focale.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Analyser la nature de l'image obtenue à partir du grandissement.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier la cohérence des résultats obtenus.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Présenter les résultats avec un vocabulaire scientifique.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+
+      <div class="espace-haut-md" id="radar-resultat"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- IMPRESSION COMPTE RENDU                                 -->
+<!-- ====================================================== -->
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, imprimer votre compte-rendu en PDF.
+      L'envoyer à l'enseignant en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les réponses aux questions ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!-- NAVIGATION                                              -->
+<!-- ====================================================== -->
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-tp="tp05-sources-lumineuses">
+    ← TP05
+  </button>
+
+  <button class="btn btn-primaire" data-aller-accueil>
+    🏠 Accueil
+  </button>
+
+</div>
+
+</main>
+
+<!-- ====================================================== -->
+<!-- CONTENEUR IMPRESSION COMPTE RENDU                       -->
+<!-- ====================================================== -->
+
+<div id="cr-print-container" hidden></div>
+
+</section>

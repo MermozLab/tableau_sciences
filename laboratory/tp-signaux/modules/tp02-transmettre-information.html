@@ -1,0 +1,818 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Tous les chemins sont relatifs à la racine du domaine (tp-signaux).
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Sci</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Transmettre l'information</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">Tle</span>
+        <span class="tag">Signaux</span>
+        <span class="tag">Propagation libre / guidée, fibre optique</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TP S02</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <ul>
+      <li><strong>Tle</strong> — Mettre en œuvre un système de transmission d'informations par propagation libre ou par propagation guidée.</li>
+      <li><strong>Tle</strong> — Identifier les éléments principaux de systèmes de transmission d'informations utilisés dans la vie courante.</li>
+      <li><strong>Tle</strong> — Savoir que la transmission d'informations s'appuie sur l'émission et la réception d'une onde.</li>
+      <li><strong>Tle</strong> — Connaître les principaux types d'ondes utilisées dans les systèmes de transmission d'informations courants : ondes sonores, lumineuses, électromagnétiques.</li>
+      <li><strong>Tle</strong> — Savoir que le fonctionnement d'une fibre optique repose sur le phénomène de réflexion totale.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="securite">
+
+  <div class="section-titre">
+    <div class="picto-section">⚠️</div>
+    <h2>Sécurité</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Ce TP ne met pas en œuvre de produit chimique. Il combine un risque lumineux (source laser pour la fibre optique) et un risque auditif classique pour la partie sonore.
+    </div>
+
+    <ul class="liste-aeree">
+      <li><strong>Source laser :</strong> ne jamais viser les yeux, même en sortie de fibre optique ; ne pas regarder directement l'extrémité d'une fibre en fonctionnement.</li>
+      <li><strong>Manipulation de la fibre optique :</strong> ne pas plier la fibre au-delà de son rayon de courbure minimal, au risque de la casser.</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="materiel">
+
+  <div class="section-titre">
+    <div class="picto-section">🧪</div>
+    <h2>Matériel nécessaire</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <details class="accordeon-materiel" name="materiel">
+      <summary>Équipements</summary>
+      <div id="materiel-equipements" class="grille-materiel">
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">⚗️</div>
+    <h2>Manipulations</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="tp02-message-filiere" class="info" hidden></div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="propagation-libre-guidee">Propagation libre / guidée</button>
+        <button class="tab-btn" data-tab="chaine-generale">Chaîne de transmission</button>
+        <button class="tab-btn" data-tab="fibre-optique">Fibre optique</button>
+      </div>
+
+      <div class="tab-panel actif" id="propagation-libre-guidee">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="propagation-libre-guidee"></p>
+        </div>
+
+        <h3>Propagation libre ou guidée ?</h3>
+
+        <div class="info">
+          Une information peut être transmise par propagation libre
+          (l'onde se propage dans l'espace, sans support matériel dédié
+          : wifi, téléphonie, télécommande IR) ou par propagation
+          guidée (l'onde est confinée dans un support : câble, fibre
+          optique).
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Recenser au moins quatre systèmes de transmission d'informations utilisés dans la vie courante ou en atelier.</li>
+          <li>Pour chacun, identifier le type d'onde utilisé et le mode de propagation (libre ou guidée).</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp02-propagation-libre-guidee.svg" alt="Schéma comparant deux modes de propagation : en propagation libre, l&#x27;onde émise par une antenne se propage dans l&#x27;espace jusqu&#x27;à un récepteur (wifi, téléphonie, télécommande IR) ; en propagation guidée, l&#x27;onde est confinée dans un support reliant l&#x27;émetteur au récepteur (câble réseau, fibre optique)" width="700" height="250" loading="lazy">
+        </div>
+
+        <div class="table-responsive">
+          <table class="tableau-resultats">
+            <thead>
+              <tr>
+                <th>Système de transmission</th>
+                <th>Type d'onde</th>
+                <th>Propagation</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-propagation-type"></tbody>
+          </table>
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="propagation-systeme">Système de transmission</label>
+            <input id="propagation-systeme" type="text" placeholder="Ex : fibre optique, wifi, câble réseau...">
+          </div>
+
+          <div class="form-group">
+            <label for="propagation-type-onde">Type d'onde</label>
+            <select id="propagation-type-onde">
+              <option value="">-- Choisir --</option>
+              <option value="sonore">Sonore</option>
+              <option value="lumineuse">Lumineuse</option>
+              <option value="electromagnetique">Électromagnétique</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="propagation-mode">Propagation</label>
+            <select id="propagation-mode">
+              <option value="">-- Choisir --</option>
+              <option value="libre">Libre</option>
+              <option value="guidee">Guidée</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="propagation-ajouter" type="button" class="btn btn-primaire">
+              + Ajouter
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="tab-panel" id="chaine-generale">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="chaine-generale"></p>
+        </div>
+
+        <h3>Chaîne de transmission d'informations</h3>
+
+        <div class="info">
+          Quel que soit le type d'onde utilisé (sonore, lumineuse,
+          électromagnétique), une chaîne de transmission d'informations
+          repose sur le même principe : un émetteur, un canal de
+          propagation, un récepteur.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Choisir un système de transmission dans la liste proposée.</li>
+          <li>Identifier, pour ce système, quel élément joue le rôle d'émetteur, de canal de propagation et de récepteur.</li>
+          <li>Recommencer pour les deux autres systèmes proposés.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp02-chaine-transmission.svg" alt="Schéma de la chaîne de transmission générale : l&#x27;information entre dans l&#x27;émetteur, qui la transforme en onde ; l&#x27;onde se propage dans le canal de propagation (milieu ou support) ; le récepteur capte l&#x27;onde et restitue l&#x27;information ; le type d&#x27;onde peut être sonore, lumineuse ou électromagnétique" width="760" height="215" loading="lazy">
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="chaine-generale-systeme">Système étudié</label>
+            <select id="chaine-generale-systeme">
+              <option value="wifi">Réseau wifi</option>
+              <option value="telecommande">Télécommande infrarouge</option>
+              <option value="fibre">Liaison fibre optique</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="chaine-generale-emetteur">Émetteur</label>
+            <select id="chaine-generale-emetteur">
+              <option value="">-- Choisir --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="chaine-generale-canal">Canal de propagation</label>
+            <select id="chaine-generale-canal">
+              <option value="">-- Choisir --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="chaine-generale-recepteur">Récepteur</label>
+            <select id="chaine-generale-recepteur">
+              <option value="">-- Choisir --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="chaine-generale-verifier" type="button" class="btn btn-primaire">
+              ✓ Vérifier
+            </button>
+          </div>
+
+        </div>
+
+        <div id="chaine-generale-resultat" class="resultat-calcul espace-haut-md">Sélectionner un système puis compléter le schéma avant de vérifier.</div>
+
+      </div>
+
+      <div class="tab-panel" id="fibre-optique">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="fibre-optique"></p>
+        </div>
+
+        <h3>La fibre optique et la réflexion totale</h3>
+
+        <div class="info">
+          Une fibre optique guide la lumière grâce au phénomène de
+          réflexion totale à l'interface entre le cœur (indice n₁) et
+          la gaine (indice n₂ &lt; n₁). Au-delà d'un angle d'incidence
+          critique θc, tout le rayon lumineux est réfléchi, sans perte
+          par réfraction.
+        </div>
+
+        <h4 class="espace-haut-lg">Protocole</h4>
+
+        <ol class="etapes">
+          <li>Relever (ou utiliser les valeurs par défaut) les indices de réfraction du cœur et de la gaine de la fibre optique disponible.</li>
+          <li>Calculer l'angle critique θc à l'aide de la relation ci-dessus.</li>
+          <li>Envoyer le faisceau laser à l'entrée de la fibre selon différents angles d'incidence et noter, pour chacun, si le faisceau reste guidé jusqu'à la sortie.</li>
+          <li>Comparer chaque angle testé à l'angle critique calculé.</li>
+        </ol>
+
+        <div class="mode-op">
+          <img class="mode-image" src="./assets/illustrations/tp02-fibre-reflexion-totale.svg" alt="Schéma en coupe d&#x27;une fibre optique : un rayon laser se propage dans le cœur d&#x27;indice n₁, entouré d&#x27;une gaine d&#x27;indice n₂ plus faible ; il se réfléchit successivement sur les deux interfaces cœur-gaine ; l&#x27;angle d&#x27;incidence θ est mesuré par rapport à la normale ; il y a réflexion totale si θ est supérieur ou égal à l&#x27;angle critique θc, avec sin θc = n₂/n₁" width="720" height="275" loading="lazy">
+        </div>
+
+        <div class="formule">
+          sin(θc) = n₂ / n₁
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="fibre-n1">Indice du cœur n₁</label>
+            <input id="fibre-n1" type="number" step="0.001" value="1.480">
+          </div>
+
+          <div class="form-group">
+            <label for="fibre-n2">Indice de la gaine n₂</label>
+            <input id="fibre-n2" type="number" step="0.001" value="1.460">
+          </div>
+
+          <div class="form-group">
+            <label for="fibre-angle-critique">Angle critique θc calculé</label>
+            <div class="input-unite">
+              <output id="fibre-angle-critique">—</output>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="fibre-angle-teste">Angle d'incidence testé sur l'interface cœur-gaine (°)</label>
+            <input id="fibre-angle-teste" type="number" step="0.1">
+          </div>
+
+          <div class="form-group">
+            <label for="fibre-conclusion">Le rayon reste-t-il guidé ?</label>
+            <div class="input-unite">
+              <output id="fibre-conclusion">—</output>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="environnement">
+
+  <div class="section-titre">
+    <div class="picto-section">🌱</div>
+    <h2>Signaux et environnement</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Bonnes pratiques au laboratoire</h3>
+
+    <ul class="liste-aeree">
+      <li>Éteindre la source laser dès la fin des mesures sur la fibre optique.</li>
+      <li>Ranger la fibre optique enroulée sans dépasser son rayon de courbure minimal.</li>
+    </ul>
+
+    <h3 class="espace-haut-md">La fibre optique, un enjeu énergétique et environnemental</h3>
+
+    <p>
+      Comparée à la transmission par câble cuivre, la fibre optique transporte l'information avec beaucoup moins de pertes sur de longues distances, ce qui limite le nombre d'équipements d'amplification nécessaires et donc la consommation d'énergie des réseaux de télécommunication.
+    </p>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="nom-eleve">Nom</label>
+        <input id="nom-eleve" type="text" placeholder="Nom">
+      </div>
+
+      <div class="form-group">
+        <label for="prenom-eleve">Prénom</label>
+        <input id="prenom-eleve" type="text" placeholder="Prénom">
+      </div>
+
+      <div class="form-group">
+        <label for="classe-eleve">Classe</label>
+        <input id="classe-eleve" type="text" placeholder="Classe">
+      </div>
+
+      <div class="form-group">
+        <label for="date-eleve">Date</label>
+        <input id="date-eleve" type="date">
+      </div>
+
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">
+      Les questions affichées correspondent à l'onglet de manipulation
+      sélectionné. Répondre aux questions de l'onglet que vous avez réalisé :
+      les quatre premières portent sur l'objet du TP de l'onglet, la cinquième
+      répond à sa problématique.
+    </p>
+
+    <div class="questions-bloc" data-tp="transmettre-information" data-onglet="propagation-libre-guidee" data-onglet-nom="Propagation libre / guidée">
+
+    <h4>Questions de l'onglet « Propagation libre / guidée »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Expliquer la différence entre propagation libre et propagation guidée à l'aide de deux exemples.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-propagation-libre-guidee-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Pour un système de transmission de votre choix, décrire la méthode permettant de déterminer le type d'onde utilisé et le mode de propagation (libre ou guidée).
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-propagation-libre-guidee-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer, à partir du tableau, les systèmes à propagation libre et ceux à propagation guidée : quels types d'ondes utilisent-ils, et un même type d'onde peut-il servir aux deux modes ?
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-propagation-libre-guidee-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier la cohérence de chaque ligne du tableau (par exemple, un réseau wifi ne peut pas utiliser une propagation guidée) et corriger toute ligne erronée en justifiant.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-propagation-libre-guidee-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Propagation libre / guidée » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="propagation-libre-guidee"></p>
+        <div class="zone-eleve">
+          <textarea id="question-propagation-libre-guidee-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="transmettre-information" data-onglet="chaine-generale" data-onglet-nom="Chaîne de transmission" hidden>
+
+    <h4>Questions de l'onglet « Chaîne de transmission »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Nommer les trois éléments d'une chaîne de transmission d'informations et donner le rôle de chacun.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-chaine-generale-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Identifier ces trois éléments pour un système de votre choix (wifi, télécommande infrarouge ou fibre optique) et préciser le type d'onde utilisé.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-chaine-generale-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Comparer les chaînes de transmission des trois systèmes proposés : indiquer ce qui change (type d'onde, canal) et ce qui reste identique.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-chaine-generale-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier votre schéma avec le bouton « Vérifier » : indiquer si votre première réponse était correcte et, sinon, expliquer l'erreur commise.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-chaine-generale-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Chaîne de transmission » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="chaine-generale"></p>
+        <div class="zone-eleve">
+          <textarea id="question-chaine-generale-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+    <div class="questions-bloc" data-tp="transmettre-information" data-onglet="fibre-optique" data-onglet-nom="Fibre optique" hidden>
+
+    <h4>Questions de l'onglet « Fibre optique »</h4>
+
+    <ol class="questions-tp">
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Énoncer la condition de réflexion totale à l'interface entre le cœur (n₁) et la gaine (n₂) et écrire l'expression de l'angle critique θc.
+          </strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-fibre-optique-1" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Calculer l'angle critique θc pour n₁ = 1,480 et n₂ = 1,460, en détaillant le calcul et en donnant le résultat avec son unité.
+          </strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-fibre-optique-2" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Analyser les résultats obtenus : expliquer pourquoi le faisceau reste guidé lorsque l'angle d'incidence est supérieur ou égal à l'angle critique et pourquoi une partie de la lumière sort de la fibre dans le cas contraire.
+          </strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-fibre-optique-3" rows="5" placeholder="Votre analyse..."></textarea>
+        </div>
+      </li>
+
+      <li>
+        <div class="question-entete">
+          <strong>
+            Vérifier la cohérence des résultats : que devient le calcul de θc lorsque n₂ est supérieur ou égal à n₁ ? En déduire pourquoi la gaine doit avoir un indice plus faible que le cœur.
+          </strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve">
+          <textarea id="question-fibre-optique-4" rows="4" placeholder="Votre réponse..."></textarea>
+        </div>
+      </li>
+
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet « Fibre optique » :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="fibre-optique"></p>
+        <div class="zone-eleve">
+          <textarea id="question-fibre-optique-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats expérimentaux..."></textarea>
+        </div>
+      </li>
+
+    </ol>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, évaluez votre niveau de maîtrise pour chaque
+      compétence.
+    </p>
+
+    <div class="table-responsive">
+
+      <table class="tableau-resultats autoeval-table">
+
+        <thead>
+          <tr>
+            <th>Domaine</th>
+            <th>Sigle</th>
+            <th>Je suis capable de...</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-comp="APP">
+            <td>S'approprier</td>
+            <td>APP</td>
+            <td>Distinguer propagation libre et propagation guidée.</td>
+            <td><input type="radio" name="APP" value="0"></td>
+            <td><input type="radio" name="APP" value="1"></td>
+            <td><input type="radio" name="APP" value="2"></td>
+          </tr>
+
+          <tr data-comp="REA">
+            <td>Réaliser</td>
+            <td>REA</td>
+            <td>Mettre en œuvre une liaison par fibre optique et mesurer un angle critique.</td>
+            <td><input type="radio" name="REA" value="0"></td>
+            <td><input type="radio" name="REA" value="1"></td>
+            <td><input type="radio" name="REA" value="2"></td>
+          </tr>
+
+          <tr data-comp="ANA">
+            <td>Analyser / Raisonner</td>
+            <td>ANA</td>
+            <td>Interpréter le comportement du faisceau selon l'angle d'incidence.</td>
+            <td><input type="radio" name="ANA" value="0"></td>
+            <td><input type="radio" name="ANA" value="1"></td>
+            <td><input type="radio" name="ANA" value="2"></td>
+          </tr>
+
+          <tr data-comp="VAL">
+            <td>Valider</td>
+            <td>VAL</td>
+            <td>Vérifier la cohérence des résultats obtenus.</td>
+            <td><input type="radio" name="VAL" value="0"></td>
+            <td><input type="radio" name="VAL" value="1"></td>
+            <td><input type="radio" name="VAL" value="2"></td>
+          </tr>
+
+          <tr data-comp="COM">
+            <td>Communiquer</td>
+            <td>COM</td>
+            <td>Présenter les résultats avec un vocabulaire scientifique.</td>
+            <td><input type="radio" name="COM" value="0"></td>
+            <td><input type="radio" name="COM" value="1"></td>
+            <td><input type="radio" name="COM" value="2"></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" class="btn btn-primaire">
+        📊 Générer mon radar de compétences
+      </button>
+      <div class="espace-haut-md" id="radar-resultat"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TP, imprimer votre compte-rendu en PDF.
+      L'envoyer à l'enseignant en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">
+        🖨 Imprimer le compte-rendu
+      </button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>les valeurs saisies et les résultats des manipulations ;</li>
+        <li>les réponses aux questions de l'onglet sélectionné ;</li>
+        <li>l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-tp="tp01-onde-electromagnetique">
+    ← TP S01
+  </button>
+
+  <button class="btn btn-primaire" data-aller-accueil>
+    🏠 Accueil
+  </button>
+
+</div>
+
+</main>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

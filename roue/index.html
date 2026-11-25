@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roue Classe Puzzle</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="compte-rendu.css">
+</head>
+
+<body>
+
+<header class="page-header">
+  <h1><span class="emoji">🎡</span>Roue Classe Puzzle</h1>
+  <p>Tirage des groupes et attribution des rôles pour la pédagogie du puzzle</p>
+</header>
+
+<div class="upload-card">
+  <input type="file" id="fileInput" accept=".txt">
+  <div class="upload-hint">
+    La liste des élèves est réalisée par un fichier .txt<br>
+    avec un prénom à chaque ligne, sans séparateur.
+  </div>
+  <button onclick="loadFromFile()">📄 Charger fichier</button>
+</div>
+
+<div class="actions-row">
+  <button onclick="tirageSeance1()">🧩 Séance 1 : Groupes adaptatifs</button>
+  <button onclick="tirageSeance2()">🎨 Séance 2 : Groupes puzzle</button>
+  <button onclick="tirageSeance3()">👫 Séance 3 : Binômes</button>
+  <button onclick="exporterPDF()">🖨️ Exporter PDF (Séance 1 + 2 + 3)</button>
+</div>
+
+<div class="wheel-wrap">
+  <canvas id="wheel" width="400" height="400"></canvas>
+</div>
+
+<button onclick="spin()">🎯 Tourner</button>
+
+<div id="results" class="results"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

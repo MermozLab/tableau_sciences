@@ -1,0 +1,888 @@
+<!--
+  Fragment SPA chargé dynamiquement par navigation.js.
+  Les chemins (./assets/…) sont relatifs à la page du domaine
+  (tp-geometrie/index.html), pas à la racine du site.
+  Aucun <script> dans ce fragment.
+-->
+
+<section>
+
+<header class="tp-header">
+
+  <div class="tp-header-logo">
+    <div class="logo">
+      <span class="sci">Mathi</span><span class="Lab">Lab</span>
+    </div>
+  </div>
+
+  <div class="tp-header-centre">
+
+    <h1>Vecteurs du plan et de l'espace</h1>
+
+    <div class="tp-meta">
+
+      <div class="tp-row">
+        <span class="tag">1ère</span>
+        <span class="tag">Géométrie</span>
+        <span class="tag">Coordonnées</span>
+        <span class="tag">Somme et produit par un réel</span>
+        <span class="tag">Norme</span>
+        <span class="tag">Statique et RDM (atelier)</span>
+      </div>
+      <div class="tp-row">
+        <span class="tag">Tle</span>
+        <span class="tag">Géométrie</span>
+        <span class="tag">Vecteurs dans l'espace</span>
+        <span class="tag">Norme et colinéarité</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="tp-header-numero">
+    <span class="tp-numero-txt">TD G03</span>
+  </div>
+
+</header>
+
+<div class="progress">
+  <div id="bar"></div>
+</div>
+
+<main id="content">
+
+<div class="section" data-type="objectif">
+
+  <div class="section-titre">
+    <div class="picto-section">🎯</div>
+    <h2>Capacités évaluées</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      Sélectionner votre filière ci-dessous : les onglets affichés
+      s'adaptent automatiquement à votre niveau et à votre filière.
+    </p>
+
+    <ul>
+      <li><strong>1ère</strong> (toutes filières) — reconnaître des vecteurs égaux, opposés, colinéaires ; construire la somme de deux vecteurs et le produit d'un vecteur par un réel ; déterminer et calculer les coordonnées d'un vecteur dans un repère orthogonal ; calculer sa norme.</li>
+      <li><strong>Tle</strong> (groupement B — TRPM, TCI, MCC uniquement) — étendre ces notions à l'espace : coordonnées d'un point et d'un vecteur, norme, somme, colinéarité dans un repère orthonormé de l'espace.</li>
+      <li><em>Domaine transversal — Capacités mathématiques : chercher, modéliser, représenter, calculer, raisonner et communiquer.</em></li>
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="contexte-pro">
+
+  <div class="section-titre">
+    <div class="picto-section">🏭</div>
+    <h2>Contexte professionnel</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div class="info">
+      Un déplacement, une force, ou un effort de traction se modélisent par
+      un vecteur : direction, sens et intensité (norme).
+    </div>
+
+    <div class="filiere-select-bloc">
+      <label for="select-filiere-pro">Votre filière professionnelle :</label>
+      <select id="select-filiere-pro">
+        <option value="">-- Sélectionner une filière --</option>
+      </select>
+    </div>
+
+    <div id="contexte-pro-resultat" class="contexte-pro-resultat">
+      <p>Sélectionner votre filière professionnelle pour afficher le contexte professionnel associé.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="preparation">
+
+  <div class="section-titre">
+    <div class="picto-section">📐</div>
+    <h2>Activités</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <div id="td03-message-filiere" class="info" hidden></div>
+
+    <div class="toolbar">
+      <a class="btn btn-secondaire" href="../../numworks/emulator.html" data-outil-index="Calculatrice NumWorks" target="_blank" rel="noopener">
+        🧮 Ouvrir la calculatrice NumWorks
+      </a>
+    </div>
+
+    <div class="tabs-container">
+
+      <div class="tabs-header">
+        <button class="tab-btn actif" data-tab="construire-vecteurs">1ère · Construire et reconnaître des vecteurs</button>
+        <button class="tab-btn" data-tab="coordonnees-plan">1ère · Coordonnées, somme, produit, norme</button>
+        <button class="tab-btn" data-tab="vecteurs-espace" data-filieres="trpm,tci,mcc">Tle · Vecteurs dans l'espace</button>
+        <button class="tab-btn" data-tab="activites-atelier" data-filieres="trpm,tci,log">🛠 Activités atelier</button>
+        <button class="tab-btn" data-tab="activites-puzzle">🧩 Activités Puzzle</button>
+      </div>
+
+      <!-- ---------- 1ère : CONSTRUIRE ET RECONNAÎTRE ---------- -->
+      <div class="tab-panel actif" id="construire-vecteurs">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="construire-vecteurs"></p>
+        </div>
+
+        <h3>Construire la somme de deux vecteurs et le produit par un réel</h3>
+
+        <div class="info">
+          Ouvrir GéoGébra Classic (bouton ci-dessous) et suivre le protocole
+          pour construire, reconnaître et combiner des vecteurs.
+        </div>
+
+        <div class="toolbar">
+          <button type="button" class="btn btn-secondaire" data-ggb="classique">
+            📐 Ouvrir GéoGébra Classic
+          </button>
+        </div>
+
+        <ol class="etapes">
+          <li>Construire deux vecteurs non colinéaires : taper <code>u=Vecteur((0,0),(3,1))</code> puis <code>v=Vecteur((0,0),(1,2))</code>.</li>
+          <li>Construire leur somme avec la commande <code>w=u+v</code> : observer la règle du parallélogramme.</li>
+          <li>Construire le vecteur opposé de u avec <code>-u</code>, et un vecteur colinéaire à u avec <code>2u</code>.</li>
+          <li>Déplacer les points définissant u : la somme w se met-elle à jour automatiquement ?</li>
+        </ol>
+
+      </div>
+
+      <!-- ---------- 1ère : COORDONNÉES ---------- -->
+      <div class="tab-panel" id="coordonnees-plan">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="coordonnees-plan"></p>
+        </div>
+
+        <h3>Coordonnées, somme, produit par un réel et norme dans le plan</h3>
+
+        <div class="info">
+          Saisir les coordonnées de deux points A et B : les coordonnées du
+          vecteur AB et sa norme se calculent automatiquement.
+        </div>
+
+        <h4 class="espace-haut-lg">Méthodologie</h4>
+        <ol class="etapes espace-bas-lg">
+          <li>Les coordonnées de AB s'obtiennent par (xB − xA ; yB − yA).</li>
+          <li>La norme se calcule par la formule de Pythagore appliquée aux coordonnées : ‖AB‖ = √((xB−xA)² + (yB−yA)²).</li>
+          <li>Adapter les coordonnées à un déplacement ou un effort de votre filière.</li>
+        </ol>
+
+        <div class="form-row">
+          <div class="form-group"><label for="vp-ax">xA</label><input id="vp-ax" type="number" step="0.1" value="1"></div>
+          <div class="form-group"><label for="vp-ay">yA</label><input id="vp-ay" type="number" step="0.1" value="2"></div>
+          <div class="form-group"><label for="vp-bx">xB</label><input id="vp-bx" type="number" step="0.1" value="4"></div>
+          <div class="form-group"><label for="vp-by">yB</label><input id="vp-by" type="number" step="0.1" value="6"></div>
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="vp-calculer" type="button" class="btn btn-primaire">▶ Calculer AB et sa norme</button>
+          </div>
+        </div>
+
+        <div id="vp-resultat" class="resultat-calcul"></div>
+
+        <h4 class="espace-haut-lg">Somme de deux vecteurs et produit par un réel</h4>
+
+        <div class="form-row">
+          <div class="form-group"><label for="vp-ux">xu</label><input id="vp-ux" type="number" step="0.1" value="3"></div>
+          <div class="form-group"><label for="vp-uy">yu</label><input id="vp-uy" type="number" step="0.1" value="1"></div>
+          <div class="form-group"><label for="vp-vx">xv</label><input id="vp-vx" type="number" step="0.1" value="-1"></div>
+          <div class="form-group"><label for="vp-vy">yv</label><input id="vp-vy" type="number" step="0.1" value="2"></div>
+          <div class="form-group"><label for="vp-k">Réel k</label><input id="vp-k" type="number" step="0.1" value="2"></div>
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="vp-combiner" type="button" class="btn btn-secondaire">Calculer u+v et k·u</button>
+          </div>
+        </div>
+
+        <div id="vp-combi-resultat" class="resultat-calcul"></div>
+
+
+      </div>
+
+      <!-- ---------- Tle : VECTEURS DANS L'ESPACE (groupement B) ---------- -->
+      <div class="tab-panel" id="vecteurs-espace" data-filieres="trpm,tci,mcc">
+
+        <div class="problematique-onglet">
+          <span class="problematique-onglet-etiquette">Problématique</span>
+          <p class="problematique-rappel" data-activite="vecteurs-espace"></p>
+        </div>
+
+        <h3>Coordonnées, somme, colinéarité et norme dans l'espace</h3>
+
+        <div class="info">
+          Les mêmes notions s'étendent à l'espace muni d'un repère
+          orthonormé : chaque point et chaque vecteur ont trois
+          coordonnées (x ; y ; z).
+        </div>
+
+        <h4 class="espace-haut-lg">Méthodologie</h4>
+        <ol class="etapes espace-bas-lg">
+          <li>Les coordonnées de AB dans l'espace s'obtiennent par (xB−xA ; yB−yA ; zB−zA).</li>
+          <li>La norme se calcule par ‖AB‖ = √((xB−xA)² + (yB−yA)² + (zB−zA)²).</li>
+          <li>Deux vecteurs sont colinéaires si les trois rapports de leurs coordonnées respectives sont égaux.</li>
+        </ol>
+
+        <div class="form-row">
+          <div class="form-group"><label for="ve-ax">xA</label><input id="ve-ax" type="number" step="0.1" value="1"></div>
+          <div class="form-group"><label for="ve-ay">yA</label><input id="ve-ay" type="number" step="0.1" value="0"></div>
+          <div class="form-group"><label for="ve-az">zA</label><input id="ve-az" type="number" step="0.1" value="2"></div>
+          <div class="form-group"><label for="ve-bx">xB</label><input id="ve-bx" type="number" step="0.1" value="4"></div>
+          <div class="form-group"><label for="ve-by">yB</label><input id="ve-by" type="number" step="0.1" value="3"></div>
+          <div class="form-group"><label for="ve-bz">zB</label><input id="ve-bz" type="number" step="0.1" value="6"></div>
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="ve-calculer" type="button" class="btn btn-primaire">▶ Calculer AB et sa norme</button>
+          </div>
+        </div>
+
+        <div id="ve-resultat" class="resultat-calcul"></div>
+
+        <h4 class="espace-haut-lg">Vecteurs colinéaires dans l'espace</h4>
+
+        <div class="info">
+          Deux vecteurs de l'espace sont colinéaires si l'un est le produit
+          de l'autre par un réel : leurs coordonnées sont alors
+          proportionnelles.
+        </div>
+
+        <div class="form-row">
+          <div class="form-group"><label for="ve-ux">xu</label><input id="ve-ux" type="number" step="0.1" value="2"></div>
+          <div class="form-group"><label for="ve-uy">yu</label><input id="ve-uy" type="number" step="0.1" value="-1"></div>
+          <div class="form-group"><label for="ve-uz">zu</label><input id="ve-uz" type="number" step="0.1" value="4"></div>
+          <div class="form-group"><label for="ve-vx">xv</label><input id="ve-vx" type="number" step="0.1" value="-4"></div>
+          <div class="form-group"><label for="ve-vy">yv</label><input id="ve-vy" type="number" step="0.1" value="2"></div>
+          <div class="form-group"><label for="ve-vz">zv</label><input id="ve-vz" type="number" step="0.1" value="-8"></div>
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button id="ve-colineaire" type="button" class="btn btn-secondaire">Tester la colinéarité</button>
+          </div>
+        </div>
+
+        <div id="ve-colineaire-resultat" class="resultat-calcul"></div>
+
+
+      </div>
+
+      <!-- ---------- ACTIVITÉS ATELIER : statique et RDM (TP mécanique) ---------- -->
+      <div class="tab-panel" id="activites-atelier" data-filieres="trpm,tci,log">
+
+        <h3>Activités atelier : des vecteurs aux efforts sur une installation</h3>
+
+        <div class="info">
+          En atelier, une force est un <strong>vecteur</strong> : point d'application,
+          droite d'action, sens et intensité (la norme). Les notions de ce TD servent
+          à vérifier qu'une suspension ou une soudure est bien dimensionnée
+          (situations du pré-séparateur, du répartiteur bidirectionnel, du clapet anti-retour
+          et du support de détecteur).
+        </div>
+
+        <div class="sous-onglets" role="tablist">
+          <button class="sous-btn actif" data-atelier="atelier-poids">1. Poids et bilan des actions</button>
+          <button class="sous-btn" data-atelier="atelier-equilibre">2. Équilibre : moments et résultante</button>
+          <button class="sous-btn" data-atelier="atelier-soudure">3. Résistance d'une soudure</button>
+        </div>
+
+        <!-- 1. POIDS -->
+        <div class="sous-panel actif" id="atelier-poids">
+          <div class="problematique-onglet">
+            <span class="problematique-onglet-etiquette">Problématique</span>
+            <p class="problematique-rappel" data-activite="activites-atelier-poids"></p>
+          </div>
+
+          <h4>Le poids : un vecteur vertical dirigé vers le bas</h4>
+          <ol class="etapes">
+            <li>Le poids se calcule par <code>P = m × g</code> (P en newtons, m en kg, g = 10 m/s²).</li>
+            <li>Il s'applique au centre de gravité G, sa droite d'action est verticale, son sens est vers le bas.</li>
+            <li>Dans un repère (O ; x ; y) avec y vers le haut, ses coordonnées sont <code>(0 ; −P)</code> et sa norme est P.</li>
+          </ol>
+          <div class="form-row">
+            <div class="form-group"><label for="at-masse">Masse m (kg)</label><input id="at-masse" type="number" step="any" value="300"></div>
+            <div class="form-group"><label for="at-g">g (m/s²)</label><input id="at-g" type="number" step="any" value="10"></div>
+            <div class="form-group"><label>&nbsp;</label><button id="at-poids-calc" type="button" class="btn btn-primaire">▶ Calculer le poids</button></div>
+          </div>
+          <div id="at-poids-resultat" class="resultat-calcul"></div>
+
+          <h4 class="espace-haut-lg">Bilan des actions mécaniques (à compléter sur le sujet)</h4>
+          <div class="table-responsive">
+            <table class="tableau-resultats">
+              <thead><tr><th>Action</th><th>Point d'application</th><th>Droite d'action</th><th>Sens</th><th>Intensité</th></tr></thead>
+              <tbody>
+                <tr><td>Poids P</td><td>G</td><td>verticale</td><td>vers le bas</td><td>P = m × g (connue)</td></tr>
+                <tr><td>Action A (tige, élingue, pied…)</td><td>A</td><td>verticale (hypothèse)</td><td>?</td><td>?</td></tr>
+                <tr><td>Action B (tige, élingue, pied…)</td><td>B</td><td>verticale (hypothèse)</td><td>?</td><td>?</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2. ÉQUILIBRE -->
+        <div class="sous-panel" id="atelier-equilibre">
+          <div class="problematique-onglet">
+            <span class="problematique-onglet-etiquette">Problématique</span>
+            <p class="problematique-rappel" data-activite="activites-atelier-equilibre"></p>
+          </div>
+
+          <h4>Forces verticales parallèles : théorème des moments puis de la résultante</h4>
+          <ol class="etapes">
+            <li>On place les points sur un axe horizontal (positions en mm) : A et B sont les appuis, chaque charge a une position.</li>
+            <li>Théorème des moments en A : <code>B × (xB − xA) = Σ F × (x − xA)</code>, d'où B.</li>
+            <li>Théorème de la résultante : la somme des vecteurs forces est le vecteur nul (<math><mo>Σ</mo><mover accent="true"><mi mathvariant="normal">F</mi><mo stretchy="false">→</mo></mover><mo>=</mo><mover accent="true"><mi mathvariant="normal">0</mi><mo stretchy="false">→</mo></mover></math>), d'où <code>A = ΣF − B</code>.</li>
+          </ol>
+
+          <div class="toolbar">
+            <button type="button" class="btn btn-secondaire" data-preset-eq="separateur">Pré-séparateur (TP3)</button>
+            <button type="button" class="btn btn-secondaire" data-preset-eq="clapet">Clapet anti-retour (TP2)</button>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group"><label for="at-xa">Position de A (mm)</label><input id="at-xa" type="number" step="any" value="0"></div>
+            <div class="form-group"><label for="at-xb">Position de B (mm)</label><input id="at-xb" type="number" step="any" value="608"></div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="tableau-resultats">
+              <thead><tr><th>Charge (vers le bas)</th><th>Intensité (N)</th><th>Position (mm)</th></tr></thead>
+              <tbody>
+                <tr><td><input id="at-f1-nom" type="text" value="P (poids)"></td><td><input id="at-f1-n" type="number" step="any" value="3000"></td><td><input id="at-f1-x" type="number" step="any" value="400"></td></tr>
+                <tr><td><input id="at-f2-nom" type="text" value=""></td><td><input id="at-f2-n" type="number" step="any" value=""></td><td><input id="at-f2-x" type="number" step="any" value=""></td></tr>
+                <tr><td><input id="at-f3-nom" type="text" value=""></td><td><input id="at-f3-n" type="number" step="any" value=""></td><td><input id="at-f3-x" type="number" step="any" value=""></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="toolbar"><button id="at-eq-calc" type="button" class="btn btn-primaire">▶ Calculer les efforts en A et B</button></div>
+          <div id="at-eq-resultat" class="resultat-calcul"></div>
+
+          <div class="info espace-haut-md">
+            Si les trois forces ne sont pas parallèles (élingues inclinées), on utilise la
+            méthode graphique : les trois droites d'action sont concourantes et le
+            dynamique des forces est fermé.
+          </div>
+        </div>
+
+        <!-- 3. SOUDURE -->
+        <div class="sous-panel" id="atelier-soudure">
+          <div class="problematique-onglet">
+            <span class="problematique-onglet-etiquette">Problématique</span>
+            <p class="problematique-rappel" data-activite="activites-atelier-soudure"></p>
+          </div>
+
+          <h4>Un cordon de soudure travaille au cisaillement</h4>
+          <ol class="etapes">
+            <li>Section cisaillée des cordons : <code>S = n × a × L</code> (n cordons de gorge a et de longueur L).</li>
+            <li>Résistance élastique au glissement <code>Rg = Re / 2</code>, puis pratique <code>Rpg = Rg / s</code>.</li>
+            <li>Contrainte <code>τ = T / S</code> (en N/mm² = MPa) et condition de résistance <code>τ ≤ Rpg</code>.</li>
+            <li>Longueur minimale : <code>Lmin = T / (n × a × Rpg)</code>.</li>
+          </ol>
+
+          <div class="toolbar">
+            <button type="button" class="btn btn-secondaire" data-preset-sd="detecteur">Support de détecteur (TP2 RDM)</button>
+            <button type="button" class="btn btn-secondaire" data-preset-sd="oreille">Oreille de levage (TP1 RDM)</button>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group"><label for="at-T">Effort T (N)</label><input id="at-T" type="number" step="any" value="540"></div>
+            <div class="form-group"><label for="at-Re">Re (MPa)</label><input id="at-Re" type="number" step="any" value="175"></div>
+            <div class="form-group"><label for="at-s">Coefficient s</label><input id="at-s" type="number" step="any" value="5"></div>
+            <div class="form-group"><label for="at-a">Gorge a (mm)</label><input id="at-a" type="number" step="any" value="3"></div>
+            <div class="form-group"><label for="at-n">Nombre de cordons n</label><input id="at-n" type="number" step="1" min="1" value="1"></div>
+            <div class="form-group"><label for="at-L">Longueur L (mm, facultative)</label><input id="at-L" type="number" step="any" value=""></div>
+            <div class="form-group"><label>&nbsp;</label><button id="at-sd-calc" type="button" class="btn btn-primaire">▶ Vérifier la soudure</button></div>
+          </div>
+          <div id="at-sd-resultat" class="resultat-calcul"></div>
+        </div>
+
+      </div>
+
+      <!-- ---------- ACTIVITÉS PUZZLE (onglet indépendant, sujets A / B / C) ---------- -->
+      <div class="tab-panel" id="activites-puzzle">
+
+        <h3>Activités Puzzle</h3>
+
+        <div id="puzzle-info" class="info">
+          Sélectionner votre filière professionnelle dans la section « Contexte professionnel »
+          ci-dessus pour afficher les trois sujets.
+        </div>
+
+        <div class="sous-onglets" role="tablist">
+          <button class="sous-btn actif" data-sous="puzzle-sujet-a">Sujet A</button>
+          <button class="sous-btn" data-sous="puzzle-sujet-b">Sujet B</button>
+          <button class="sous-btn" data-sous="puzzle-sujet-c">Sujet C</button>
+        </div>
+
+        <div class="sous-panel actif" id="puzzle-sujet-a">
+          <div class="fiche-puzzle" data-titre="Coordonnées et norme">
+            <div class="questions-bloc" data-tp="puzzle-a">
+              <ol class="questions-tp"><li>
+                <div class="question-entete"><strong>Sujet A — Coordonnées et norme</strong>
+                  <span class="cartouche" data-comp="REA">REA</span></div>
+                <p class="info puzzle-contexte" id="puzzle-a-contexte"></p>
+                <p class="puzzle-problematique" id="puzzle-a-problematique"></p>
+                <ol id="puzzle-a-enonce" class="puzzle-questions"></ol>
+              </li></ol>
+            </div>
+          </div>
+        </div>
+        <div class="sous-panel" id="puzzle-sujet-b">
+          <div class="fiche-puzzle" data-titre="Somme de vecteurs ou colinéarité">
+            <div class="questions-bloc" data-tp="puzzle-b">
+              <ol class="questions-tp"><li>
+                <div class="question-entete"><strong>Sujet B — Somme de vecteurs ou colinéarité</strong>
+                  <span class="cartouche" data-comp="ANA">ANA</span></div>
+                <p class="info puzzle-contexte" id="puzzle-b-contexte"></p>
+                <p class="puzzle-problematique" id="puzzle-b-problematique"></p>
+                <ol id="puzzle-b-enonce" class="puzzle-questions"></ol>
+              </li></ol>
+            </div>
+          </div>
+        </div>
+        <div class="sous-panel" id="puzzle-sujet-c">
+          <div class="fiche-puzzle" data-titre="Combiner ou comparer des vecteurs">
+            <div class="questions-bloc" data-tp="puzzle-c">
+              <ol class="questions-tp"><li>
+                <div class="question-entete"><strong>Sujet C — Combiner ou comparer des vecteurs</strong>
+                  <span class="cartouche" data-comp="VAL">VAL</span></div>
+                <p class="info puzzle-contexte" id="puzzle-c-contexte"></p>
+                <p class="puzzle-problematique" id="puzzle-c-problematique"></p>
+                <ol id="puzzle-c-enonce" class="puzzle-questions"></ol>
+              </li></ol>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<div class="section" data-type="bilan">
+
+  <div class="section-titre">
+    <div class="picto-section">📝</div>
+    <h2>Trace écrite - Compte rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <h3>Identification</h3>
+
+    <div class="form-row">
+      <div class="form-group"><label for="nom-eleve">Nom</label><input id="nom-eleve" type="text" placeholder="Nom"></div>
+      <div class="form-group"><label for="prenom-eleve">Prénom</label><input id="prenom-eleve" type="text" placeholder="Prénom"></div>
+      <div class="form-group"><label for="classe-eleve">Classe</label><input id="classe-eleve" type="text" placeholder="Classe"></div>
+      <div class="form-group"><label for="date-eleve">Date</label><input id="date-eleve" type="date"></div>
+    </div>
+
+
+    <h3 class="espace-haut-md">Questions</h3>
+
+    <p class="info">Les questions affichées suivent l'onglet sélectionné dans « Activités » (et, pour « Activités atelier », son sous-onglet) : quatre portent sur l'objet de l'onglet, la cinquième sur sa problématique. Seules les questions de l'onglet actif sont imprimées.</p>
+
+    <div class="questions-bloc" data-tp="vecteurs-construire-vecteurs" data-onglet="construire-vecteurs" data-onglet-nom="1ère · Construire et reconnaître des vecteurs">
+    <h4>Questions de l'onglet « 1ère · Construire et reconnaître des vecteurs »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Rappeler la définition d'un vecteur (direction, sens, norme) et la règle du parallélogramme pour la somme de deux vecteurs.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-construire-vecteurs-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Décrire la construction réalisée dans GéoGébra : vecteurs u et v, somme u + v et produit k·u pour le réel k choisi.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-construire-vecteurs-2" rows="4" placeholder="Description de la construction..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer comment reconnaître que deux vecteurs sont égaux ou opposés à partir de leur direction, de leur sens et de leur norme.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-construire-vecteurs-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier, sur la construction, que u + v est bien la diagonale du parallélogramme construit sur u et v.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-construire-vecteurs-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="construire-vecteurs"></p>
+        <div class="zone-eleve"><textarea id="question-construire-vecteurs-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="vecteurs-coordonnees-plan" data-onglet="coordonnees-plan" data-onglet-nom="1ère · Coordonnées, somme, produit, norme" hidden>
+    <h4>Questions de l'onglet « 1ère · Coordonnées, somme, produit, norme »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Donner la formule des coordonnées du vecteur AB et celle de sa norme dans le plan.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-coordonnees-plan-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Donner les coordonnées et la norme du vecteur AB étudié, ainsi que le résultat de u + v.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-coordonnees-plan-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer comment passer des coordonnées de A et de B à celles du vecteur AB puis à sa norme, et pourquoi la somme de deux vecteurs s'obtient en additionnant leurs coordonnées.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-coordonnees-plan-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier la norme de AB en la comparant à la longueur du segment [AB] mesurée dans GéoGébra Classic.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-coordonnees-plan-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="coordonnees-plan"></p>
+        <div class="zone-eleve"><textarea id="question-coordonnees-plan-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="vecteurs-vecteurs-espace" data-onglet="vecteurs-espace" data-onglet-nom="Tle · Vecteurs dans l&#x27;espace" hidden>
+    <h4>Questions de l'onglet « Tle · Vecteurs dans l&#x27;espace »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Donner les coordonnées du vecteur AB de l'espace en fonction de celles de A et de B, puis la formule de sa norme.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-vecteurs-espace-1" rows="4" placeholder="Votre réponse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Calculer les coordonnées et la norme du vecteur AB étudié, avec l'unité.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-vecteurs-espace-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer comment reconnaître, à l'aide de leurs coordonnées, que deux vecteurs sont colinéaires.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-vecteurs-espace-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier la conclusion sur la colinéarité par une seconde méthode (rapport des coordonnées ou produit vectoriel).</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-vecteurs-espace-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="vecteurs-espace"></p>
+        <div class="zone-eleve"><textarea id="question-vecteurs-espace-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="vecteurs-activites-atelier-poids" data-onglet="activites-atelier-poids" data-onglet-parent="activites-atelier" data-sous="atelier-poids" data-onglet-nom="Activités atelier · 1. Poids et bilan des actions">
+    <h4>Questions de l'onglet « Activités atelier » · 1. Poids et bilan des actions</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Donner la relation entre la masse et le poids d'un ensemble (en précisant les unités), puis les quatre caractéristiques du vecteur poids : point d'application, droite d'action, sens, intensité.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-poids-1" rows="4" placeholder="Relation, unités, caractéristiques..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Calculer le poids de l'ensemble étudié avec les valeurs de m et de g saisies dans l'outil, puis donner les coordonnées du vecteur poids dans le repère (O ; x ; y), y étant dirigé vers le haut.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-poids-2" rows="5" placeholder="Formule, calcul, résultat en newtons, coordonnées (0 ; −P)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Compléter le bilan des actions mécaniques : pour les actions en A et en B, justifier la droite d'action (verticale) et le sens, puis expliquer pourquoi leur intensité est encore inconnue à ce stade.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-poids-3" rows="5" placeholder="Votre analyse du bilan des actions..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Contrôler le résultat : la norme du vecteur poids est-elle égale à P, l'unité est-elle cohérente, et le sens du vecteur correspond-il à celui d'une force dirigée vers le bas ?</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-poids-4" rows="4" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="activites-atelier-poids"></p>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-poids-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="vecteurs-activites-atelier-equilibre" data-onglet="activites-atelier-equilibre" data-onglet-parent="activites-atelier" data-sous="atelier-equilibre" data-onglet-nom="Activités atelier · 2. Équilibre : moments et résultante" hidden>
+    <h4>Questions de l'onglet « Activités atelier » · 2. Équilibre : moments et résultante</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Énoncer, pour des forces verticales parallèles, le théorème des moments en A et le théorème de la résultante.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-equilibre-1" rows="4" placeholder="Énoncés et formules..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Écrire l'équation des moments en A avec les positions et les charges saisies dans l'outil, en déduire l'effort en B, puis utiliser le théorème de la résultante pour en déduire l'effort en A.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-equilibre-2" rows="5" placeholder="Équations, calculs, résultats en newtons..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer pourquoi, à l'équilibre, la somme des vecteurs forces (<math><mo>Σ</mo><mover accent="true"><mi mathvariant="normal">F</mi><mo stretchy="false">→</mo></mover><mo>=</mo><mover accent="true"><mi mathvariant="normal">0</mi><mo stretchy="false">→</mo></mover></math>) et la somme des moments sont nulles, et ce que cela impose aux efforts en A et en B.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-equilibre-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier les résultats : contrôler que A + B est égal à la somme des charges, puis que le théorème des moments écrit en B redonne la même valeur pour A.</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-equilibre-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="activites-atelier-equilibre"></p>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-equilibre-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="vecteurs-activites-atelier-soudure" data-onglet="activites-atelier-soudure" data-onglet-parent="activites-atelier" data-sous="atelier-soudure" data-onglet-nom="Activités atelier · 3. Résistance d'une soudure" hidden>
+    <h4>Questions de l'onglet « Activités atelier » · 3. Résistance d'une soudure</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Rappeler pourquoi un cordon de soudure travaille au cisaillement, puis donner les relations qui permettent de calculer S, Rg, Rpg et τ ainsi que la condition de résistance.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-soudure-1" rows="5" placeholder="Relations et condition de résistance..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Calculer la résistance élastique au glissement Rg puis la résistance pratique Rpg avec les valeurs de Re et de s saisies dans l'outil, puis la longueur minimale Lmin du cordon.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-soudure-2" rows="5" placeholder="Rg, Rpg, Lmin avec les unités..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer l'influence de la gorge a, de la longueur L et du nombre de cordons n sur la section cisaillée S et sur la contrainte τ, et indiquer comment agir si la condition de résistance n'est pas vérifiée.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-soudure-3" rows="5" placeholder="Votre analyse..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Calculer la contrainte τ pour la longueur de cordon retenue, la comparer à Rpg et conclure : la soudure résiste-t-elle à l'effort T ?</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-soudure-4" rows="5" placeholder="S, τ, comparaison et conclusion..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de l'onglet :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <p class="problematique-rappel" data-activite="activites-atelier-soudure"></p>
+        <div class="zone-eleve"><textarea id="question-activites-atelier-soudure-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+
+    <div class="questions-bloc" data-tp="vecteurs-activites-puzzle" data-onglet="activites-puzzle" data-onglet-nom="Activités Puzzle" hidden>
+    <h4>Questions de l'onglet « Activités Puzzle »</h4>
+    <ol class="questions-tp">
+      <li>
+        <div class="question-entete">
+          <strong>Indiquer le sujet traité par votre groupe (A, B ou C) et nommer la propriété ou la formule utilisée.</strong>
+          <span class="cartouche" data-comp="APP">APP</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-1" rows="4" placeholder="Sujet traité, propriété ou formule..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Donner les résultats chiffrés obtenus pour votre sujet, avec les unités.</strong>
+          <span class="cartouche" data-comp="REA">REA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-2" rows="4" placeholder="Votre réponse (calculs et résultats avec les unités)..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Expliquer la démarche suivie et justifier le choix de la méthode.</strong>
+          <span class="cartouche" data-comp="ANA">ANA</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-3" rows="5" placeholder="Démarche et justification..."></textarea></div>
+      </li>
+      <li>
+        <div class="question-entete">
+          <strong>Vérifier la cohérence d'un résultat de votre sujet (unité, ordre de grandeur, second calcul).</strong>
+          <span class="cartouche" data-comp="VAL">VAL</span>
+        </div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-4" rows="5" placeholder="Votre vérification..."></textarea></div>
+      </li>
+      <li class="question-problematique">
+        <div class="question-entete">
+          <strong>Répondre à la problématique de votre sujet (rappelée ci-dessous) en vous appuyant sur vos résultats :</strong>
+          <span class="cartouche" data-comp="COM">COM</span>
+        </div>
+        <div class="puzzle-rappel" id="puzzle-rappel" aria-live="polite"></div>
+        <div class="zone-eleve"><textarea id="question-activites-puzzle-5" rows="5" placeholder="Répondre à la problématique en vous appuyant sur vos résultats..."></textarea></div>
+      </li>
+    </ol>
+    </div>
+    <p class="info">Onglet « Activités Puzzle » : traiter un sujet (A, B ou C), puis rédiger ici vos réponses. La problématique rappelée en question 5 est celle du sujet actif ; elle dépend de la classe et de la filière choisies dans « Contexte professionnel ».</p>
+  </div>
+
+</div>
+
+<div class="section" data-type="auto-evaluation">
+
+  <div class="section-titre">
+    <div class="picto-section">📡</div>
+    <h2>Auto-évaluation des compétences</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">À la fin du TD, évaluez votre niveau de maîtrise pour chaque compétence.</p>
+
+    <div class="table-responsive">
+      <table class="tableau-resultats autoeval-table">
+        <thead><tr><th>Domaine</th><th>Sigle</th><th>Je suis capable de...</th><th>0</th><th>1</th><th>2</th></tr></thead>
+        <tbody>
+          <tr data-comp="APP"><td>S'approprier</td><td>APP</td><td>Reconnaître des vecteurs égaux, opposés, colinéaires.</td>
+            <td><input type="radio" name="APP" value="0"></td><td><input type="radio" name="APP" value="1"></td><td><input type="radio" name="APP" value="2"></td></tr>
+          <tr data-comp="REA"><td>Réaliser</td><td>REA</td><td>Calculer les coordonnées, la somme, le produit par un réel et la norme d'un vecteur.</td>
+            <td><input type="radio" name="REA" value="0"></td><td><input type="radio" name="REA" value="1"></td><td><input type="radio" name="REA" value="2"></td></tr>
+          <tr data-comp="ANA"><td>Analyser / Raisonner</td><td>ANA</td><td>Reconnaître la colinéarité de deux vecteurs à l'aide de leurs coordonnées.</td>
+            <td><input type="radio" name="ANA" value="0"></td><td><input type="radio" name="ANA" value="1"></td><td><input type="radio" name="ANA" value="2"></td></tr>
+          <tr data-comp="VAL"><td>Valider</td><td>VAL</td><td>Vérifier la cohérence d'un calcul de norme ou de colinéarité.</td>
+            <td><input type="radio" name="VAL" value="0"></td><td><input type="radio" name="VAL" value="1"></td><td><input type="radio" name="VAL" value="2"></td></tr>
+          <tr data-comp="COM"><td>Communiquer</td><td>COM</td><td>Expliquer une construction ou un calcul de vecteur à l'oral ou à l'écrit.</td>
+            <td><input type="radio" name="COM" value="0"></td><td><input type="radio" name="COM" value="1"></td><td><input type="radio" name="COM" value="2"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="radar-actions espace-haut-lg">
+      <button id="btn-radar" class="btn btn-primaire">📊 Générer mon radar de compétences</button>
+      <div class="espace-haut-md" id="radar-resultat"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section" data-type="impression_tp">
+
+  <div class="section-titre">
+    <div class="picto-section">📒</div>
+    <h2>Impression du compte-rendu</h2>
+    <span class="chevron">▼</span>
+  </div>
+
+  <div class="section-corps">
+
+    <p class="info">
+      À la fin du TD, imprimer votre travail en PDF.
+      Envoyer à l'enseignant votre compte rendu en pièce jointe par la messagerie de l'ENT.
+    </p>
+
+    <div class="toolbar">
+      <button id="btn-imprimer" class="btn btn-primaire">🖨 Imprimer le compte-rendu</button>
+    </div>
+
+    <div class="info espace-haut-md">
+      L'impression récupère automatiquement :
+      <ul>
+        <li>le contexte professionnel et les résultats calculés dans les onglets ;</li>
+        <li>les réponses aux questions de l'onglet actif (5 questions, la dernière portant sur la problématique) ;</li>
+        <li>les fiches puzzle (onglet « Activités Puzzle » actif) et l'auto-évaluation des compétences.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="nav-tp">
+
+  <button class="btn btn-secondaire" data-aller-accueil>🏠 Accueil</button>
+
+  <button class="btn btn-primaire" data-aller-tp="td04-trigonometrie">TD04 →</button>
+
+</div>
+
+</main>
+
+<div id="cr-print-container" hidden></div>
+
+</section>

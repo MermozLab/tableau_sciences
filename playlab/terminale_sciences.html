@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sciences - Terminale Pro</title>
+
+    <link rel="stylesheet" href="arcade.css">
+</head>
+
+<body>
+
+<header class="top-bar">
+    <h1>🎮 SCIENCES - TERMINALE PRO 🎮</h1>
+
+    <button class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </button>
+</header>
+
+
+<!-- PAGE ACCUEIL -->
+<div class="home-dashboard" id="homeDashboard">
+
+<!-- ===================== CHIMIE ===================== -->
+<section class="arcade-column">
+    <h2>🧪 Chimie</h2>
+
+    <div class="game-card" onclick="loadPage('./playsciences/25/index.html')">
+        <h3>🏆 C4</h3>
+        <p>Oxydo-réduction — Réaction métal/acide, piles, classification des couples, corrosion</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playsciences/26/index.html')">
+        <h3>🏆 C5</h3>
+        <p>Chimie organique — Estérification, hydrolyse, oxydation des alcools, groupes caractéristiques</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== ACOUSTIQUE ===================== -->
+<section class="arcade-column">
+    <h2>🔊 Acoustique</h2>
+
+
+    <div class="game-card" onclick="loadPage('./playsciences/31/index.html')">
+        <h3>🏆 A5</h3>
+        <p>Pression et niveau acoustiques — Niveau depuis pression/intensité, atténuation avec la distance</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== OPTIQUE ===================== -->
+<section class="arcade-column">
+    <h2>💡 Optique</h2>
+
+    <div class="game-card" onclick="loadPage('./playsciences/36/index.html')">
+        <h3>🏆 O5</h3>
+        <p>Sources lumineuses — Spectres d'émission, efficacité énergétique, propriétés du laser</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playsciences/37/index.html')">
+        <h3>🏆 O6</h3>
+        <p>Lentilles convergentes/divergentes — Différencier les lentilles, distance focale, conjugaison et grandissement</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== MÉCANIQUE ===================== -->
+<section class="arcade-column">
+    <h2>⚙️ Mécanique</h2>
+
+
+    <div class="game-card" onclick="loadPage('./playsciences/41/index.html')">
+        <h3>🏆 M4</h3>
+        <p>Équilibre en rotation et Archimède — Moment d'une force, équilibre en rotation, force d'Archimède</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playsciences/42/index.html')">
+        <h3>🏆 M5</h3>
+        <p>Pression, débit et résonance — Pression dans un fluide immobile, débit, résonance mécanique, effet Venturi</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== THERMIQUE ===================== -->
+<section class="arcade-column">
+    <h2>🔥 Thermique</h2>
+
+
+    <div class="game-card" onclick="loadPage('./playsciences/47/index.html')">
+        <h3>🏆 T5</h3>
+        <p>Transferts thermiques — Les trois modes de transfert, conduction, rayonnement, effet de serre</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== SIGNAUX ===================== -->
+<section class="arcade-column">
+    <h2>📡 Signaux</h2>
+
+    <div class="game-card" onclick="loadPage('./playsciences/49/index.html')">
+        <h3>🏆 S2</h3>
+        <p>Transmettre l'information — Propagation libre/guidée, chaîne de transmission générale, fibre optique</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== ÉLECTRICITÉ ===================== -->
+<section class="arcade-column">
+    <h2>⚡ Électricité</h2>
+
+
+    <div class="game-card" onclick="loadPage('./playsciences/52/index.html')">
+        <h3>🏆 E3</h3>
+        <p>Puissance active — Déphasage tension-intensité, puissance active et facteur de puissance</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playsciences/53/index.html')">
+        <h3>🏆 E4</h3>
+        <p>Conversion et moteurs électriques — Redressement et filtrage, moteurs électriques</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+
+    <div class="game-card" onclick="loadPage('./playsciences/54/index.html')">
+        <h3>🏆 E5</h3>
+        <p>Stockage électrochimique — Piles et oxydoréduction, charge et décharge d'un accumulateur</p>
+        <div class="tag-row">
+            <span class="tag cap3">Expert</span>
+            <span class="tag classe">Tle</span>
+        </div>
+    </div>
+</section>
+
+</div>
+
+
+<!-- ===================== FRAME ===================== -->
+<div class="frame-container" id="frameContainer">
+    <iframe id="contentFrame" src=""></iframe>
+</div>
+
+
+<!-- ===================== MENU ===================== -->
+<div class="side-menu" id="sideMenu">
+    <button class="home-btn" onclick="returnHome()">
+        🏠 Retour accueil
+    </button>
+</div>
+
+<script src="arcade.js"></script>
+
+</body>
+</html>

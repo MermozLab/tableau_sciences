@@ -1,0 +1,57 @@
+name: Publier le site (branche pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: publish-pages
+  cancel-in-progress: true
+
+jobs:
+  pages:
+    runs-on: codeberg-medium
+    timeout-minutes: 20
+    steps:
+      - name: Récupérer le dernier commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          fetch-tags: false
+          lfs: false
+          persist-credentials: false
+          show-progress: false
+
+      - name: Publier sur la branche pages
+        env:
+          CB_USER: ${{ secrets.CODEBERG_USER }}
+          CB_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+        run: |
+          set -eu
+          DEPOT="https://${CB_USER}:${CB_TOKEN}@codeberg.org/MermozLab/sciences.git"
+          MOI="$(git rev-parse HEAD)"
+
+          # Deux exécutions simultanées (pushs rapprochés) peuvent se disputer le verrou de
+          # la branche pages : « cannot lock ref … incorrect old value provided ».
+          # On réessaie donc, mais seulement tant que ce commit est toujours la pointe de
+          # main : sinon une exécution plus récente publiera, et republier ce commit
+          # écraserait son travail avec une version plus ancienne.
+          for essai in 1 2 3 4 5; do
+            if timeout 600 git push --force "$DEPOT" "HEAD:refs/heads/pages"; then
+              echo "Publication réussie (essai ${essai})."
+              exit 0
+            fi
+
+            POINTE="$(git ls-remote "$DEPOT" refs/heads/main | cut -f1)"
+            if [ -n "$POINTE" ] && [ "$POINTE" != "$MOI" ]; then
+              echo "main a avancé (${POINTE}) : l'exécution la plus récente publiera. Abandon sans erreur."
+              exit 0
+            fi
+
+            echo "Échec de la publication (essai ${essai}/5), nouvelle tentative dans $((essai * 5)) s…"
+            sleep $((essai * 5))
+          done
+
+          echo "Publication impossible après 5 essais." >&2
+          exit 1

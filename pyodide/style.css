@@ -1,0 +1,1639 @@
+@import url("../fonts/fonts.css");
+/* =========================================================
+   PYLAB
+   CHARTE CLAIRE TABLEAU SCIENCES
+   ALIGNÉE SCILAB : BLANC / BLEU
+   ========================================================= */
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+
+  /* Le menu latéral est en position:fixed : le body ne doit
+     avoir AUCUNE transformation, sinon il deviendrait le
+     référentiel du menu et le décalerait (c'était la cause du
+     bug de positionnement / forme ovale du menu). */
+  position: relative;
+  transform: none;
+
+  font-family: 'Atkinson Hyperlegible', Verdana, 'DejaVu Sans', Arial, sans-serif;
+  font-size: 18px;
+
+  color: #172033;
+  background: #f7fbff;
+}
+
+/* =========================================================
+   MENU LATÉRAL
+   ========================================================= */
+
+.menu {
+  position: fixed;
+
+  left: 15px;
+  top: 50%;
+
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* La largeur ne doit jamais dépendre du contenu (c'est ce
+     qui étirait les boutons en ovales) : elle se limite
+     strictement à la taille des icônes + le padding. */
+  width: max-content;
+
+  gap: 12px;
+
+  padding: 12px;
+
+  overflow: visible;
+
+  transform: translateY(-50%);
+
+  background: #f0f8ff;
+
+  border: 1px solid #d5e8f8;
+  border-radius: 20px;
+
+  box-shadow:
+    0 5px 18px rgba(50, 90, 130, 0.16);
+}
+
+.menu-wrapper {
+  position: relative;
+}
+
+.menu-item {
+  position: relative;
+
+  /* Dimensions verrouillées : width/height/flex/aspect-ratio
+     travaillent ensemble pour garantir un CERCLE parfait,
+     quelle que soit la façon dont le bouton est disposé. */
+  width: 65px;
+  height: 65px;
+  min-width: 65px;
+  min-height: 65px;
+  max-width: 65px;
+  max-height: 65px;
+  flex: 0 0 65px;
+  aspect-ratio: 1 / 1;
+
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+
+  font-size: 26px;
+
+  cursor: pointer;
+
+  border: none;
+  border-radius: 50%;
+  overflow: hidden;
+
+  background: #4169e1;
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.menu-item:hover {
+  background: #1e90ff;
+
+  transform: scale(1.1);
+}
+
+.menu-item.active {
+  background: #1c3f7c;
+}
+
+.menu-item i {
+  font-size: 24px;
+}
+
+/* =========================================================
+   SOUS-MENU
+   ========================================================= */
+
+.submenu {
+  position: absolute;
+
+  left: 80px;
+  top: 50%;
+
+  display: none;
+
+  width: max-content;
+  min-width: 170px;
+  /* assez large pour afficher les noms de fichiers en entier */
+  max-width: min(640px, calc(100vw - 110px));
+
+  /* liste longue : le sous-menu défile */
+  max-height: 80vh;
+  overflow-y: auto;
+
+  padding: 10px;
+
+  transform: translateY(-50%);
+
+  background: #ffffff;
+
+  border: 1px solid #d7e1eb;
+  border-radius: 14px;
+
+  box-shadow:
+    0 6px 20px rgba(20, 40, 70, 0.25);
+}
+
+.submenu.show {
+  display: block;
+}
+
+.submenu button {
+  width: 100%;
+  min-height: 45px;
+
+  padding: 10px 14px;
+  margin: 4px 0;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #24354a;
+
+  font-size: 17px;
+  text-align: left;
+
+  cursor: pointer;
+
+  border: none;
+  border-radius: 9px;
+
+  background: #edf5fb;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.submenu button:hover {
+  color: #ffffff;
+
+  background: #1c3f7c;
+}
+
+/* =========================================================
+   INFO-BULLES
+   ========================================================= */
+
+.menu-item::after {
+  content: attr(data-tooltip);
+
+  position: absolute;
+
+  left: 75px;
+  top: 50%;
+
+  padding: 8px 12px;
+
+  transform: translateY(-50%);
+
+  color: #ffffff;
+
+  font-size: 15px;
+
+  white-space: nowrap;
+
+  opacity: 0;
+  visibility: hidden;
+
+  pointer-events: none;
+
+  border-radius: 7px;
+
+  background: rgba(0, 0, 0, 0.85);
+
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.menu-item:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* =========================================================
+   CONTENU
+   ========================================================= */
+
+#content-container {
+  position: absolute;
+
+  left: 110px;
+  top: 0;
+
+  width: calc(100% - 110px);
+  height: 100%;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fcff,
+      #edf6fc
+    );
+}
+
+.page {
+  display: none;
+
+  min-height: 100%;
+
+  padding: 35px;
+}
+
+.page.active-page {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================
+   ACCUEIL
+   ========================================================= */
+
+#home-message {
+  align-items: center;
+  justify-content: center;
+
+  max-width: 950px;
+
+  margin: auto;
+
+  text-align: center;
+}
+
+.home-icon {
+  width: 105px;
+  height: 105px;
+
+  margin-bottom: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+
+  font-size: 52px;
+
+  border-radius: 50%;
+
+  background: #4169e1;
+
+  box-shadow:
+    0 10px 25px rgba(65, 105, 225, 0.25);
+}
+
+#home-message h1 {
+  margin: 0 0 18px;
+
+  color: #243b73;
+
+  font-size:
+    clamp(
+      2.8rem,
+      6vw,
+      4.8rem
+    );
+}
+
+#home-message h1 span {
+  color: #4169e1;
+}
+
+#home-message h2 {
+  margin: 0 0 18px;
+
+  color: #405c78;
+
+  font-size:
+    clamp(
+      1.35rem,
+      2vw,
+      1.7rem
+    );
+
+  font-weight: normal;
+}
+
+#home-message p {
+  max-width: 750px;
+
+  margin: 10px auto;
+
+  color: #354d65;
+
+  font-size: 1.1rem;
+
+  line-height: 1.75;
+}
+
+.pylab-tagline {
+  margin: 0 0 22px;
+
+  color: #6c8299;
+
+  font-size: 1.05rem;
+  font-style: italic;
+}
+
+.home-actions {
+  margin: 30px 0;
+}
+
+.start-button {
+  min-height: 58px;
+
+  padding: 15px 30px;
+
+  color: #ffffff;
+
+  font-size: 1.05rem;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #4169e1;
+
+  box-shadow:
+    0 6px 15px rgba(65, 105, 225, 0.25);
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.start-button:hover {
+  background: #1e90ff;
+
+  transform: translateY(-2px);
+}
+
+.signature {
+  margin-top: 28px !important;
+
+  color: #596f84 !important;
+
+  font-size: 0.95rem !important;
+}
+
+/* =========================================================
+   EN-TÊTE PYLAB
+   ========================================================= */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 24px 28px;
+
+  margin-bottom: 25px;
+
+  background: #ffffff;
+
+  border: 1px solid #d7e5f0;
+  border-left: 7px solid #4169e1;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 4px 15px rgba(40, 70, 100, 0.08);
+}
+
+.page-header h1 {
+  margin: 0;
+
+  color: #243b73;
+
+  font-size: 2.2rem;
+}
+
+.page-header h1 i {
+  margin-right: 10px;
+
+  color: #4169e1;
+}
+
+.page-header p {
+  margin: 9px 0 0;
+
+  color: #526b83;
+
+  font-size: 1rem;
+}
+
+/* =========================================================
+   STATUT PYODIDE
+   ========================================================= */
+
+#status {
+  padding: 11px 16px;
+
+  font-size: 0.9rem;
+  font-weight: bold;
+
+  white-space: nowrap;
+
+  border: 1px solid;
+  border-radius: 22px;
+}
+
+#status::before {
+  margin-right: 6px;
+}
+
+#status.status-loading {
+  color: #2b4a75;
+
+  border-color: #bcd3ec;
+
+  background: #eaf2fb;
+}
+
+#status.status-loading::before {
+  content: "◐";
+}
+
+#status.status-ready {
+  color: #1c3f7c;
+
+  border-color: #a9c3e8;
+
+  background: #e3ecfa;
+}
+
+#status.status-ready::before {
+  content: "✓";
+}
+
+#status.status-error {
+  color: #243b73;
+
+  border-color: #243b73;
+
+  background: #dbe4f3;
+}
+
+#status.status-error::before {
+  content: "!";
+}
+
+/* =========================================================
+   GRILLE
+   ========================================================= */
+
+.lab-grid {
+  flex: 1;
+
+  min-height: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(450px, 1fr)
+    minmax(380px, 0.9fr);
+
+  gap: 24px;
+}
+
+/* =========================================================
+   PANNEAUX
+   ========================================================= */
+
+.editor-panel,
+.result-panel {
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #d5e2ec;
+  border-radius: 15px;
+
+  box-shadow:
+    0 5px 18px rgba(35, 65, 95, 0.10);
+}
+
+.panel-title {
+  min-height: 62px;
+
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  color: #243b73;
+
+  font-size: 1rem;
+  font-weight: bold;
+
+  border-bottom: 1px solid #dbe6ef;
+
+  background: #edf5fb;
+}
+
+.panel-title i {
+  margin-right: 8px;
+
+  color: #4169e1;
+}
+
+.file-name {
+  padding: 7px 11px;
+
+  color: #465f77;
+
+  font-family:
+    'Atkinson Hyperlegible Mono', Consolas, 'Courier New', monospace;
+
+  font-size: 0.85rem;
+
+  border-radius: 6px;
+
+  background: #ffffff;
+}
+
+/* =========================================================
+   ÉDITEUR PYTHON
+   ========================================================= */
+
+#code {
+  width: 100%;
+
+  flex: 1;
+
+  min-height: 390px;
+
+  padding: 24px;
+
+  resize: none;
+
+  color: #172033;
+
+  font-family:
+    'Atkinson Hyperlegible Mono', Consolas, 'Courier New', monospace;
+
+  font-size: 18px;
+
+  line-height: 1.75;
+
+  border: none;
+
+  outline: none;
+
+  background: #ffffff;
+
+  tab-size: 4;
+}
+
+#code:focus {
+  background: #f8fcff;
+}
+
+/* =========================================================
+   ACTIONS DE L'ÉDITEUR
+   Deux zones empilées :
+     1) .editor-buttons : les boutons, en grille 3 colonnes
+        (donc exactement deux lignes de 3 boutons) ;
+     2) .editor-info    : état du micro + raccourci clavier.
+   ========================================================= */
+
+.editor-actions {
+  padding: 14px 18px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  gap: 12px;
+
+  border-top:
+    1px solid #dbe6ef;
+
+  background: #f5f9fc;
+}
+
+.editor-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.editor-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+}
+
+/* =========================================================
+   BOUTONS DE L'ÉDITEUR
+   (Exécuter / Importer / Exporter / Dicter / Effacer / PDF)
+   Tous les boutons partagent EXACTEMENT le même style.
+   ========================================================= */
+
+.editor-actions button,
+.run-button,
+.import-button,
+.export-button,
+.clear-button,
+.pdf-button {
+  min-height: 48px;
+
+  padding: 0 12px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  color: #ffffff;
+
+  font-size: 0.95rem;
+  font-weight: bold;
+  line-height: 1.2;
+  text-align: center;
+
+  cursor: pointer;
+
+  border: none;
+  border-radius: 9px;
+
+  background: #4169e1;
+
+  box-shadow:
+    0 3px 8px rgba(65, 105, 225, 0.20);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Dans la grille : chaque bouton occupe sa colonne, sans jamais
+   être tronqué (le texte passe à la ligne si le panneau est étroit). */
+.editor-buttons button {
+  width: 100%;
+  min-width: 0;
+
+  white-space: normal;
+}
+
+.editor-actions button:hover:not(:disabled),
+.run-button:hover:not(:disabled),
+.import-button:hover:not(:disabled),
+.export-button:hover:not(:disabled),
+.clear-button:hover:not(:disabled),
+.pdf-button:hover:not(:disabled) {
+  background: #1e90ff;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 5px 12px rgba(65, 105, 225, 0.28);
+}
+
+.editor-actions button:active,
+.run-button:active,
+.import-button:active,
+.export-button:active,
+.clear-button:active,
+.pdf-button:active {
+  transform: translateY(0);
+}
+
+.run-button:disabled {
+  cursor: wait;
+
+  opacity: 0.55;
+
+  transform: none;
+}
+
+.pdf-button:disabled {
+  cursor: wait;
+
+  opacity: 0.55;
+
+  transform: none;
+}
+
+/* =========================================================
+   RACCOURCI CLAVIER
+   ========================================================= */
+
+.shortcut {
+  margin-left: auto;
+
+  color: #526b83;
+
+  font-size: 0.85rem;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   RÉSULTAT
+   ========================================================= */
+
+.result-panel {
+  background: #eaf1fb;
+
+  border-color: #b8cfe9;
+}
+
+.result-title {
+  color: #243b73;
+
+  border-bottom-color: #c8d9ee;
+
+  background: #dce8f8;
+}
+
+.result-title i {
+  color: #2a5aa8;
+}
+
+.result-indicator {
+  color: #1c3f7c;
+
+  font-size: 0.82rem;
+}
+
+/* =========================================================
+   CONSOLE
+   ========================================================= */
+
+#output {
+  flex: 1;
+
+  min-height: 390px;
+
+  margin: 20px;
+
+  padding: 22px;
+
+  overflow: auto;
+
+  color: #e2ebfa;
+
+  font-family:
+    'Atkinson Hyperlegible Mono', Consolas, 'Courier New', monospace;
+
+  font-size: 17px;
+
+  line-height: 1.75;
+
+  white-space: pre-wrap;
+
+  border:
+    2px solid #4e6f9e;
+
+  border-radius: 12px;
+
+  background: #17202f;
+
+  box-shadow:
+    inset 0 0 15px rgba(0, 0, 0, 0.25);
+}
+
+/* =========================================================
+   GRAPHIQUES MATPLOTLIB
+   ========================================================= */
+
+#output .plot-image {
+  display: block;
+
+  max-width: 100%;
+  height: auto;
+
+  margin: 14px 0;
+
+  border:
+    1px solid #4e6f9e;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+}
+
+/* =========================================================
+   AIDE
+   ========================================================= */
+
+.help-card {
+  margin-top: 24px;
+
+  padding: 20px 24px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  color: #243b73;
+
+  font-size: 1rem;
+
+  border:
+    1px solid #bcd3ec;
+
+  border-radius: 13px;
+
+  background: #eaf2fb;
+}
+
+.help-card > i {
+  color: #2a5aa8;
+
+  font-size: 2rem;
+}
+
+.help-card strong {
+  color: #1c3f7c;
+}
+
+.help-card p {
+  margin: 6px 0 0;
+
+  line-height: 1.6;
+}
+
+/* =========================================================
+   BARRES DE DÉFILEMENT
+   ========================================================= */
+
+#content-container::-webkit-scrollbar,
+#output::-webkit-scrollbar {
+  width: 11px;
+}
+
+#content-container::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background: #b8cad9;
+}
+
+#output::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background: #4e6f9e;
+}
+
+/* =========================================================
+   TABLETTE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .lab-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-panel {
+    min-height: 500px;
+  }
+
+  .result-panel {
+    min-height: 450px;
+  }
+
+  .shortcut {
+    margin-left: auto;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .menu {
+    top: auto;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+
+    padding: 8px;
+
+    flex-direction: row;
+    justify-content: space-around;
+
+    transform: none;
+
+    border-radius: 0;
+  }
+
+  .menu-item {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+    flex: 0 0 48px;
+  }
+
+  .menu-item i {
+    font-size: 19px;
+  }
+
+  .menu-item::after {
+    display: none;
+  }
+
+  .submenu {
+    left: 50%;
+    top: auto;
+    bottom: 62px;
+
+    max-width: calc(100vw - 20px);
+
+    transform:
+      translateX(-50%);
+  }
+
+  #content-container {
+    left: 0;
+
+    width: 100%;
+
+    height:
+      calc(100% - 70px);
+  }
+
+  .page {
+    padding: 18px;
+  }
+
+  .home-icon {
+    width: 80px;
+    height: 80px;
+
+    font-size: 40px;
+  }
+
+  #home-message h1 {
+    font-size: 2.6rem;
+  }
+
+  .page-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .page-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .lab-grid {
+    display: flex;
+
+    flex-direction: column;
+  }
+
+  #code {
+    min-height: 330px;
+
+    font-size: 17px;
+  }
+
+  #output {
+    min-height: 280px;
+
+    font-size: 16px;
+  }
+
+  /* Petit écran : deux colonnes (trois lignes de boutons) */
+  .editor-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .editor-info {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .shortcut {
+    width: 100%;
+
+    margin-left: 0;
+
+    text-align: center;
+  }
+
+  .help-card {
+    align-items: flex-start;
+  }
+}
+
+/* =========================================================
+   LOGO PYLAB
+   ========================================================= */
+
+.pylab-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 10px auto 28px;
+
+  padding: 16px 28px;
+
+  background: #050505;
+
+  border:
+    3px solid #111;
+
+  border-radius: 8px;
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.35),
+    inset 0 0 12px rgba(255, 255, 255, 0.04);
+
+  font-family:
+    'Atkinson Hyperlegible', Verdana, 'DejaVu Sans', Arial, sans-serif;
+
+  font-size:
+    clamp(
+      2.5rem,
+      7vw,
+      5rem
+    );
+
+  font-weight: 900;
+
+  letter-spacing: -2px;
+
+  line-height: 1;
+
+  user-select: none;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.pylab-logo:hover {
+  transform:
+    translateY(-3px)
+    scale(1.02);
+
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.45),
+    0 0 14px rgba(227, 27, 47, 0.18);
+}
+
+/* Partie blanche : Py */
+
+.pylab-logo .py {
+  color: #ffffff;
+
+  text-shadow:
+    1px 1px 0 #777,
+    2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Partie rouge : Lab
+   Règle placée en dernier + !important : garantit que rien
+   d'autre dans la feuille de style (ni un futur ajout) ne
+   peut repasser ce texte en couleur sombre, ce qui était le
+   bug observé (le rouge n'apparaissait plus qu'en lueur
+   autour d'un texte resté foncé). */
+
+.pylab-logo .lab {
+  margin-left: 7px;
+
+  color: #e31b2f !important;
+
+  text-shadow:
+    1px 1px 0 #85000d,
+    0 0 7px rgba(227, 27, 47, 0.35);
+}
+
+/* =========================================================
+   PETITS ÉCRANS
+   ========================================================= */
+
+@media screen and (max-width: 600px) {
+
+  .pylab-logo {
+    padding: 13px 20px;
+
+    font-size:
+      clamp(
+        2.2rem,
+        14vw,
+        3.6rem
+      );
+
+    letter-spacing: -1px;
+
+    border-width: 2px;
+  }
+
+  .pylab-logo .lab {
+    margin-left: 5px;
+  }
+}
+
+
+/* =========================================================
+   ZOOM DE L'ÉDITEUR (vidéoprojecteur)
+   Deux boutons ronds bleus : + (ouvrir) et - (fermer)
+   ========================================================= */
+
+.title-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.zoom-btn {
+  width: 40px;
+  height: 40px;
+  min-height: 0;
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+  font-size: 1rem;
+
+  cursor: pointer;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #4169e1;
+
+  box-shadow: 0 3px 8px rgba(65, 105, 225, 0.30);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.zoom-btn i {
+  margin: 0;
+  color: #ffffff;
+}
+
+.zoom-btn:hover {
+  background: #1e90ff;
+  transform: scale(1.08);
+}
+
+.zoom-btn:active {
+  transform: scale(1);
+}
+
+.zoom-btn:focus-visible {
+  outline: 3px solid #1e90ff;
+  outline-offset: 3px;
+}
+
+.zoom-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 3vh 3vw;
+
+  background: rgba(23, 32, 51, 0.72);
+}
+
+.zoom-modal.show {
+  display: flex;
+}
+
+.zoom-window {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 2px solid #4169e1;
+  border-radius: 18px;
+
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.zoom-window-bar {
+  min-height: 64px;
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: #243b73;
+  font-weight: bold;
+
+  border-bottom: 1px solid #c8d9ee;
+
+  background: #dce8f8;
+}
+
+.zoom-window-bar i {
+  margin-right: 8px;
+  color: #4169e1;
+}
+
+.zoom-content {
+  flex: 1;
+  margin: 0;
+  padding: 28px 36px;
+
+  overflow: auto;
+
+  color: #172033;
+
+  font-family:
+    'Atkinson Hyperlegible Mono', Consolas, 'Courier New', monospace;
+
+  /* grande taille, lisible au vidéoprojecteur */
+  font-size: clamp(30px, 4vw, 64px);
+  line-height: 1.6;
+
+  white-space: pre;
+  tab-size: 4;
+
+  resize: none;
+  border: none;
+  outline: none;
+  width: 100%;
+
+  background: #ffffff;
+}
+
+.zoom-content:focus {
+  background: #f8fcff;
+}
+
+
+/* =========================================================
+   DICTÉE VOCALE (transcription)
+   ========================================================= */
+
+.mic-status {
+  max-width: 260px;
+
+  color: #526b83;
+
+  font-size: 0.85rem;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mic-status.mic-error {
+  color: #c92a2a;
+}
+
+/* Bouton en cours d'écoute : rouge + pulsation */
+.mic-button.listening,
+.zoom-btn.mic-zoom.listening {
+  background: #d9480f;
+
+  animation: micPulse 1.4s ease-in-out infinite;
+}
+
+.editor-actions .mic-button.listening:hover:not(:disabled) {
+  background: #e8590c;
+}
+
+.mic-button:disabled,
+.zoom-btn.mic-zoom:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.45;
+
+  transform: none;
+}
+
+@keyframes micPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(217, 72, 15, 0.55); }
+  70%  { box-shadow: 0 0 0 12px rgba(217, 72, 15, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(217, 72, 15, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mic-button.listening,
+  .zoom-btn.mic-zoom.listening {
+    animation: none;
+  }
+}
+
+
+/* =========================================================
+   BIBLIOTHÈQUE DE PROGRAMMES (.py du dossier programmes/)
+   ========================================================= */
+
+.submenu-title {
+  margin: 10px 4px 2px;
+  padding-top: 10px;
+
+  color: #526b83;
+
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  border-top: 1px solid #d7e1eb;
+}
+
+.submenu-title[hidden] {
+  display: none;
+}
+
+.submenu-info {
+  margin: 4px;
+  padding: 6px 8px;
+
+  color: #526b83;
+
+  font-size: 0.85rem;
+}
+
+.submenu button.library-item span {
+  /* nom complet : retour à la ligne si vraiment trop long */
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.submenu button.library-item i {
+  flex-shrink: 0;
+}
+
+/* Le titre « Mes programmes » est désormais le premier élément du menu */
+.submenu > .submenu-title:first-child {
+  margin-top: 0;
+  padding-top: 0;
+
+  border-top: none;
+}
+
+
+/* =========================================================
+   IMPRESSION (compte rendu PDF)
+   Le document du PDF est construit dans une iframe qui recopie
+   les feuilles de style de la page : html/body ne doivent pas y
+   rester bloqués à 100 % de hauteur avec overflow:hidden, sinon
+   seule la première page serait imprimée.
+   ========================================================= */
+
+@media print {
+
+  html,
+  body {
+    width: auto;
+    height: auto !important;
+
+    overflow: visible !important;
+  }
+}
+
+
+/* =========================================================
+   TRACE ÉCRITE — IDENTIFICATION (reportée dans le PDF)
+   Rubrique repliable : Nom / Prénom / Classe / Date.
+   ========================================================= */
+
+.identity-panel {
+  margin-top: 24px;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #d5e2ec;
+  border-radius: 15px;
+
+  box-shadow:
+    0 5px 18px rgba(35, 65, 95, 0.10);
+}
+
+.identity-panel > summary {
+  min-height: 62px;
+
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  color: #243b73;
+
+  font-size: 1rem;
+  font-weight: bold;
+
+  list-style: none;
+
+  cursor: pointer;
+
+  background: #ffffff;
+}
+
+.identity-panel > summary::-webkit-details-marker {
+  display: none;
+}
+
+.identity-panel[open] > summary {
+  border-bottom: 1px solid #dbe6ef;
+}
+
+.identity-panel > summary:focus-visible {
+  outline: 3px solid #1e90ff;
+  outline-offset: -3px;
+}
+
+.identity-icon {
+  width: 36px;
+  height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #4169e1;
+
+  font-size: 1rem;
+
+  border-radius: 8px;
+
+  background: #eaf2fb;
+}
+
+.identity-arrow {
+  margin-left: auto;
+
+  color: #526b83;
+
+  transition: transform 0.2s ease;
+}
+
+.identity-arrow::after {
+  content: "▾";
+}
+
+.identity-panel:not([open]) .identity-arrow {
+  transform: rotate(-90deg);
+}
+
+.identity-body {
+  padding: 18px 20px 22px;
+}
+
+.identity-title {
+  margin: 0 0 6px;
+
+  color: #243b73;
+
+  font-size: 1rem;
+}
+
+.identity-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+.identity-field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.identity-field label {
+  color: #243b73;
+
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.identity-field input {
+  width: 100%;
+  min-height: 40px;
+
+  padding: 0 10px;
+
+  color: #172033;
+
+  font-family:
+    'Atkinson Hyperlegible Mono', Consolas, 'Courier New', monospace;
+
+  font-size: 0.95rem;
+
+  border: 1px solid #c3d3ec;
+  border-radius: 6px;
+
+  background: #e9effd;
+}
+
+.identity-field input:focus {
+  outline: 3px solid #1e90ff;
+  outline-offset: 1px;
+
+  background: #f8fcff;
+}
+
+/* Bouton « Valider l'impression » sous les champs d'identification */
+.identity-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 18px;
+}
+
+.identity-valider {
+  min-width: 220px;
+  padding: 0 22px;
+}
+
+@media (max-width: 600px) {
+  .identity-valider {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .identity-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .identity-grid {
+    grid-template-columns: 1fr;
+  }
+}
