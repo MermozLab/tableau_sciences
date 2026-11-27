@@ -90,3 +90,13 @@ table.aff{min-width:760px}
 table.aff td:first-child,table.aff th:first-child{position:static;box-shadow:none}
 table.aff tr.inconnue td{background:#fff3f2}
 table.aff select{max-width:22rem}
+
+/* Saisie manuelle d'une note (cases cliquables) */
+.saisie{all:unset;cursor:pointer;border-radius:6px;padding:.05rem .2rem;display:inline-block}
+.saisie:hover{background:var(--bleu-clair)} .saisie:focus-visible{outline:3px solid #f6a800}
+.note.manuel::after,.chip.manuel::after{content:" ✎";color:var(--bleu);font-weight:400}
+.dlg-note{border:1px solid var(--bord);border-radius:10px;padding:1rem 1.25rem;max-width:26rem;box-shadow:0 8px 24px rgba(15,61,130,.25)}
+.dlg-note::backdrop{background:rgba(15,40,80,.35)}
+.dlg-note h2{margin:0 0 .25rem;font-size:1.05rem;color:var(--bleu-fonce)}
+.dlg-note label{display:flex;flex-direction:column;gap:.2rem;font-size:.85rem;color:var(--gris);margin:.5rem 0}
+.dlg-note input{font:inherit;padding:.4rem .5rem;border:1px solid var(--bord);border-radius:6px;color:var(--texte)}
