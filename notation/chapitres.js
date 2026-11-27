@@ -27,9 +27,9 @@
   const sym = v => `<span class="sym sym-${v}" aria-hidden="true">${symboles[v] ?? ''}</span>`;
 
   const state = {
-    chap: null, copies: [], pm: {}, manuel: new Map(), aff: new Map(), eleves: [], infoCopies: [],
+    chap: null, copies: [], pm: {}, manuel: new Map(), notes: new Map(), aff: new Map(), eleves: [], infoCopies: [],
     horsConfig: [], vue: 'moyennes', tri: { col: 'nom', dir: 1 },
-    opt: { agg: 'best', nonValides: false, pmSeul: false, classe: '', q: '' },
+    opt: { agg: 'best', nonValides: false, pmSeul: true, classe: '', q: '' },
     ouverts: new Set(), erreurPm: null, affOuvert: null, affGroupe: true
   };
 
@@ -47,6 +47,11 @@
     if (chap.quiz) {
       const nomQuiz = chap.quiz.categorie === 'playmaths' ? 'PlayMaths' : 'PlaySciences';
       comps.push({ id: 'quiz', type: 'quiz', court: `${nomQuiz} ${chap.quiz.code}`, libelle: `Quiz ${nomQuiz} ${chap.quiz.code}`, categorie: chap.quiz.categorie, code: chap.quiz.code, niveaux: chap.quiz.niveaux || [], requis: true });
+    }
+    for (const code of (CFG.autoParChapitre || {})[chap.id] || []) {
+      const niv = { A: '2nde', B: '1ere', C: 'tle' }[code[0]];
+      comps.push({ id: 'auto:' + code, type: 'auto', court: code, code, libelle: `Automatisme ${code} — ${(CFG.automatismes || {})[code] || ''}`,
+        niveaux: niv ? [niv] : [], requis: false });
     }
     chap.composantes = comps;
     return chap;
@@ -127,11 +132,19 @@
         const { data, error } = await sb.rpc('notation_quiz', { p_categorie: def.categorie, p_code: def.code });
         if (error) { state.erreurPm = error.message; state.pm[def.id] = []; } else state.pm[def.id] = data || [];
       }
-      const [{ data: man, error: errMan }, { data: aff, error: errAff }] = await Promise.all([
+      const defsAuto = chap.composantes.filter(c => c.type === 'auto');
+      if (defsAuto.length) {
+        const { data, error } = await sb.rpc('notation_automatismes', { p_codes: defsAuto.map(d => d.code) });
+        if (error) { state.erreurPm = error.message; defsAuto.forEach(d => { state.pm[d.id] = []; }); }
+        else defsAuto.forEach(d => { state.pm[d.id] = (data || []).filter(s => s.code === d.code.toUpperCase()); });
+      }
+      const [{ data: man, error: errMan }, { data: aff, error: errAff }, { data: nts, error: errNts }] = await Promise.all([
         sb.from('notation_cotations_manuelles').select('*').eq('chapitre', chap.id),
-        sb.from('notation_affectations').select('copie_id,composante').eq('chapitre', chap.id)
+        sb.from('notation_affectations').select('copie_id,composante').eq('chapitre', chap.id),
+        sb.from('notation_notes_manuelles').select('eleve_cle,composante,note_10').eq('chapitre', chap.id)
       ]);
-      state.manuel = new Map(); state.aff = new Map();
+      state.manuel = new Map(); state.aff = new Map(); state.notes = new Map();
+      if (!errNts) (nts || []).forEach(n => state.notes.set(`${n.eleve_cle}|${n.composante}`, Number(n.note_10)));
       if (!errMan) (man || []).forEach(m => state.manuel.set(`${m.eleve_cle}|${m.competence}`, m.valeur));
       if (!errAff) (aff || []).forEach(a => state.aff.set(a.copie_id, a.composante));
       state.horsConfig = await lireHorsConfig();
@@ -210,7 +223,7 @@
       const nv = niveauCle(c.niveau); if (nv) e.niveaux.set(nv, (e.niveaux.get(nv) || 0) + 1);
     }
 
-    for (const def of chap.composantes.filter(c => c.type === 'quiz')) {
+    for (const def of chap.composantes.filter(c => c.type === 'quiz' || c.type === 'auto')) {
       for (const s of state.pm[def.id] || []) {
         const k = cleEleve(s.prenom, s.nom); if (!k) continue;
         let e = map.get(k);
@@ -258,7 +271,7 @@
         r = { note, complet: note != null, reste: def.court, detail: detailCopies(l) };
       } else if (def.type === 'puzzle') {
         const lettres = [...new Set([...def.sujets, ...Object.keys(e.slots).filter(k => k.startsWith('puzzle:')).map(k => k.slice(7))])];
-        const sujets = lettres.map(s => { const l = e.slots['puzzle:' + s] || []; return { s, l, note: noteListe(l, agg) }; });
+        const sujets = lettres.map(s => { const l = e.slots['puzzle:' + s] || []; const man = state.notes.get(`${e.cle}|puzzle:${s}`); return { s, l, note: man ?? noteListe(l, agg), manuel: man != null }; });
         const faits = sujets.filter(x => x.note != null);
         const manque = Math.max(0, def.sujetsRequis - faits.length);
         r = { sujets, note: faits.length ? moy(faits.map(x => x.note)) : null, complet: manque === 0, manque,
@@ -270,6 +283,8 @@
           detail: l.length ? l.map(x => `${fmt(Number(x.note_sur_10), 0)}/10 · ${dateFr(x.created_at)}${x.quiz ? ' · ' + esc(x.quiz) : ''}`).join(' ; ') : 'aucune tentative terminée' };
       }
       r.def = def;
+      const manuelle = def.type === 'puzzle' ? null : state.notes.get(`${e.cle}|${def.id}`);
+      if (manuelle != null) { r.note = manuelle; r.complet = true; r.manuel = true; r.reste = ''; r.detail = `note saisie à la main : ${fmt(manuelle, 1)}/10 (remplace : ${r.detail})`; }
       const niveauOk = !def.niveaux.length || !e.niveau || def.niveaux.includes(e.niveau);
       r.na = r.note == null && !niveauOk;                       // onglet / quiz d'une autre classe
       r.facultatif = r.note == null && niveauOk && !def.requis;  // jamais « à faire »
@@ -320,17 +335,21 @@
     return `<th class="${cls}" scope="col" aria-sort="${actif ? (state.tri.dir > 0 ? 'ascending' : 'descending') : 'none'}"><button type="button" class="tri" data-tri="${col}">${libelle}</button></th>`;
   }
 
-  function cellule(c) {
+  function cellule(c, e) {
+    const cle = esc(e.cle);
+    const bouton = (id, contenu, titreBtn) => `<button type="button" class="saisie" data-saisie="${cle}|${esc(id)}" title="${esc(titreBtn)}">${contenu}</button>`;
     if (c.na) return `<td><span class="petit" title="Concerne une autre classe">— autre niveau</span></td>`;
-    if (c.facultatif) return `<td><span class="petit" title="Réservé à certaines filières ou optionnel">facultatif</span></td>`;
+    if (c.facultatif) return `<td>${bouton(c.def.id, '<span class="petit">facultatif</span>', 'Facultatif — cliquer pour saisir une note à la main')}</td>`;
     if (c.def.type === 'puzzle') {
-      const chips = c.sujets.filter(x => x.note != null || c.def.sujets.includes(x.s)).map(x => x.note != null ? `<span class="chip" title="Sujet ${esc(x.s)}">${esc(x.s)} : ${fmt(x.note, 1)}</span>` : `<span class="chip vide" title="Sujet ${esc(x.s)} non réalisé">${esc(x.s)} –</span>`).join('');
+      const chips = c.sujets.filter(x => x.note != null || c.def.sujets.includes(x.s)).map(x => x.note != null
+        ? bouton('puzzle:' + x.s, `<span class="chip${x.manuel ? ' manuel' : ''}">${esc(x.s)} : ${fmt(x.note, 1)}</span>`, `Sujet ${x.s}${x.manuel ? ' — note saisie à la main' : ''} — cliquer pour saisir ou corriger la note`)
+        : bouton('puzzle:' + x.s, `<span class="chip vide">${esc(x.s)} –</span>`, `Sujet ${x.s} non réalisé — cliquer pour saisir la note à la main`)).join('');
       const etat = c.complet ? '' : `<br><span class="afaire">${c.manque} sujet${c.manque > 1 ? 's' : ''} à faire</span>`;
       return `<td>${chips}${c.note != null ? `<br><span class="note fait">${fmt(c.note, 1)}<small>/10</small></span>` : ''}${etat}</td>`;
     }
     return c.note != null
-      ? `<td><span class="note fait">${fmt(c.note, 1)}<small>/10</small></span></td>`
-      : `<td><span class="afaire">À faire</span></td>`;
+      ? `<td>${bouton(c.def.id, `<span class="note fait${c.manuel ? ' manuel' : ''}">${fmt(c.note, 1)}<small>/10</small></span>`, c.manuel ? 'Note saisie à la main — cliquer pour modifier' : 'Cliquer pour saisir une note à la main (elle remplacera ce résultat)')}</td>`
+      : `<td>${bouton(c.def.id, '<span class="afaire">À faire</span>', 'Cliquer pour saisir la note à la main')}</td>`;
   }
 
   function ligneDetail(e, colspan) {
@@ -350,7 +369,7 @@
       return `<tr>
         <td><button type="button" class="nom" data-detail="${esc(e.cle)}" aria-expanded="${ouvert}">${esc(e.nom)}</button></td>
         <td>${esc(e.classe) || '–'}</td>
-        ${r.comps.map(cellule).join('')}
+        ${r.comps.map(c => cellule(c, e)).join('')}
         <td>${r.total ? `<span class="barre-prog" aria-hidden="true"><i style="width:${r.nbFait / r.total * 100}%"></i></span>${r.nbFait}/${r.total}` : '–'}</td>
         <td>${note}${sous}</td>
         <td class="gauche">${r.reste.length ? r.reste.map(esc).join(', ') : '<span class="badge ok">Rien — complet</span>'}</td>
@@ -448,7 +467,7 @@
     rendreAffectations();
 
     const al = [];
-    if (state.erreurPm) al.push(`<div class="alerte erreur"><strong>Notes des quiz indisponibles</strong> : ${esc(state.erreurPm)}. Vérifiez que la fonction <code>notation_quiz</code> existe (sql/notation_chapitres.sql) et que vous êtes connecté avec le compte enseignant.</div>`);
+    if (state.erreurPm) al.push(`<div class="alerte erreur"><strong>Notes des quiz indisponibles</strong> : ${esc(state.erreurPm)}. Vérifiez que les fonctions <code>notation_quiz</code> et <code>notation_automatismes</code> existent (sql/notation_chapitres.sql, sql/notation_automatismes.sql) et que vous êtes connecté avec le compte enseignant.</div>`);
     if (state.ignoreesAValider) al.push(`<div class="alerte">${state.ignoreesAValider} copie(s) « à valider » ne sont pas comptées. Validez-les dans l’analyse des copies ou cochez « Inclure les copies à valider ».</div>`);
     const inconnues = state.infoCopies.filter(x => !x.slot).length;
     if (inconnues) al.push(`<div class="alerte"><strong>${inconnues} copie(s) n’ont pu être rattachées à un onglet</strong> : choisissez l’onglet dans « Rattachement des copies » sous le tableau.</div>`);
@@ -457,7 +476,7 @@
 
     const pz = chap.composantes.find(c => c.type === 'puzzle');
     $('#aide').innerHTML = state.vue === 'moyennes'
-      ? `<p><strong>Calcul :</strong> chaque composante est notée sur 10 ; la note finale sur 20 est la moyenne des composantes concernées × 2. « Provisoire » = moyenne des seules activités déjà faites ; « si le reste = 0 » compte les activités manquantes comme 0. Les onglets d’une autre classe (« autre niveau ») et les onglets facultatifs ne sont pas exigés.${pz ? ` Puzzle : moyenne des sujets réalisés, ${pz.sujetsRequis} sujet(s) à réaliser au minimum.` : ''}</p>`
+      ? `<p><strong>Calcul :</strong> chaque composante est notée sur 10 ; la note finale sur 20 est la moyenne des composantes concernées × 2. « Provisoire » = moyenne des seules activités déjà faites ; « si le reste = 0 » compte les activités manquantes comme 0. Les onglets d’une autre classe (« autre niveau ») et les onglets facultatifs (dont les automatismes A/B/C) ne sont pas exigés, mais comptent dès qu’ils sont faits. Cliquez sur une case (« À faire », une note, un sujet du puzzle) pour saisir ou corriger la note à la main : elle remplace les résultats enregistrés.${pz ? ` Puzzle : moyenne des sujets réalisés, ${pz.sujetsRequis} sujet(s) à réaliser au minimum.` : ''}</p>`
       : `<p><strong>Niveaux</strong> (cotation moyenne 0 à 2 sur toutes les copies du chapitre) : ${sym('4')} 4 ≥ ${CFG.seuils.tbm} · ${sym('3')} 3 ≥ ${CFG.seuils.satisfaisante} · ${sym('2')} 2 ≥ ${CFG.seuils.fragile} · ${sym('1')} 1 en dessous · ${sym('N')} N = aucune réponse cotée. Cliquez sur un niveau pour le corriger ou indiquer Absent / Dispensé.</p>`;
   }
 
@@ -491,8 +510,42 @@
   document.addEventListener('click', ev => { if (!menu.hidden && !menu.contains(ev.target) && !ev.target.closest('[data-niveau]')) fermerMenu(); });
   document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && !menu.hidden) fermerMenu(); });
 
+  /* ---------- saisie manuelle d'une note (clic sur « À faire », une note ou un sujet) ---------- */
+  const dlg = $('#dlg-note'); let cibleSaisie = null;
+  function ouvrirSaisie(valeur) {
+    const i = valeur.indexOf('|'); const cle = valeur.slice(0, i), compId = valeur.slice(i + 1);
+    const e = state.eleves.find(x => x.cle === cle); if (!e) return;
+    const chap = state.chap;
+    const lib = compId.startsWith('puzzle:') ? `Puzzle · sujet ${compId.slice(7)}` : (chap.composantes.find(c => c.id === compId) || {}).libelle || compId;
+    const actuel = state.notes.get(`${cle}|${compId}`);
+    cibleSaisie = { cle, compId, nom: e.nom };
+    $('#dlg-titre').textContent = `${e.nom} — ${lib}`;
+    $('#dlg-info').textContent = actuel != null ? 'Une note saisie à la main existe : elle remplace les résultats enregistrés.' : 'La note saisie à la main remplace les résultats enregistrés pour cette activité.';
+    $('#dlg-valeur').value = actuel != null ? String(actuel).replace('.', ',') : '';
+    $('#dlg-suppr').hidden = actuel == null;
+    $('#dlg-erreur').textContent = '';
+    dlg.showModal(); $('#dlg-valeur').focus();
+  }
+  $('#dlg-annuler').addEventListener('click', () => dlg.close());
+  $('#form-note').addEventListener('submit', async ev => {
+    ev.preventDefault(); if (!cibleSaisie) return;
+    const brut = $('#dlg-valeur').value.trim().replace(',', '.'); const n = Number(brut);
+    if (brut === '' || Number.isNaN(n) || n < 0 || n > 10) { $('#dlg-erreur').textContent = 'Saisissez une note entre 0 et 10.'; return; }
+    const note = Math.round(n * 100) / 100, { cle, compId, nom } = cibleSaisie;
+    const { error } = await sb.from('notation_notes_manuelles').upsert({ eleve_cle: cle, chapitre: state.chap.id, composante: compId, note_10: note, eleve_nom: nom, updated_at: new Date().toISOString() }, { onConflict: 'eleve_cle,chapitre,composante' });
+    if (error) { $('#dlg-erreur').textContent = 'Enregistrement impossible : ' + error.message; return; }
+    state.notes.set(`${cle}|${compId}`, note); dlg.close(); construire(); rendre();
+  });
+  $('#dlg-suppr').addEventListener('click', async () => {
+    if (!cibleSaisie) return; const { cle, compId } = cibleSaisie;
+    const { error } = await sb.from('notation_notes_manuelles').delete().match({ eleve_cle: cle, chapitre: state.chap.id, composante: compId });
+    if (error) { $('#dlg-erreur').textContent = 'Suppression impossible : ' + error.message; return; }
+    state.notes.delete(`${cle}|${compId}`); dlg.close(); construire(); rendre();
+  });
+
   /* ---------- interactions ---------- */
   $('#zone').addEventListener('click', ev => {
+    const sa = ev.target.closest('[data-saisie]'); if (sa) return ouvrirSaisie(sa.dataset.saisie);
     const t = ev.target.closest('[data-tri]');
     if (t) { const col = t.dataset.tri; state.tri = { col, dir: state.tri.col === col ? -state.tri.dir : 1 }; return rendre(); }
     const d = ev.target.closest('[data-detail]');
