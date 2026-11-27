@@ -100,3 +100,45 @@ window.CHAPITRES_CONFIG = {
     {"id":"T5","groupe":"Sciences · Thermique","titre":"Transferts thermiques","filtre":{"domaines":["THERMIQUE"],"code_td":"TP05"},"onglets":[["trois-modes","Les trois modes de transfert"],["conduction","Conduction thermique"],["rayonnement","Rayonnement thermique"],["effet-de-serre","Effet de serre atmosphérique"]],"quiz":{"categorie":"playsciences","code":"T5","niveaux":["tle"]}}
   ]
 };
+
+/* ==========================================================================
+   Automatismes PlayLab (quiz A xx / B xx / C xx de playlab/automatisme*)
+   autoParChapitre : chapitre -> codes des quiz rattachés (chaque quiz = une colonne facultative,
+   comptée dans la moyenne dès qu'elle est faite). Niveau déduit de la lettre : A = 2nde, B = 1ère, C = Tle.
+   Les résultats sont lus dans quiz_sessions par la fonction Supabase notation_automatismes().
+   ========================================================================== */
+Object.assign(window.CHAPITRES_CONFIG, {
+  autoParChapitre: {
+    A01: ['A 07', 'A 08', 'A 09', 'A 11', 'A 19', 'B 06', 'B 07'],
+    A02: ['C 07'],
+    A03: ['A 15', 'A 16', 'B 08', 'B 09', 'B 10', 'C 08', 'C 09', 'C 10'],
+    A04: ['A 05', 'A 06'],
+    A05: ['A 02', 'A 03', 'A 12'],
+    G01: ['A 13', 'A 14', 'A 17', 'A 18', 'A 20', 'A 21', 'A 22'],
+    G03: ['C 11'],
+    S02: ['A 04', 'B 05'],
+    S03: ['A 01', 'B 01', 'B 02', 'C 01', 'C 02', 'C 03', 'C 04'],
+    S04: ['B 03', 'B 04'],
+    S05: ['C 05', 'C 06', 'C 12'],
+    E2:  ['A 10']
+  },
+  automatismes: {
+    'A 01': 'Calcul d’une fréquence', 'A 02': 'Pourcentages', 'A 03': 'Écriture décimale / fraction / pourcentage',
+    'A 04': 'Calcul d’une moyenne', 'A 05': 'Puissances de 10', 'A 06': 'Notation scientifique',
+    'A 07': 'Comparaison des fractions', 'A 08': 'Additions / multiplications de fractions',
+    'A 09': 'Développement / factorisation', 'A 10': 'Transformation de formules',
+    'A 11': 'Résolution d’équations simples', 'A 12': 'Quatrième proportionnelle', 'A 13': 'Pourcentage et échelle',
+    'A 14': 'Repérage dans le plan', 'A 15': 'Images et antécédents (fonctions)', 'A 16': 'Résolution graphique d’équations',
+    'A 17': 'Conversions d’unités', 'A 18': 'Pythagore et Thalès', 'A 19': 'Arrondis et valeurs approchées',
+    'A 20': 'Unités adaptées', 'A 21': 'Cohérence grandeur / unité', 'A 22': 'Aires (carré, rectangle, disque)',
+    'B 01': 'Probabilité d’un événement', 'B 02': 'Dénombrement (tableaux et arbres)', 'B 03': 'Lecture de graphiques et diagrammes',
+    'B 04': 'Associer un graphique à des données', 'B 05': 'Indicateurs de position et de dispersion',
+    'B 06': 'Résolution d’équations du 1er degré', 'B 07': 'Résolution d’inéquations du 1er degré',
+    'B 08': 'Proportionnalité et fonction linéaire', 'B 09': 'Allure d’une courbe à partir d’un tableau de variations',
+    'B 10': 'Tableau de variations à partir d’une courbe',
+    'C 01': 'Probabilité de l’événement contraire', 'C 02': 'Réunion d’événements incompatibles', 'C 03': 'Réunion de deux événements',
+    'C 04': 'Intersection de deux événements', 'C 05': 'Tableaux croisés et diagrammes', 'C 06': 'Probabilités conditionnelles',
+    'C 07': 'Suites arithmétiques', 'C 08': 'Nombre de solutions de f(x) = 0', 'C 09': 'Forme factorisée d’un polynôme du 2nd degré',
+    'C 10': 'Dérivée d’un polynôme (degré ≤ 2)', 'C 11': 'Construction de vecteurs', 'C 12': 'Arbre pondéré et indépendance'
+  }
+});
