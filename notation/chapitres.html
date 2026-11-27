@@ -46,7 +46,7 @@
         </select>
       </label>
       <label class="case"><input type="checkbox" id="f-nonvalides"> Inclure les copies « à valider »</label>
-      <label class="case"><input type="checkbox" id="f-pmseul"> Inclure les élèves présents seulement dans PlayMaths</label>
+      <label class="case"><input type="checkbox" id="f-pmseul" checked> Inclure les élèves présents seulement dans PlayMaths / Automatismes</label>
       <div class="rangee">
         <button type="button" id="btn-actualiser" class="btn secondaire">Actualiser</button>
         <button type="button" id="btn-csv" class="btn secondaire">Export CSV</button>
@@ -69,6 +69,20 @@
 </main>
 
 <div id="menu-niveau" class="menu-niveau" role="menu" hidden></div>
+
+<dialog id="dlg-note" class="dlg-note" aria-labelledby="dlg-titre">
+  <form id="form-note" method="dialog">
+    <h2 id="dlg-titre"></h2>
+    <p id="dlg-info" class="petit"></p>
+    <label>Note sur 10 <input type="text" id="dlg-valeur" inputmode="decimal" autocomplete="off" placeholder="ex. 7,5"></label>
+    <p id="dlg-erreur" class="message erreur" role="alert"></p>
+    <div class="rangee">
+      <button type="submit" class="btn">Enregistrer</button>
+      <button type="button" id="dlg-suppr" class="btn secondaire" hidden>Retirer la note saisie</button>
+      <button type="button" id="dlg-annuler" class="btn secondaire">Annuler</button>
+    </div>
+  </form>
+</dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="chapitres-config.js"></script>
