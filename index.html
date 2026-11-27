@@ -17,92 +17,9 @@
 >
 
 <!-- =====================================================
-     CHARTE GRAPHIQUE DU LOGO MERMOZ LAB
-     Inspirée de l'identité visuelle SciLab
+     Le style du logo Mermoz Lab est dans style.css (.lab-welcome)
 ====================================================== -->
 <style>
-
-    /* Conteneur général du logo */
-    .mermoz-logo {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-
-        margin: 10px auto 28px;
-        padding: 16px 28px;
-
-        background: #050505;
-
-        border: 3px solid #111;
-        border-radius: 8px;
-
-        box-shadow:
-            0 8px 20px rgba(0, 0, 0, 0.35),
-            inset 0 0 12px rgba(255, 255, 255, 0.04);
-
-        font-family:
-            'Atkinson Hyperlegible', Verdana, 'DejaVu Sans', Arial, sans-serif;
-
-        font-size: clamp(2.2rem, 6vw, 4.8rem);
-        font-weight: 900;
-
-        letter-spacing: -2px;
-
-        line-height: 1;
-
-        user-select: none;
-
-        transition:
-            transform 0.25s ease,
-            box-shadow 0.25s ease;
-    }
-
-    /* Effet discret au survol */
-    .mermoz-logo:hover {
-        transform: translateY(-3px) scale(1.02);
-
-        box-shadow:
-            0 12px 28px rgba(0, 0, 0, 0.45),
-            0 0 14px rgba(230, 30, 45, 0.18);
-    }
-
-    /* Partie blanche : MERMOZ */
-    .mermoz-logo .mermoz {
-        color: #ffffff;
-
-        text-shadow:
-            1px 1px 0 #777,
-            2px 2px 4px rgba(0, 0, 0, 0.7);
-    }
-
-    /* Partie rouge : LAB */
-    .mermoz-logo .lab {
-        color: #e31b2f;
-
-        margin-left: 8px;
-
-        text-shadow:
-            1px 1px 0 #85000d,
-            0 0 7px rgba(227, 27, 47, 0.35);
-    }
-
-    /* Adaptation aux petits écrans */
-    @media screen and (max-width: 600px) {
-
-        .mermoz-logo {
-            padding: 13px 18px;
-
-            font-size: clamp(2rem, 12vw, 3.2rem);
-
-            letter-spacing: -1px;
-
-            border-width: 2px;
-        }
-
-        .mermoz-logo .lab {
-            margin-left: 5px;
-        }
-    }
 
     /* Impression du compte rendu PDF (iframe qui recopie cette feuille
        de style) : html/body ne doivent pas rester bloqués à 100 % de
@@ -358,30 +275,12 @@
 
         <div id="home-message">
 
-            <h2>
-                Bienvenue dans le projet
-            </h2>
-
-
-            <!-- =========================================
-                 LOGO MERMOZ LAB
-            ========================================== -->
-
-            <div
-                class="mermoz-logo"
-                aria-label="Mermoz Lab"
-            >
-
-                <span class="mermoz">
-                    Mermoz
-                </span>
-
-                <span class="lab">
-                    Lab
-                </span>
-
-            </div>
-
+            <!-- Logo d'accueil Mermoz Lab (même style que SciLab) -->
+            <header class="lab-welcome" aria-label="Bienvenue dans le projet Mermoz Lab">
+                <span class="lab-welcome__icone" aria-hidden="true"><img src="images/logo_mermozlab.jpg" alt=""></span>
+                <p class="lab-welcome__texte">Bienvenue dans le projet</p>
+                <p class="lab-welcome__logo">Mermoz<span>Lab</span></p>
+            </header>
 
             <p>
 
