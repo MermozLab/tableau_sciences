@@ -41,7 +41,7 @@
   <section id="panneau-analyse" role="tabpanel" aria-labelledby="tab-analyse">
     <div id="zone-depot" class="depot" tabindex="0">
       <p><strong>Déposez ici un ou plusieurs PDF</strong> (un ou plusieurs élèves)</p>
-      <p class="aide">Comptes rendus générés par MathiLab, SciLab… (MermozLab_Nom_Prénom_id….pdf)</p>
+      <p class="aide">Comptes rendus générés par MathiLab, SciLab, PyLab, GéoGébra, NumWorks… (MermozLab_Nom_Prénom_id….pdf). Pour PyLab, GéoGébra et NumWorks, vous choisirez le chapitre et l’onglet de rattachement sur la copie.</p>
       <input id="fichiers" type="file" accept="application/pdf,.pdf" multiple>
       <label for="fichiers" class="btn btn-principal">Choisir des fichiers PDF</label>
     </div>
@@ -57,7 +57,6 @@
     </div>
     <progress id="progression" max="1" value="0" hidden aria-label="Progression de l’analyse"></progress>
     <p id="compteur-ia" class="aide" aria-live="polite"></p>
-    <div id="zone-secours"></div>
 
     <div id="liste-copies"></div>
   </section>
@@ -101,6 +100,7 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="chapitres-config.js"></script>
 <script type="module" src="analyse.js"></script>
 </body>
 </html>
