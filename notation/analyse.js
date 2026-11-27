@@ -6,8 +6,7 @@
    Accès protégé : connexion Supabase Auth + règles RLS (supabase/notation.sql).
    ========================================================================== */
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
-import { lignesDepuisPdf, analyserLignes, retirerIdPdf } from "./analyse-parser.js";
-import { appelerSecours, montrerPanneauCles, fournisseursActifs } from "./analyse-ia-secours.js";
+import { lignesDepuisPdf, analyserLignes, retirerIdPdf, OUTILS } from "./analyse-parser.js";
 import { ajouterRubriques, appliquerControles, recalculerAuto, evaluerRubriquesPhysique, questionsReelles, estRubrique } from "./analyse-rubriques.js";
 
 const SUPABASE_URL = "https://obsqakmhtvfuwnoxoksr.supabase.co";
@@ -43,7 +42,7 @@ async function afficherSelonSession() {
   $("#vue-connexion").hidden = connecte;
   $("#vue-app").hidden = !connecte;
   $("#btn-deco").hidden = !connecte;
-  if (connecte) { chargerBase(); afficherCompteur(); const z = $("#zone-secours"); if (z && !z.dataset.pret) { montrerPanneauCles(z); z.dataset.pret = "1"; } }
+  if (connecte) { chargerBase(); afficherCompteur(); }
 }
 
 $("#form-connexion").addEventListener("submit", async e => {
@@ -129,11 +128,100 @@ function nouvelleCopie(r, nomFichier, emp) {
     contexte: r.contexte, manipulation: r.manipulation, problematique: r.problematique,
     autoevaluation: r.autoevaluation, avertissements: r.avertissements,
     materiel: r.materiel, manipulationValeurs: r.manipulationValeurs, manipulationResultats: r.manipulationResultats,
+    outil: r.outil || "", outilDonnees: r.outilDonnees || null, chapitre: "", onglet: "", suggestion: null,
     questions: r.questions.map(q => ({ ...q, cotation: null, cotationIA: null, signal: false, justification: "" })),
     commentaireProf: "", commentaireNote: "", analysePar: "", valide: false, etat: "lue", occupe: false
   };
-  ajouterRubriques(c);        // matériel, valeurs de la manipulation (physique) et auto-évaluation (toutes matières)
+  if (c.outil) c.suggestion = suggererRattachement(c);   // PyLab / GéoGébra / NumWorks : une seule réalisation à coter
+  else ajouterRubriques(c);   // matériel, valeurs de la manipulation (physique) et auto-évaluation (toutes matières)
   return c;
+}
+
+/* ============================ Comptes rendus « outil » (PyLab, GéoGébra, NumWorks) ============================
+   Une réalisation = une cotation 0/1/2 (compétence « Réaliser » par défaut), rattachée à un chapitre et à un onglet
+   de la page « Moyenne par chapitre » (table notation_affectations). */
+
+const CHAPITRES = () => (window.CHAPITRES_CONFIG && window.CHAPITRES_CONFIG.chapitres) || [];
+const chapitreDe = c => CHAPITRES().find(x => x.id === c.chapitre);
+const domaineAffiche = chap => chap.groupe.split("·").pop().trim().toUpperCase();      // « Mathématiques · Algèbre » → ALGÈBRE
+const libelleOutil = c => OUTILS[c.outil] || "Réalisation";
+
+/** Domaine, code TD/TP et titre déduits du chapitre et de l'onglet choisis (c'est ce que lit la page « Moyenne par chapitre »). */
+function appliquerRattachement(c) {
+  const chap = chapitreDe(c);
+  if (!chap) { c.domaine = ""; c.codeTd = ""; c.titre = libelleOutil(c); return; }
+  const o = chap.onglets.find(x => x[0] === c.onglet);
+  c.domaine = domaineAffiche(chap);
+  c.codeTd = chap.filtre.code_td;
+  c.titre = `${c.codeTd} — ${libelleOutil(c)}${o ? " · " + o[1] : ""}`;
+}
+
+/* Suggestions prudentes (jamais appliquées sans clic) : mots-clés du programme ou types d'objets GéoGébra. */
+const SUGGESTIONS = {
+  pylab: [
+    [/arbre\s*\(|\bsachant\b|pB_A/i, "AL02", "probas-tle", "arbre pondéré"],
+    [/p[ée]rim[eè]tre|\baire\b|volume/i, "AL05", "aires-volumes", "périmètre, aire ou volume"],
+    [/pythag|hypot|sqrt\s*\(/i, "AL05", "pythagore", "Pythagore"],
+    [/randint|random|simul/i, "AL01", "utiliser-simulation", "simulation aléatoire"]
+  ],
+  geogebra: [
+    [/vecteur/i, "G03", "construire-vecteurs", "vecteurs"],
+    [/pyramide|cube|prisme|cylindre|c[ôo]ne|sph[èe]re|plan/i, "G02", "representer-solide", "solide"]
+  ],
+  numworks: []
+};
+function suggererRattachement(c) {
+  const d = c.outilDonnees || {};
+  const texte = c.outil === "pylab" ? d.programme || "" : c.outil === "geogebra" ? (d.objets || []).map(o => `${o.type} ${o.definition} ${o.valeur}`).join(" ") : "";
+  for (const [re, chap, onglet, motif] of SUGGESTIONS[c.outil] || []) {
+    const ch = CHAPITRES().find(x => x.id === chap);
+    if (re.test(texte) && ch && ch.onglets.some(x => x[0] === onglet)) return { chapitre: chap, onglet, motif };
+  }
+  return null;
+}
+
+/** Cotation automatique prudente (modifiable) : programme exécuté / figure construite ; la capture NumWorks reste à coter à la main. */
+function analyserOutil(c) {
+  const q = c.questions[0], d = c.outilDonnees;
+  if (!d) { message($("#msg-depot"), "Cette copie a été rouverte depuis la base : redéposez le PDF pour relancer l’analyse, ou cotez-la à la main.", "info"); return "locale"; }
+  let cot = null, j = "";
+  if (c.outil === "pylab") {
+    if (!String(d.programme || "").trim()) { cot = 0; j = "Programme vide."; }
+    else if (String(d.console || "").trim() || d.graphique) { cot = 2; j = "Programme exécuté : un résultat s’affiche dans la console ou un graphique est produit. À vérifier avec la consigne."; }
+    else { cot = 1; j = "Programme saisi, mais aucun résultat visible (console vide, pas de graphique)."; }
+  } else if (c.outil === "geogebra") {
+    const n = (d.objets || []).length;
+    if (!n) { cot = 0; j = "Aucun objet construit."; }
+    else if (d.figure) { cot = 2; j = `Figure et construction présentes (${n} objet${n > 1 ? "s" : ""}). À vérifier avec la consigne.`; }
+    else { cot = 1; j = "Construction listée mais figure absente."; }
+  } else {
+    j = "Capture d’écran : à coter par l’enseignant (l’image n’est pas lue automatiquement).";
+  }
+  q.cotation = q.cotationIA = cot; q.justification = j; q.signal = false;
+  c.analysePar = "contrôle automatique (réalisation)";
+  c.etat = "analysée"; c.valide = false; c.occupe = false;
+  afficherCarte(c);
+  return "locale";
+}
+
+function blocRattachement(c) {
+  const cfg = window.CHAPITRES_CONFIG;
+  if (!cfg) return `<div class="avert">Configuration des chapitres introuvable (chapitres-config.js).</div>`;
+  const groupes = [...new Set(cfg.chapitres.map(x => x.groupe))];
+  const optChap = `<option value="">— choisir le chapitre —</option>` + groupes.map(g =>
+    `<optgroup label="${esc(g)}">${cfg.chapitres.filter(x => x.groupe === g).map(x => `<option value="${esc(x.id)}" ${c.chapitre === x.id ? "selected" : ""}>${esc(x.id)} — ${esc(x.titre)}</option>`).join("")}</optgroup>`).join("");
+  const chap = chapitreDe(c);
+  const optOnglet = `<option value="">— choisir l’onglet —</option>` + (chap ? chap.onglets.map(([id, lib]) => `<option value="${esc(id)}" ${c.onglet === id ? "selected" : ""}>${esc(lib)}</option>`).join("") : "");
+  const optComp = Object.entries(NOM_COMP).map(([k, v]) => `<option value="${k}" ${c.questions[0]?.competence === k ? "selected" : ""}>${k} — ${esc(v)}</option>`).join("");
+  const sug = c.suggestion && !(c.chapitre === c.suggestion.chapitre && c.onglet === c.suggestion.onglet)
+    ? `<p class="aide">Suggestion (${esc(c.suggestion.motif)}) : ${esc(c.suggestion.chapitre)}, onglet « ${esc((cfg.chapitres.find(x => x.id === c.suggestion.chapitre).onglets.find(x => x[0] === c.suggestion.onglet) || [])[1] || "")} ». <button type="button" class="btn btn-discret" data-rattach="suggestion">Appliquer</button></p>` : "";
+  return `<div class="contexte rattachement">
+    <p><strong>${esc(libelleOutil(c))}</strong> — choisissez le chapitre et l’onglet auxquels rattacher cette réalisation : elle apparaîtra dans « Moyenne par chapitre ».</p>
+    <div class="grille-meta">
+      <div><label for="c${c.uid}-chap">Chapitre</label><select id="c${c.uid}-chap" data-rattach="chapitre">${optChap}</select></div>
+      <div><label for="c${c.uid}-ong">Onglet</label><select id="c${c.uid}-ong" data-rattach="onglet" ${chap ? "" : "disabled"}>${optOnglet}</select></div>
+      <div><label for="c${c.uid}-comp">Compétence évaluée</label><select id="c${c.uid}-comp" data-rattach="competence">${optComp}</select></div>
+    </div>${sug}</div>`;
 }
 
 /* ============================ Note et commentaires ============================ */
@@ -230,42 +318,8 @@ function afficherCompteur() {
   el.textContent = v.total ? `Aujourd’hui : ${v.total} copie(s) analysée(s) par IA (${detail}).` : "";
 }
 
-/** Edge Function d’abord ; si son quota est épuisé (ou si elle est en panne), IA de secours (autres quotas gratuits). */
-async function appelerIA(charge) {
-  try { return await appelerIAPrincipale(charge); }
-  catch (err) {
-    const secoursPossible = err.quota || err.statut >= 500 || !err.statut;
-    if (!secoursPossible) throw err;
-    try {
-      // 1) clés saisies dans le navigateur (si présentes) ; 2) sinon IA de secours côté serveur (secrets Supabase)
-      const data = fournisseursActifs().length ? await appelerSecours(charge) : await appelerSecoursServeur(charge);
-      console.info("[notation] IA de secours utilisée :", data.fournisseur);
-      return data;
-    } catch (errSecours) {
-      // Tous les quotas sont épuisés : on garde le statut « quota » pour conserver les copies restantes.
-      errSecours.message = `${err.message} — ${errSecours.message}`;
-      if (!errSecours.quota && err.quota) errSecours.quota = true;
-      throw errSecours;
-    }
-  }
-}
-
-/** IA de secours hébergée : Edge Function « analyser-copie-secours », clés dans les secrets Supabase. */
-async function appelerSecoursServeur(charge) {
-  const { data, error } = await sb.functions.invoke("analyser-copie-secours", { body: { copie: charge } });
-  if (!error && data && !data.erreur) return data;
-  let statut = error?.context?.status || 0, detail = data?.erreur || "", delai = 0;
-  try {
-    const j = JSON.parse(((await error?.context?.text?.()) || "").trim());
-    detail = j?.erreur || detail; delai = Number(j?.reessayer_dans_s) || 0;
-  } catch { /* corps non JSON */ }
-  const e = new Error(statut === 404 ? "fonction de secours non déployée" : (detail || "IA de secours injoignable"));
-  e.quota = statut === 429; e.delai = delai; e.statut = statut;
-  throw e;
-}
-
 /** Appelle la Edge Function ; en cas d’erreur, lit le message renvoyé par le serveur. */
-async function appelerIAPrincipale(charge) {
+async function appelerIA(charge) {
   const { data, error } = await sb.functions.invoke("analyser-copie", { body: { copie: charge } });
   if (!error && data && !data.erreur) return data;
   let detail = data?.erreur || "", statut = 0, delai = 0, brut = "";
@@ -299,6 +353,7 @@ let derniereErreurIA = "";
 /** Une copie → IA. Retourne "ia" | "locale" | "quota" (quota seulement en mode lot). */
 async function analyserCopie(c, { lot = false, attenteQuota = false } = {}) {
   const msg = $("#msg-depot");
+  if (c.outil) return analyserOutil(c);           // PyLab / GéoGébra / NumWorks : contrôle local, sans appel IA
   c.occupe = true; afficherCarte(c);
   const charge = {
     domaine: c.domaine, titre: c.titre, niveau: c.niveau, filiere: c.filiere, contexte: c.contexte,
@@ -397,12 +452,14 @@ async function enregistrerCopie(c, { silencieux = false } = {}) {
   const note = noteCopie(c);
   if (!c.nom.trim() || !c.prenom.trim()) { message(msg, "Renseignez le nom et le prénom avant d’enregistrer.", "erreur"); return false; }
   if (!note) { message(msg, `${c.prenom} ${c.nom} : cotez chaque question (ou lancez l’analyse) avant d’enregistrer.`, "erreur"); return false; }
+  if (c.outil && (!c.chapitre || !c.onglet)) { message(msg, `${c.prenom} ${c.nom} : choisissez le chapitre et l’onglet de cette réalisation (${libelleOutil(c)}) avant d’enregistrer.`, "erreur"); return false; }
+  if (c.outil) appliquerRattachement(c);
   c.occupe = true; afficherCarte(c);
   const ligne = {
     empreinte: c.empreinte, nom_fichier: c.fichier, pdf_id: c.pdfId || null, matiere: c.matiere || null,
     domaine: c.domaine.trim(), code_td: c.codeTd || null, titre_td: c.titre.trim(), niveau: c.niveau || null,
     classe: c.classe || null, filiere: c.filiere || null, nom: c.nom.trim(), prenom: c.prenom.trim(),
-    date_copie: c.dateCopie || null, contexte_pro: c.contexte || null, problematique: c.problematique || null,
+    date_copie: c.dateCopie || null, contexte_pro: c.outil ? `Outil : ${c.outil}` : (c.contexte || null), problematique: c.problematique || null,
     autoevaluation: c.autoevaluation?.length ? c.autoevaluation : null,
     commentaire_prof: c.commentaireProf.trim() || null, commentaire_note: c.commentaireNote.trim() || null,
     total_points: note.total, total_max: note.max, note_sur_10: note.sur10,
@@ -427,6 +484,10 @@ async function enregistrerCopie(c, { silencieux = false } = {}) {
     }));
     const { error: e2 } = await sb.from("notation_reponses").insert(reps);
     if (e2) throw e2;
+    if (c.outil) {          // rattachement à l'onglet du chapitre (lu par la page « Moyenne par chapitre »)
+      const { error: e3 } = await sb.from("notation_affectations").upsert({ copie_id: id, chapitre: c.chapitre, composante: "o:" + c.onglet, updated_at: new Date().toISOString() }, { onConflict: "copie_id" });
+      if (e3) throw e3;
+    }
     c.dbId = id; c.etat = "enregistrée";
     if (!silencieux) message(msg, `${c.prenom} ${c.nom} : copie enregistrée (${fmt(note.sur10)} / 10).`, "ok");
     c.occupe = false; afficherCarte(c);
@@ -516,10 +577,10 @@ function carteHTML(c, ouverte) {
       ${champ(c, "classe", "Classe")}${champ(c, "nom", "Nom")}${champ(c, "prenom", "Prénom")}${champ(c, "dateCopie", "Date", "date")}
       ${champ(c, "filiere", "Filière")}
     </div>
-    <div class="contexte">
+    ${c.outil ? blocRattachement(c) : `<div class="contexte">
       <p><strong>Contexte professionnel :</strong> ${esc(c.contexte) || "<em>non détecté</em>"}</p>
       <p><strong>Problématique :</strong> ${esc(c.problematique) || "<em>non détectée</em>"}</p>
-    </div>
+    </div>`}
     <div class="table-wrapper"><table>
       <thead><tr><th>Question / rubrique</th><th>Énoncé et réponse de l’élève</th><th>Cotation</th><th>Justification</th></tr></thead>
       <tbody>${c.questions.map((q, i) => ligneQuestion(c, q, i)).join("")}</tbody>
@@ -607,7 +668,25 @@ liste.addEventListener("input", e => {
   }
 });
 
+/* Rattachement d'une réalisation (PyLab, GéoGébra, NumWorks) : chapitre, onglet, compétence, suggestion */
+function changerRattachement(el) {
+  const c = copieDe(el); if (!c) return;
+  const k = el.dataset.rattach;
+  if (k === "suggestion" && c.suggestion) { c.chapitre = c.suggestion.chapitre; c.onglet = c.suggestion.onglet; }
+  else if (k === "chapitre") {
+    c.chapitre = el.value; c.onglet = "";
+    const ch = chapitreDe(c);
+    if (ch && ch.onglets.length === 1) c.onglet = ch.onglets[0][0];
+  } else if (k === "onglet") c.onglet = el.value;
+  else if (k === "competence" && c.questions[0]) c.questions[0].competence = el.value;
+  appliquerRattachement(c);
+  if (c.etat === "enregistrée") c.etat = "analysée";
+  afficherCarte(c);
+}
+liste.addEventListener("change", e => { const s = e.target.closest("select[data-rattach]"); if (s) changerRattachement(s); });
+
 liste.addEventListener("click", async e => {
+  const sg = e.target.closest("button[data-rattach]"); if (sg) { changerRattachement(sg); return; }
   const b = e.target.closest("[data-action]"); if (!b) return;
   const c = copieDe(b); if (!c) return;
   if (b.dataset.action === "analyser") await analyserCopie(c);
@@ -664,11 +743,16 @@ async function ouvrirEnregistree(id) {
       sb.from("notation_reponses").select("*").eq("copie_id", id).order("ordre")
     ]);
     if (error || e2) { message($("#msg-base"), `Lecture impossible : ${(error || e2).message}`, "erreur"); return; }
+    const outil = (/^Outil\s*:\s*(pylab|geogebra|numworks)\b/i.exec(r.contexte_pro || "") || [])[1]?.toLowerCase() || "";
+    let aff = null;
+    if (outil) { const { data } = await sb.from("notation_affectations").select("chapitre,composante").eq("copie_id", id).maybeSingle(); aff = data; }
     copies.push({
+      outil, outilDonnees: null, suggestion: null,
+      chapitre: aff?.chapitre || "", onglet: (aff?.composante || "").startsWith("o:") ? aff.composante.slice(2) : "",
       uid: ++uidCompteur, dbId: id, fichier: r.nom_fichier || "", empreinte: r.empreinte, matiere: r.matiere || "",
       domaine: r.domaine || "", codeTd: r.code_td || "", titre: r.titre_td || "", niveau: r.niveau || "", classe: r.classe || "",
       filiere: r.filiere || "", nom: r.nom, prenom: r.prenom, dateCopie: r.date_copie || "", pdfId: r.pdf_id || "",
-      contexte: r.contexte_pro || "", manipulation: "", problematique: r.problematique || "",
+      contexte: outil ? "" : (r.contexte_pro || ""), manipulation: "", problematique: r.problematique || "",
       autoevaluation: r.autoevaluation || [], avertissements: [],
       materiel: null, manipulationValeurs: [], manipulationResultats: [], rubriquesGelees: true,
       questions: reps.map(x => ({ code: x.code, competence: x.competence || "", enonce: x.enonce || "", reponse: retirerIdPdf(x.reponse || ""),
