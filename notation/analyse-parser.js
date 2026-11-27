@@ -21,7 +21,8 @@ const RE_PIED = [
   /^https?:\/\/\S+(\s+\d+\/\d+)?\s*$/i,
   /^\d{2}\/\d{2}\/\d{4}\s+\d{1,2}:\d{2}\b/,
   /^MathiLab\s+—\s+Mermoz Lab/i,
-  /^SciLab\s+—\s+Mermoz Lab/i
+  /^SciLab\s+—\s+Mermoz Lab/i,
+  /^PyLab\s+—\s+Mermoz Lab/i
 ];
 /* Identifiant de pied de page « id=71d54f6b » (ajouté par js/id-pdf.js) : ne doit jamais faire partie d'une réponse. */
 const RE_ID = /(?:^|\s)id\s*=\s*[0-9a-f]{6,}\b/i;
@@ -121,6 +122,56 @@ function depuisNomFichier(nom) {
   return m ? { nom: m[1], prenom: m[2], pdfId: m[3] } : {};
 }
 
+/* ---------- Comptes rendus « outil » : PyLab (programme Python), GéoGébra, NumWorks ----------
+   Pas de questions Q1…Qn : une seule réalisation à coter (compétence « Réaliser » par défaut),
+   à rattacher à un chapitre et à un onglet dans l'analyse. */
+export const OUTILS = {
+  pylab: "Programme Python (PyLab)",
+  geogebra: "Réalisation GéoGébra",
+  numworks: "Écran de la calculatrice NumWorks"
+};
+
+function detecterOutil(L) {
+  const t = L.map(l => l.texte).join("\n");
+  if (/PYTHON\s*[—–-]\s*PROGRAMME/i.test(t) || (/^PyLab\b/im.test(t) && /[ÉE]diteur Python/i.test(t))) return "pylab";
+  if (/G[ÉE]OG[ÉE]BRA/i.test(t) && /R[ée]alisation sous/i.test(t)) return "geogebra";
+  if (/NUMWORKS/i.test(t) && /[ÉE]cran de la calculatrice/i.test(t)) return "numworks";
+  return "";
+}
+
+function lireOutil(outil, L, res) {
+  const idx = re => L.findIndex(l => re.test(l.texte));
+  res.outil = outil;
+  res.titre = OUTILS[outil];
+  let reponse = "";
+  if (outil === "pylab") {
+    const iProg = idx(/^[ÉE]diteur Python/i), iRes = idx(/^R[ée]sultat\s*[—–-]\s*Console/i), iGraph = idx(/^Graphique$/i);
+    const finProg = iRes >= 0 ? iRes : iGraph >= 0 ? iGraph : L.length;
+    const prog = iProg >= 0 ? L.slice(iProg + 1, finProg).map(l => l.texte) : [];
+    const cons = iRes >= 0 ? L.slice(iRes + 1, iGraph > iRes ? iGraph : L.length).map(l => l.texte) : [];
+    const consVide = !cons.length || cons.every(x => /^\(console vide\)$/i.test(x));
+    res.outilDonnees = { programme: prog.join("\n"), console: consVide ? "" : cons.join("\n"), graphique: iGraph >= 0 };
+    reponse = `Programme :\n${prog.join("\n") || "(vide)"}\n\nConsole : ${consVide ? "(vide)" : "\n" + cons.join("\n")}\n\nGraphique : ${iGraph >= 0 ? "oui" : "non"}`;
+  } else if (outil === "geogebra") {
+    const iCons = idx(/^Construction$/i);
+    const objets = [];
+    if (iCons >= 0) {
+      for (const l of L.slice(iCons + 1)) {
+        if (/^Objet\b/i.test(l.texte)) continue;
+        if (l.cellules.length >= 3) objets.push({ objet: l.cellules[0], type: l.cellules[1], definition: l.cellules[2], valeur: l.cellules[3] || "" });
+      }
+    }
+    res.outilDonnees = { figure: idx(/^Figure$/i) >= 0, objets };
+    reponse = `Figure : ${res.outilDonnees.figure ? "oui" : "non"}\nConstruction (${objets.length} objet${objets.length > 1 ? "s" : ""}) :\n` +
+      (objets.map(o => `${o.objet} — ${o.type} — ${o.definition} — ${o.valeur}`).join("\n") || "(aucun objet)");
+  } else {
+    res.outilDonnees = {};
+    reponse = "(capture d’écran de la calculatrice : à consulter dans le PDF)";
+    res.avertissements.push("Capture d’écran NumWorks : le contenu de l’image n’est pas lu automatiquement, cotez-la vous-même.");
+  }
+  res.questions = [{ code: "Q1", numero: 1, sujet: "", competence: "REA", enonce: OUTILS[outil], reponse }];
+}
+
 export function analyserLignes(lignes, nomFichier = "") {
   const fich = depuisNomFichier(nomFichier);
   // l'id est lu d'abord (n'importe où dans une ligne), puis retiré de toutes les lignes avant l'analyse
@@ -133,6 +184,7 @@ export function analyserLignes(lignes, nomFichier = "") {
     .filter(l => l.texte !== "");
   const L = sansId.filter(l => !RE_PIED.some(re => re.test(l.texte)));
   const res = {
+    outil: "", outilDonnees: null,
     matiere: "", domaine: "", codeTd: "", titre: "", niveau: "", classe: "",
     nom: fich.nom || "", prenom: fich.prenom || "", dateCopie: "", pdfId: fich.pdfId || "",
     filiere: "", contexte: "", manipulation: "", problematique: "",
@@ -268,6 +320,10 @@ export function analyserLignes(lignes, nomFichier = "") {
       }
     }
   }
+
+  // --- Comptes rendus « outil » (PyLab, GéoGébra, NumWorks)
+  const outil = detecterOutil(L);
+  if (outil) lireOutil(outil, L, res);
 
   // --- Contrôles
   if (!res.nom || !res.prenom) res.avertissements.push("Nom ou prénom introuvable : à saisir.");
