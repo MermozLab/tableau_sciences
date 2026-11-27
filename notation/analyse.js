@@ -7,6 +7,7 @@
    ========================================================================== */
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
 import { lignesDepuisPdf, analyserLignes, retirerIdPdf } from "./analyse-parser.js";
+import { appelerSecours, montrerPanneauCles, fournisseursActifs } from "./analyse-ia-secours.js";
 import { ajouterRubriques, appliquerControles, recalculerAuto, evaluerRubriquesPhysique, questionsReelles, estRubrique } from "./analyse-rubriques.js";
 
 const SUPABASE_URL = "https://obsqakmhtvfuwnoxoksr.supabase.co";
@@ -42,7 +43,7 @@ async function afficherSelonSession() {
   $("#vue-connexion").hidden = connecte;
   $("#vue-app").hidden = !connecte;
   $("#btn-deco").hidden = !connecte;
-  if (connecte) { chargerBase(); afficherCompteur(); }
+  if (connecte) { chargerBase(); afficherCompteur(); const z = $("#zone-secours"); if (z && !z.dataset.pret) { montrerPanneauCles(z); z.dataset.pret = "1"; } }
 }
 
 $("#form-connexion").addEventListener("submit", async e => {
@@ -229,8 +230,42 @@ function afficherCompteur() {
   el.textContent = v.total ? `Aujourd’hui : ${v.total} copie(s) analysée(s) par IA (${detail}).` : "";
 }
 
-/** Appelle la Edge Function ; en cas d’erreur, lit le message renvoyé par le serveur. */
+/** Edge Function d’abord ; si son quota est épuisé (ou si elle est en panne), IA de secours (autres quotas gratuits). */
 async function appelerIA(charge) {
+  try { return await appelerIAPrincipale(charge); }
+  catch (err) {
+    const secoursPossible = err.quota || err.statut >= 500 || !err.statut;
+    if (!secoursPossible) throw err;
+    try {
+      // 1) clés saisies dans le navigateur (si présentes) ; 2) sinon IA de secours côté serveur (secrets Supabase)
+      const data = fournisseursActifs().length ? await appelerSecours(charge) : await appelerSecoursServeur(charge);
+      console.info("[notation] IA de secours utilisée :", data.fournisseur);
+      return data;
+    } catch (errSecours) {
+      // Tous les quotas sont épuisés : on garde le statut « quota » pour conserver les copies restantes.
+      errSecours.message = `${err.message} — ${errSecours.message}`;
+      if (!errSecours.quota && err.quota) errSecours.quota = true;
+      throw errSecours;
+    }
+  }
+}
+
+/** IA de secours hébergée : Edge Function « analyser-copie-secours », clés dans les secrets Supabase. */
+async function appelerSecoursServeur(charge) {
+  const { data, error } = await sb.functions.invoke("analyser-copie-secours", { body: { copie: charge } });
+  if (!error && data && !data.erreur) return data;
+  let statut = error?.context?.status || 0, detail = data?.erreur || "", delai = 0;
+  try {
+    const j = JSON.parse(((await error?.context?.text?.()) || "").trim());
+    detail = j?.erreur || detail; delai = Number(j?.reessayer_dans_s) || 0;
+  } catch { /* corps non JSON */ }
+  const e = new Error(statut === 404 ? "fonction de secours non déployée" : (detail || "IA de secours injoignable"));
+  e.quota = statut === 429; e.delai = delai; e.statut = statut;
+  throw e;
+}
+
+/** Appelle la Edge Function ; en cas d’erreur, lit le message renvoyé par le serveur. */
+async function appelerIAPrincipale(charge) {
   const { data, error } = await sb.functions.invoke("analyser-copie", { body: { copie: charge } });
   if (!error && data && !data.erreur) return data;
   let detail = data?.erreur || "", statut = 0, delai = 0, brut = "";
