@@ -122,9 +122,6 @@ tr.rubrique.exclue { opacity: .55; }
 .q-lecture { margin: 4px 0 0; white-space: pre-wrap; word-break: break-word; font: inherit; font-size: .85rem; background: #fcfcfc; border: 1px dashed var(--bord); border-radius: 6px; padding: 6px 8px; max-height: 160px; overflow: auto; }
 .repere h3 { font-size: 1rem; margin: 14px 0 4px; }
 
-/* IA de secours (quotas gratuits supplémentaires) */
-.secours { margin: 8px 0 12px; padding: 8px 12px; border: 1px solid #c5d0e0; border-radius: 8px; background: #f7f9fc; }
-.secours summary { cursor: pointer; font-weight: 700; }
-.ligne-cle { display: grid; grid-template-columns: 1fr; gap: 4px; margin: 8px 0; font-weight: 600; }
-.ligne-cle a { font-weight: 400; font-size: .85rem; margin-left: 8px; }
-.ligne-cle input { padding: 6px 8px; font: inherit; }
+/* Rattachement d'une réalisation (PyLab, GéoGébra, NumWorks) à un chapitre et à un onglet */
+.rattachement select { width: 100%; }
+.rattachement .aide { margin: 6px 0 0; }
