@@ -15,34 +15,19 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const norm = s => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const cleEleve = (prenom, nom) => norm(`${prenom} ${nom}`).replace(/[^a-z0-9]+/g, ' ').trim().split(' ').filter(Boolean).sort().join(' ');
-  /* comptes de test à ne jamais afficher (clé = prénom + nom, sans accents ni ordre) */
-  const ELEVES_EXCLUS = new Set([cleEleve('Test', 'TEST')]);
   const titre = s => String(s || '').trim().toLowerCase().replace(/(^|[\s\-'’])(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
   const fmt = (n, d = 1) => (n == null || Number.isNaN(n)) ? '–' : Number(n).toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d });
   const moy = a => a.length ? a.reduce((s, x) => s + x, 0) / a.length : null;
   const dateFr = d => { const x = d ? new Date(d) : null; return x && !isNaN(x) ? x.toLocaleDateString('fr-FR') : ''; };
   const niveauCle = s => { const n = norm(s); return /2(nde|de)|seconde/.test(n) ? '2nde' : /1(ere|re)|premiere/.test(n) ? '1ere' : /tle|term/.test(n) ? 'tle' : ''; };
   const niveauDeClasse = cl => { const c = String(cl || '').toUpperCase().replace(/\s+/g, ''); return /^2/.test(c) ? '2nde' : /^1/.test(c) ? '1ere' : /^T/.test(c) ? 'tle' : ''; };
-  /* classe d'un élève d'après le référentiel (table notation_eleves) : tous les mots de son nom
-     doivent figurer dans une entrée du référentiel, et une seule classe doit correspondre */
-  /* entrée unique du référentiel correspondant à un élève (orthographe de référence), sinon null */
-  const entreeReferentiel = cle => {
-    const mots = String(cle || '').split(' ').filter(Boolean); if (!mots.length) return null;
-    const ok = state.roster.filter(r => mots.every(m => r.mots.has(m)));
-    return ok.length === 1 ? ok[0] : null;
-  };
-  const classeDuReferentiel = cle => {
-    const mots = String(cle || '').split(' ').filter(Boolean); if (!mots.length) return '';
-    const classes = new Set(state.roster.filter(r => mots.every(m => r.mots.has(m))).map(r => r.classe));
-    return classes.size === 1 ? [...classes][0] : '';
-  };
   const NIVEAU_LIB = { '2nde': '2nde', '1ere': '1ère', tle: 'Terminale' };
   const symboles = { '4': '+', '3': '', '2': '', '1': '', A: 'A', N: '', D: 'd' };
   const libNiveau = v => (CFG.niveaux.find(n => n.v === v) || {}).label || v;
   const sym = v => `<span class="sym sym-${v}" aria-hidden="true">${symboles[v] ?? ''}</span>`;
 
   const state = {
-    chap: null, copies: [], roster: [], notesMan: new Map(), pm: {}, manuel: new Map(), aff: new Map(), eleves: [], infoCopies: [],
+    chap: null, copies: [], roster: [], pm: {}, manuel: new Map(), aff: new Map(), eleves: [], infoCopies: [],
     horsConfig: [], vue: 'moyennes', tri: { col: 'nom', dir: 1 },
     opt: { agg: 'best', nonValides: false, pmSeul: false, classe: '', q: '' },
     ouverts: new Set(), erreurPm: null, affOuvert: null, affGroupe: true
@@ -63,6 +48,8 @@
       const nomQuiz = chap.quiz.categorie === 'playmaths' ? 'PlayMaths' : 'PlaySciences';
       comps.push({ id: 'quiz', type: 'quiz', court: `${nomQuiz} ${chap.quiz.code}`, libelle: `Quiz ${nomQuiz} ${chap.quiz.code}`, categorie: chap.quiz.categorie, code: chap.quiz.code, niveaux: chap.quiz.niveaux || [], requis: true });
     }
+    const codesAuto = (CFG.automatismes || {})[chap.id];
+    if (codesAuto && codesAuto.length) comps.push({ id: 'auto', type: 'auto', court: 'Automatismes', libelle: 'Automatismes ' + codesAuto.join(', '), codes: codesAuto, niveaux: [], requis: false });
     chap.composantes = comps;
     return chap;
   }
@@ -138,21 +125,25 @@
     try {
       state.copies = await lireCopies(chap);
       state.pm = {}; state.erreurPm = null;
-      try {
-        const { data: ro, error: errRo } = await sb.from('notation_eleves').select('nom,prenom,classe');
-        state.roster = errRo ? [] : (ro || []).map(r => ({ nom: String(r.nom || '').trim(), prenom: String(r.prenom || '').trim(), mots: new Set(cleEleve(r.prenom, r.nom).split(' ')), classe: String(r.classe || '').toUpperCase().replace(/\s+/g, '') }));
-      } catch (_) { state.roster = []; }
       for (const def of chap.composantes.filter(c => c.type === 'quiz')) {
         const { data, error } = await sb.rpc('notation_quiz', { p_categorie: def.categorie, p_code: def.code });
         if (error) { state.erreurPm = error.message; state.pm[def.id] = []; } else state.pm[def.id] = data || [];
       }
-      const [{ data: man, error: errMan }, { data: aff, error: errAff }, { data: nman, error: errNman }] = await Promise.all([
+      /* Automatismes (PlayLab) rattachés au chapitre : même principe que PlayMaths, meilleure note retenue */
+      for (const def of chap.composantes.filter(c => c.type === 'auto')) {
+        const { data, error } = await sb.rpc('notation_automatismes', { p_codes: def.codes });
+        if (error) { state.erreurPm = error.message; state.pm[def.id] = []; } else state.pm[def.id] = data || [];
+      }
+      /* élèves attendus pour ce chapitre (classe + filière), pré-remplis dans Supabase */
+      state.roster = [];
+      try {
+        state.roster = await lireTout(() => sb.from('notation_chapitre_eleves').select('eleve_cle,nom,prenom,classe,filiere').eq('chapitre', chap.id).order('nom').order('prenom'));
+      } catch (e) { state.erreurPm = state.erreurPm || ('Liste des élèves attendus illisible : ' + (e.message || e)); }
+      const [{ data: man, error: errMan }, { data: aff, error: errAff }] = await Promise.all([
         sb.from('notation_cotations_manuelles').select('*').eq('chapitre', chap.id),
-        sb.from('notation_affectations').select('copie_id,composante').eq('chapitre', chap.id),
-        sb.from('notation_notes_manuelles').select('eleve_cle,composante,note_10').eq('chapitre', chap.id)
+        sb.from('notation_affectations').select('copie_id,composante').eq('chapitre', chap.id)
       ]);
-      state.manuel = new Map(); state.aff = new Map(); state.notesMan = new Map();
-      if (!errNman) (nman || []).forEach(m => state.notesMan.set(`${m.eleve_cle}|${m.composante}`, Number(m.note_10)));
+      state.manuel = new Map(); state.aff = new Map();
       if (!errMan) (man || []).forEach(m => state.manuel.set(`${m.eleve_cle}|${m.competence}`, m.valeur));
       if (!errAff) (aff || []).forEach(a => state.aff.set(a.copie_id, a.composante));
       state.horsConfig = await lireHorsConfig();
@@ -209,11 +200,19 @@
     const chap = state.chap, o = state.opt;
     const map = new Map();
     const obtenir = (prenom, nom) => {
-      const k = cleEleve(prenom, nom); if (!k || ELEVES_EXCLUS.has(k)) return null;
+      const k = cleEleve(prenom, nom); if (!k) return null;
       if (!map.has(k)) map.set(k, { cle: k, variantes: new Map(), classes: new Map(), niveaux: new Map(), slots: {}, pm: {}, nbCopies: 0, vuPm: null });
       return map.get(k);
     };
     state.infoCopies = []; let ignoreesAValider = 0;
+
+    /* tous les élèves attendus (classe / filière), même sans copie ni quiz : les cases restent « à faire » */
+    for (const r of state.roster || []) {
+      const e = obtenir(r.prenom, r.nom); if (!e) continue;
+      e.rosterNom = `${titre(r.prenom)} ${String(r.nom || '').trim().toUpperCase()}`;
+      e.rosterClasse = String(r.classe || '').toUpperCase().replace(/\s+/g, '');
+      e.filiere = r.filiere || '';
+    }
 
     for (const c of state.copies) {
       const auto = classer(chap, c), manuel = state.aff.get(c.id) || null;
@@ -224,28 +223,27 @@
       const e = obtenir(c.prenom, c.nom); if (!e) continue;
       (e.slots[slot] ||= []).push(c);
       e.nbCopies++;
-      const nomAff = `${String(c.nom || '').trim().toUpperCase()} ${titre(c.prenom)}`;
+      const nomAff = `${titre(c.prenom)} ${String(c.nom || '').trim().toUpperCase()}`;
       e.variantes.set(nomAff, (e.variantes.get(nomAff) || 0) + 1);
       const cl = String(c.classe || '').toUpperCase().replace(/\s+/g, '');
       if (cl) e.classes.set(cl, (e.classes.get(cl) || 0) + 1);
       const nv = niveauCle(c.niveau); if (nv) e.niveaux.set(nv, (e.niveaux.get(nv) || 0) + 1);
     }
 
-    for (const def of chap.composantes.filter(c => c.type === 'quiz')) {
+    for (const def of chap.composantes.filter(c => c.type === 'quiz' || c.type === 'auto')) {
       for (const s of state.pm[def.id] || []) {
-        const k = cleEleve(s.prenom, s.nom); if (!k || ELEVES_EXCLUS.has(k)) continue;
+        const k = cleEleve(s.prenom, s.nom); if (!k) continue;
         let e = map.get(k);
         if (!e) { if (!o.pmSeul) continue; e = obtenir(s.prenom, s.nom); }
         (e.pm[def.id] ||= []).push({ note_sur_10: s.note_10, created_at: s.ended_at || s.started_at, quiz: s.quiz });
-        if (!e.variantes.size) e.vuPm = `${String(s.nom || '').trim().toUpperCase()} ${titre(s.prenom)}`;
+        if (!e.variantes.size) e.vuPm = `${titre(s.prenom)} ${String(s.nom || '').trim().toUpperCase()}`;
       }
     }
 
     state.eleves = [...map.values()].map(e => {
-      e.nom = [...e.variantes.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || e.vuPm || e.cle;
-      const ref = entreeReferentiel(e.cle); if (ref) e.nom = `${ref.nom.toUpperCase()} ${titre(ref.prenom)}`;
-      e.classe = [...e.classes.entries()].sort((a, b) => b[1] - a[1] || b[0].length - a[0].length)[0]?.[0] || classeDuReferentiel(e.cle) || '';
-      e.niveau = [...e.niveaux.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || niveauDeClasse(e.classe);
+      e.nom = [...e.variantes.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || e.rosterNom || e.vuPm || e.cle;
+      e.classe = e.rosterClasse || [...e.classes.entries()].sort((a, b) => b[1] - a[1] || b[0].length - a[0].length)[0]?.[0] || '';
+      e.niveau = niveauDeClasse(e.rosterClasse) || [...e.niveaux.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || niveauDeClasse(e.classe);
       e.res = calculer(e);
       return e;
     });
@@ -287,18 +285,11 @@
           reste: manque ? `${def.court} (${manque} sujet${manque > 1 ? 's' : ''})` : '',
           detail: sujets.filter(x => x.l.length).map(x => `sujet ${x.s} : ${detailCopies(x.l)}`).join(' — ') || 'aucune copie' };
       } else {
-        const l = e.pm[def.id] || []; const note = noteListe(l, agg);
+        const l = e.pm[def.id] || []; const note = noteListe(l, def.type === 'auto' ? 'best' : agg);
         r = { note, complet: note != null, reste: def.court,
           detail: l.length ? l.map(x => `${fmt(Number(x.note_sur_10), 0)}/10 · ${dateFr(x.created_at)}${x.quiz ? ' · ' + esc(x.quiz) : ''}`).join(' ; ') : 'aucune tentative terminée' };
       }
       r.def = def;
-      const saisie = state.notesMan.get(`${e.cle}|${def.id}`);
-      r.saisie = saisie != null && !Number.isNaN(saisie);
-      if (r.saisie) {
-        const auto = r.note;
-        r.note = saisie; r.complet = true; r.manque = 0; r.reste = '';
-        r.detail = `note saisie à la main : ${fmt(saisie, 1)}/10` + (auto != null ? ` (calcul automatique : ${fmt(auto, 1)}/10)` : '');
-      }
       const niveauOk = !def.niveaux.length || !e.niveau || def.niveaux.includes(e.niveau);
       r.na = r.note == null && !niveauOk;                       // onglet / quiz d'une autre classe
       r.facultatif = r.note == null && niveauOk && !def.requis;  // jamais « à faire »
@@ -349,21 +340,17 @@
     return `<th class="${cls}" scope="col" aria-sort="${actif ? (state.tri.dir > 0 ? 'ascending' : 'descending') : 'none'}"><button type="button" class="tri" data-tri="${col}">${libelle}</button></th>`;
   }
 
-  function cellule(c, e) {
-    const cible = `${esc(e.cle)}|${esc(c.def.id)}`;
-    const noteBtn = (txt, cls, titre) => `<button type="button" class="${cls}" data-note="${cible}" title="${titre}">${txt}</button>`;
+  function cellule(c) {
     if (c.na) return `<td><span class="petit" title="Concerne une autre classe">— autre niveau</span></td>`;
-    if (c.facultatif) return `<td>${noteBtn('facultatif', 'petit btn-note', 'Facultatif — cliquer pour saisir une note à la main')}</td>`;
-    const valeur = c.note != null ? `<span class="note fait">${fmt(c.note, 1)}<small>/10</small></span>${c.saisie ? ' <span class="stylo" aria-hidden="true">✎</span>' : ''}` : '';
+    if (c.facultatif) return `<td><span class="petit" title="Réservé à certaines filières ou optionnel">facultatif</span></td>`;
     if (c.def.type === 'puzzle') {
       const chips = c.sujets.filter(x => x.note != null || c.def.sujets.includes(x.s)).map(x => x.note != null ? `<span class="chip" title="Sujet ${esc(x.s)}">${esc(x.s)} : ${fmt(x.note, 1)}</span>` : `<span class="chip vide" title="Sujet ${esc(x.s)} non réalisé">${esc(x.s)} –</span>`).join('');
-      const etat = c.complet ? '' : `<br>${noteBtn(`${c.manque} sujet${c.manque > 1 ? 's' : ''} à faire`, 'afaire btn-note', 'Cliquer pour saisir la note du puzzle à la main')}`;
-      const val = c.note != null ? `<br>${noteBtn(valeur, 'btn-note btn-valeur' + (c.saisie ? ' saisie' : ''), 'Cliquer pour modifier la note')}` : '';
-      return `<td>${chips}${val}${etat}</td>`;
+      const etat = c.complet ? '' : `<br><span class="afaire">${c.manque} sujet${c.manque > 1 ? 's' : ''} à faire</span>`;
+      return `<td>${chips}${c.note != null ? `<br><span class="note fait">${fmt(c.note, 1)}<small>/10</small></span>` : ''}${etat}</td>`;
     }
     return c.note != null
-      ? `<td>${noteBtn(valeur, 'btn-note btn-valeur' + (c.saisie ? ' saisie' : ''), c.saisie ? 'Note saisie à la main — cliquer pour modifier ou supprimer' : 'Cliquer pour remplacer par une note saisie à la main')}</td>`
-      : `<td>${noteBtn('À faire', 'afaire btn-note', 'Cliquer pour saisir la note à la main')}</td>`;
+      ? `<td><span class="note fait">${fmt(c.note, 1)}<small>/10</small></span></td>`
+      : `<td><span class="afaire">À faire</span></td>`;
   }
 
   function ligneDetail(e, colspan) {
@@ -383,7 +370,7 @@
       return `<tr>
         <td><button type="button" class="nom" data-detail="${esc(e.cle)}" aria-expanded="${ouvert}">${esc(e.nom)}</button></td>
         <td>${esc(e.classe) || '–'}</td>
-        ${r.comps.map(c => cellule(c, e)).join('')}
+        ${r.comps.map(cellule).join('')}
         <td>${r.total ? `<span class="barre-prog" aria-hidden="true"><i style="width:${r.nbFait / r.total * 100}%"></i></span>${r.nbFait}/${r.total}` : '–'}</td>
         <td>${note}${sous}</td>
         <td class="gauche">${r.reste.length ? r.reste.map(esc).join(', ') : '<span class="badge ok">Rien — complet</span>'}</td>
@@ -441,7 +428,7 @@
     const inconnues = state.infoCopies.filter(x => !x.slot).length;
     const lignes = [...state.infoCopies].sort((a, b) => (!!a.slot - !!b.slot) || String(a.c.nom).localeCompare(String(b.c.nom), 'fr')).map(({ c, auto, manuel }) => `
       <tr class="${!auto && !manuel ? 'inconnue' : ''}">
-        <td class="gauche">${esc(String(c.nom).toUpperCase())} ${esc(titre(c.prenom))}</td>
+        <td class="gauche">${esc(titre(c.prenom))} ${esc(String(c.nom).toUpperCase())}</td>
         <td class="gauche petit">${esc(c.nom_fichier || '')}</td>
         <td class="gauche petit">${esc((c.problematique || '').slice(0, 90))}</td>
         <td><label class="sr-only" for="aff-${esc(c.id)}">Rattachement de la copie de ${esc(c.prenom)} ${esc(c.nom)}</label>
@@ -524,69 +511,13 @@
   document.addEventListener('click', ev => { if (!menu.hidden && !menu.contains(ev.target) && !ev.target.closest('[data-niveau]')) fermerMenu(); });
   document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && !menu.hidden) fermerMenu(); });
 
-
-  /* ---------- saisie manuelle d'une note /10 (clic sur « À faire ») ---------- */
-  const boite = document.createElement('div');
-  boite.id = 'menu-note'; boite.className = 'menu-niveau menu-note'; boite.setAttribute('role', 'dialog'); boite.hidden = true;
-  document.body.appendChild(boite);
-  let cibleNote = null;
-  const fermerNote = () => { boite.hidden = true; cibleNote = null; };
-  function ouvrirNote(btn) {
-    cibleNote = btn.dataset.note;
-    const [cle, comp] = cibleNote.split('|'); const e = state.eleves.find(x => x.cle === cle); if (!e) return;
-    const def = state.chap.composantes.find(c => c.id === comp); const existante = state.notesMan.get(cibleNote);
-    boite.innerHTML = `<div class="tete">${esc(e.nom)} — ${esc(def ? def.libelle : comp)}</div>
-      <label class="champ-note">Note sur 10
-        <input type="text" inputmode="decimal" id="note-saisie" autocomplete="off" placeholder="ex. 7,5" value="${existante != null ? esc(String(existante).replace('.', ',')) : ''}"></label>
-      <p class="petit" id="note-erreur" role="alert" hidden></p>
-      <div class="actions-note">
-        <button type="button" data-note-action="ok" class="primaire">Enregistrer</button>
-        ${existante != null ? '<button type="button" data-note-action="suppr">Supprimer la saisie</button>' : ''}
-        <button type="button" data-note-action="annuler">Annuler</button>
-      </div>`;
-    const r = btn.getBoundingClientRect();
-    boite.hidden = false;
-    boite.style.left = Math.max(8, Math.min(r.left, innerWidth - boite.offsetWidth - 8)) + 'px';
-    boite.style.top = Math.max(8, Math.min(r.bottom + 4, innerHeight - boite.offsetHeight - 8)) + 'px';
-    const champ = boite.querySelector('#note-saisie'); champ.focus(); champ.select();
-  }
-  async function enregistrerNote(supprimer) {
-    if (!cibleNote) return;
-    const [cle, comp] = cibleNote.split('|'); const e = state.eleves.find(x => x.cle === cle); if (!e) return;
-    const q = sb.from('notation_notes_manuelles'); let valeur = null;
-    if (!supprimer) {
-      const brut = boite.querySelector('#note-saisie').value.trim().replace(',', '.');
-      valeur = brut === '' ? NaN : Number(brut);
-      if (!Number.isFinite(valeur) || valeur < 0 || valeur > 10) {
-        const err = boite.querySelector('#note-erreur'); err.textContent = 'Saisissez un nombre entre 0 et 10.'; err.hidden = false; return;
-      }
-      valeur = Math.round(valeur * 100) / 100;
-    }
-    const cible = cibleNote; fermerNote();
-    const { error } = supprimer
-      ? await q.delete().match({ eleve_cle: cle, chapitre: state.chap.id, composante: comp })
-      : await q.upsert({ eleve_cle: cle, chapitre: state.chap.id, composante: comp, note_10: valeur, eleve_nom: e.nom, updated_at: new Date().toISOString() }, { onConflict: 'eleve_cle,chapitre,composante' });
-    if (error) { setStatut('Enregistrement impossible : ' + error.message, true); return; }
-    if (supprimer) state.notesMan.delete(cible); else state.notesMan.set(cible, valeur);
-    e.res = calculer(e); rendre();
-  }
-  boite.addEventListener('click', ev => {
-    const a = ev.target.closest('[data-note-action]'); if (!a) return;
-    const act = a.dataset.noteAction;
-    if (act === 'annuler') fermerNote(); else enregistrerNote(act === 'suppr');
-  });
-  boite.addEventListener('keydown', ev => { if (ev.key === 'Enter' && ev.target.id === 'note-saisie') { ev.preventDefault(); enregistrerNote(false); } });
-  document.addEventListener('click', ev => { if (!boite.hidden && !boite.contains(ev.target) && !ev.target.closest('[data-note]')) fermerNote(); });
-  document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && !boite.hidden) fermerNote(); });
-
   /* ---------- interactions ---------- */
   $('#zone').addEventListener('click', ev => {
     const t = ev.target.closest('[data-tri]');
     if (t) { const col = t.dataset.tri; state.tri = { col, dir: state.tri.col === col ? -state.tri.dir : 1 }; return rendre(); }
     const d = ev.target.closest('[data-detail]');
     if (d) { const k = d.dataset.detail; state.ouverts.has(k) ? state.ouverts.delete(k) : state.ouverts.add(k); return rendre(); }
-    const n = ev.target.closest('[data-niveau]'); if (n) return ouvrirMenu(n);
-    const sn = ev.target.closest('[data-note]'); if (sn) ouvrirNote(sn);
+    const n = ev.target.closest('[data-niveau]'); if (n) ouvrirMenu(n);
   });
 
   function changerVue(v) {
