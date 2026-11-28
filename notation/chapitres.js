@@ -48,6 +48,11 @@
       const nomQuiz = chap.quiz.categorie === 'playmaths' ? 'PlayMaths' : 'PlaySciences';
       comps.push({ id: 'quiz', type: 'quiz', court: `${nomQuiz} ${chap.quiz.code}`, libelle: `Quiz ${nomQuiz} ${chap.quiz.code}`, categorie: chap.quiz.categorie, code: chap.quiz.code, niveaux: chap.quiz.niveaux || [], requis: true });
     }
+    const progs = (CFG.pylab || {})[chap.id];
+    if (progs && progs.length) {
+      const i = comps.length;
+      comps.splice(i, 0, { id: 'o:pylab', type: 'onglet', court: 'Programmes PyLab', libelle: 'Programmes PyLab (' + progs.join(', ') + ')', motifs: [], niveaux: [], requis: false, pylab: true });
+    }
     const codesAuto = (CFG.automatismes || {})[chap.id];
     if (codesAuto && codesAuto.length) comps.push({ id: 'auto', type: 'auto', court: 'Automatismes', libelle: 'Automatismes ' + codesAuto.join(', '), codes: codesAuto, niveaux: [], requis: false });
     chap.composantes = comps;
@@ -168,7 +173,9 @@
         return 'puzzle:' + (q1 && pz.sujets.map(s => s.toLowerCase()).includes(q1[1]) ? q1[1].toUpperCase() : '?');
       }
     }
-    const onglets = chap.composantes.filter(x => x.type === 'onglet');
+    const pl = chap.composantes.find(x => x.pylab);
+    if (pl && /pylab|programme python|\.py\b/.test(pb + ' ' + fichier + ' ' + texteRep.slice(0, 400))) return pl.id;
+    const onglets = chap.composantes.filter(x => x.type === 'onglet' && !x.pylab);
     if (onglets.length === 1) return onglets[0].id;
     const autres = norm(texteRep + ' ' + fichier);
     let meilleur = null, best = 0;
