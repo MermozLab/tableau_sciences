@@ -25,6 +25,12 @@
   const niveauDeClasse = cl => { const c = String(cl || '').toUpperCase().replace(/\s+/g, ''); return /^2/.test(c) ? '2nde' : /^1/.test(c) ? '1ere' : /^T/.test(c) ? 'tle' : ''; };
   /* classe d'un élève d'après le référentiel (table notation_eleves) : tous les mots de son nom
      doivent figurer dans une entrée du référentiel, et une seule classe doit correspondre */
+  /* entrée unique du référentiel correspondant à un élève (orthographe de référence), sinon null */
+  const entreeReferentiel = cle => {
+    const mots = String(cle || '').split(' ').filter(Boolean); if (!mots.length) return null;
+    const ok = state.roster.filter(r => mots.every(m => r.mots.has(m)));
+    return ok.length === 1 ? ok[0] : null;
+  };
   const classeDuReferentiel = cle => {
     const mots = String(cle || '').split(' ').filter(Boolean); if (!mots.length) return '';
     const classes = new Set(state.roster.filter(r => mots.every(m => r.mots.has(m))).map(r => r.classe));
@@ -134,7 +140,7 @@
       state.pm = {}; state.erreurPm = null;
       try {
         const { data: ro, error: errRo } = await sb.from('notation_eleves').select('nom,prenom,classe');
-        state.roster = errRo ? [] : (ro || []).map(r => ({ mots: new Set(cleEleve(r.prenom, r.nom).split(' ')), classe: String(r.classe || '').toUpperCase().replace(/\s+/g, '') }));
+        state.roster = errRo ? [] : (ro || []).map(r => ({ nom: String(r.nom || '').trim(), prenom: String(r.prenom || '').trim(), mots: new Set(cleEleve(r.prenom, r.nom).split(' ')), classe: String(r.classe || '').toUpperCase().replace(/\s+/g, '') }));
       } catch (_) { state.roster = []; }
       for (const def of chap.composantes.filter(c => c.type === 'quiz')) {
         const { data, error } = await sb.rpc('notation_quiz', { p_categorie: def.categorie, p_code: def.code });
@@ -235,6 +241,7 @@
 
     state.eleves = [...map.values()].map(e => {
       e.nom = [...e.variantes.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || e.vuPm || e.cle;
+      const ref = entreeReferentiel(e.cle); if (ref) e.nom = `${ref.nom.toUpperCase()} ${titre(ref.prenom)}`;
       e.classe = [...e.classes.entries()].sort((a, b) => b[1] - a[1] || b[0].length - a[0].length)[0]?.[0] || classeDuReferentiel(e.cle) || '';
       e.niveau = [...e.niveaux.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || niveauDeClasse(e.classe);
       e.res = calculer(e);
