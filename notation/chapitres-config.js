@@ -56,6 +56,19 @@ window.CHAPITRES_CONFIG = {
     E2: ['A 10']
   },
 
+  /* Programmes de la bibliothèque PyLab (/pyodide/programmes) rattachés aux chapitres d'après leur code
+     (A03-1_… → A03). Composante « Programmes PyLab » : facultative, comptée dans la moyenne si une copie
+     (PDF du programme) y est rattachée, jamais « à faire ». */
+  pylab: {
+    A03: ["A03-1_droite_affine_lineaire"],
+    A04: ["A04-1-calcul_fonction_exp_boucle", "A04-1_calcul_fonction_exp", "A04-2_calcul_log10"],
+    G01: ["G01-1_Calcul_périmètre_carré", "G01-1_Calcul_périmètre_disque", "G01-1_Calcul_périmètre_parallélogramme", "G01-1_Calcul_périmètre_rectangle", "G01-1_Calcul_périmètre_trapèze", "G01-1_Calcul_périmètre_triangle", "G01-2_Calcul volume cylindre ", "G01-2_Calcul_ Volume cube", "G01-2_Calcul_volume_pyramide", "G01-2_Calcul_volume_sphère"],
+    G04: ["G04-angles-triangle"],
+    S02: ["S02-1_boite_a_moustache", "S02-1_Indicateurs de dispersion", "S02-1_Indicateurs de position"],
+    S03: ["S03-1_frequence_n_p"],
+    S05: ["S05-1_arbre_pondéré"]
+  },
+
   /* Format d'un chapitre :
      id, groupe, titre
      filtre   : { domaines:[fragments du domaine, sans accents], code_td:'TD01' | 'TP02' }
