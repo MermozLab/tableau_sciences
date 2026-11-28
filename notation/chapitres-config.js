@@ -41,9 +41,19 @@ window.CHAPITRES_CONFIG = {
      comptés dans la moyenne s'ils sont faits, jamais « à faire »). Clé = id du chapitre,
      valeur = codes tels qu'enregistrés dans quiz_sessions (« A 07 », avec l'espace). */
   automatismes: {
-    A01: ['A 07', 'A 08', 'A 09', 'A 19', 'B 06', 'B 07'],
-    G01: ['A 14'],
-    E2:  ['A 10']
+    A01: ['A 07', 'A 08', 'A 09', 'A 11', 'A 16', 'A 19', 'B 06', 'B 07'],
+    A02: ['C 07'],
+    A03: ['A 15', 'B 08', 'B 09', 'C 08', 'C 09', 'C 10'],
+    A04: ['A 05', 'A 06'],
+    A05: ['A 02', 'A 03'],
+    AL02: ['C 03', 'C 04'],
+    G01: ['A 12', 'A 13', 'A 14', 'A 17', 'A 18', 'A 20', 'A 21', 'A 22'],
+    G03: ['C 11'],
+    S01: ['B 03', 'B 04'],
+    S02: ['A 04', 'B 05'],
+    S03: ['A 01', 'B 01', 'B 02', 'C 01', 'C 02'],
+    S05: ['C 05', 'C 06'],
+    E2: ['A 10']
   },
 
   /* Format d'un chapitre :
